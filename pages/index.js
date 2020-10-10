@@ -17,41 +17,35 @@ export default function Index({league}) {
 
     const formData = new FormData(e.currentTarget);
     const teams = Object.keys(modalMatch.teams);
-    modalMatch.teams[teams[0]] = {
-      score: formData.get(`scores[${teams[0]}]`),
-      result: getResult(teams[0], formData.get('winner')),
-    }
-    modalMatch.teams[teams[1]] = {
-      score: formData.get(`scores[${teams[1]}]`),
-      result: getResult(teams[1], formData.get('winner')),
-    }
+    modalMatch.teams[teams[0]] = { score: formData.get(`scores[${teams[0]}]`) }
+    modalMatch.teams[teams[1]] = { score: formData.get(`scores[${teams[1]}]`) }
 
-    let matchIndex = league.results.findIndex(res => Object.keys(res.teams).join("-") == teams.join("-"));
-    league.results[matchIndex] = modalMatch;
+    // 勝者未選択 or 引き分けのときは、 winner = null
+    let winner = formData.get('winner');
+    if(winner == '' || winner == 'draw') { winner = null; }
+    modalMatch.winner = winner;
 
-    const docRef = firebase.firestore().collection('leagues').doc(league.id);
-    const res = await docRef.update(
-      {
-        results: league.results,
-      }
-    );
+    //勝者未選択のときのみ、 finished = false
+    modalMatch.finished = (formData.get('winner') !== '');
+
+    const matchIndex = league.matches.findIndex(match => Object.keys(match.teams).join("-") == teams.join("-"));
+    league.matches[matchIndex] = modalMatch;
+    setModalMatch(false);
   }
 
-  const getResult = (id, winnerValue) => {
-    switch(winnerValue) {
-      case '':
-        return null;
-        break;
-      case 'draw':
-        return 2;
-        break;
-      case `${id}`:
-        return 0;
-        break;
-      default:
-        return 1;
-        break;
+  const resetMatch = (match) => {
+    const teamKeys = Object.keys(match.teams);
+    let teams = {};
+    teamKeys.map(k => { teams[k] = { score: null } });
+    const newMatch = {
+      finished: false,
+      winner: null,
+      teams: teams,
     }
+
+    const matchIndex = league.matches.findIndex(m => Object.keys(m.teams).join("-") == teamKeys.join("-"));
+    league.matches[matchIndex] = newMatch;
+    setModalMatch(false);
   }
 
 
@@ -118,7 +112,7 @@ export default function Index({league}) {
                 </div>
 
                 <div className="mb-4 px-4">
-                  <select name="winner" className="w-full px-1 py-2 border">
+                  <select name="winner" className="w-full px-1 py-2 border" defaultValue={ (modalMatch.finished && modalMatch.winner===null) ? 'draw' : modalMatch.winner }>
                     <option value="">-- 勝者を選択 --</option>
                     { Object.keys(modalMatch.teams).map(teamId => (
                       <option key={teamId} value={teamId}>{ league.teams.find(team => team.id == teamId).name }</option>
@@ -130,10 +124,10 @@ export default function Index({league}) {
                 <div className="bg-gray-100 p-4 flex">
                   <div className="flex-1">
                     <input type="submit" className="bg-blue-600 text-white hover:opacity-75 text-sm p-2 mr-2 rounded cursor-pointer" value="更新" />
-                    <button className="hover:opacity-75 text-sm p-2 rounded">キャンセル</button>
+                    <div className="inline-block cursor-pointer hover:opacity-75 text-sm p-2 rounded" onClick={()=>{setModalMatch(false)}}>キャンセル</div>
                   </div>
                   <div>
-                    <button className="text-red-600 border border-red-600 hover:opacity-75 text-sm p-2 rounded">削除</button>
+                    <div className="inline-block cursor-pointer text-red-600 border border-red-600 hover:opacity-75 text-sm p-2 rounded" onClick={()=>{resetMatch(modalMatch)}}>削除</div>
                   </div>
                 </div>
               </form>
@@ -146,12 +140,12 @@ export default function Index({league}) {
 }
 
 const Result = ({league, team, counter, setModalMatch}) => {
-  const match = league.results.find(r => Object.keys(r.teams).sort().join("-") == [team.id, counter.id].sort().join("-"));
+  const match = league.matches.find(m => Object.keys(m.teams).sort().join("-") == [team.id, counter.id].sort().join("-"));
   return (
     <td className="border p-3 text-center cursor-pointer hover:bg-gray-200" onClick={()=>{setModalMatch(match)}}>
       <div>
-        <div>{ resultMark(match.teams[team.id].result) }</div>
-        { match.teams[team.id].result !== null &&
+        <div>{ resultMark(team.id, match) }</div>
+        { match.finished &&
           `${match.teams[team.id].score} - ${match.teams[counter.id].score}`
         }
       </div>
@@ -159,21 +153,10 @@ const Result = ({league, team, counter, setModalMatch}) => {
   );
 }
 
-const resultMark = (res) => {
-  switch(res) {
-    case 0:
-      return '○';
-      break;
-    case 1:
-      return '●';
-      break;
-    case 2:
-      return '▲';
-      break;
-    default:
-      return '-';
-      break;
-  }
+const resultMark = (teamId, match) => {
+  if(!match.finished) { return '-'; }
+  if(match.winner === null) { return '▲'; }
+  return (match.winner == teamId) ? '○' : '●';
 };
 
 
@@ -182,41 +165,53 @@ export async function getStaticProps(context) {
   const doc = await firebase.firestore().collection('leagues').doc(docId).get();
   const league = Object.assign(doc.data(), {id: doc.id});
 
-  const results = [
+  const matches = [
     {
+      winner: '6zdnot6r2as',
+      finished: true,
       teams: {
-        '6zdnot6r2as' : { result: 0, score: 12, },
-        'a2brymi257a': { result: 1, score: 3, },
+        '6zdnot6r2as' : { score: 12, },
+        'a2brymi257a': { score: 3, },
       },
     },
     {
+      winner: null,
+      finished: false,
       teams: {
-        '6zdnot6r2as' : { result: null, score: null, },
-        'a54zzd5a0d4': { result: null, score: null, },
+        '6zdnot6r2as' : { score: null, },
+        'a54zzd5a0d4': { score: null, },
       },
     },
     {
+      winner: 'fe50h7tqqgk',
+      finished: true,
       teams: {
-        '6zdnot6r2as' : { result: 1, score: 2, },
-        'fe50h7tqqgk': { result: 0, score: 5, },
+        '6zdnot6r2as' : { score: 2, },
+        'fe50h7tqqgk': { score: 5, },
       },
     },
     {
+      winner: null,
+      finished: true,
       teams: {
-        'a2brymi257a' : { result: 2, score: 4, },
-        'a54zzd5a0d4': { result: 2, score: 4, },
+        'a2brymi257a' : { score: 4, },
+        'a54zzd5a0d4': { score: 4, },
       },
     },
     {
+      winner: 'a2brymi257a',
+      finished: true,
       teams: {
-        'a2brymi257a' : { result: 0, score: 2, },
-        'fe50h7tqqgk': { result: 1, score: 0, },
+        'a2brymi257a' : { score: 2, },
+        'fe50h7tqqgk': { score: 0, },
       },
     },
     {
+      winner: null,
+      finished: true,
       teams: {
-        'a54zzd5a0d4' : { result: 2, score: 30, },
-        'fe50h7tqqgk': { result: 2, score: 30, },
+        'a54zzd5a0d4' : { score: 30, },
+        'fe50h7tqqgk': { score: 30, },
       },
     },
   ];
@@ -231,7 +226,7 @@ export async function getStaticProps(context) {
   // const docRef = firebase.firestore().collection('leagues').doc(docId);
   // const res = await docRef.update(
   //   {
-  //     results: results,
+  //     matches: matches,
   //     teams: teams,
   //     title: 'ほげほーげ',
   //   }
