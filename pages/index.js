@@ -18,27 +18,50 @@ export default function Index({initialLeague}) {
     setLeague(Object.assign({}, league));
   }
 
+  const addMember = () => {
+    const newMember = { name: 'PlayerX', id: Math.random().toString(36).substring(2) };
+    league.teams.forEach(team => {
+      const teams = {
+        [team.id]: { score: null },
+        [newMember.id]: { score: null },
+      };
+      league.matches.push({ teams: teams, finished: false, winner: null });
+    });
+    league.teams.push(newMember);
+    setLeague(Object.assign({}, league));
+  }
+
+  const removeMember = (teamId) => {
+    league.teams = league.teams.filter(t => t.id != teamId);
+    league.matches = league.matches.filter(m => !Object.keys(m.teams).includes(teamId));
+    setLeague(Object.assign({}, league));
+  }
+
   return (
     <LeagueContext.Provider value={[league, setLeague]}>
       <MatchContext.Provider value={[match, setMatch]}>
         <div>
           <h1 className="text-lg mb-8">{league.title}</h1>
           <div>
-            <table className="table-fixed w-full border-collapse border">
+            <table className="table-fixed w-full overflow-x-scroll border-collapse border mb-4">
               <thead>
                 <tr className="bg-gray-100">
-                  <th className="border">
-                  </th>
+                  <th className="border"></th>
                   { league.teams.map(team => (
-                    <th key={team.name} className="border py-2 text-sm">{team.name}</th>
+                    <th key={team.name} className="border px-1 py-2 text-sm truncate">{team.name}</th>
                   )) }
                 </tr>
               </thead>
               <tbody>
                 { league.teams.map((team) => (
                   <tr key={team.id}>
-                    <th className="bg-gray-100 border p-3">
-                      <input data-team-id={team.id} className="bg-gray-100 px-1 py-2" type="text" name={`teams[${team.id}]`} defaultValue={team.name} placeholder='Player XX' onBlur={ updateTeamName } />
+                    <th className="bg-gray-100 border p-3 relative">
+                      <input data-team-id={team.id} className="w-full bg-gray-100 px-1 py-2 focus:bg-white" type="text" name={`teams[${team.id}]`} defaultValue={team.name} placeholder='Player XX' onBlur={ updateTeamName } />
+                      <div className="absolute cursor-pointer top-0 right-0" onClick={()=>{removeMember(team.id)}}>
+                        <svg className="fill-current inline-block pr-1" xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 18 18">
+                          <path d="M14.53 4.53l-1.06-1.06L9 7.94 4.53 3.47 3.47 4.53 7.94 9l-4.47 4.47 1.06 1.06L9 10.06l4.47 4.47 1.06-1.06L10.06 9z"></path>
+                        </svg>
+                      </div>
                     </th>
                     { league.teams.map((counter) => {
                       if(team.id == counter.id) {
@@ -51,6 +74,10 @@ export default function Index({initialLeague}) {
                 )) }
               </tbody>
             </table>
+
+            <div>
+              <div className="cursor-pointer inline-block" onClick={addMember}>＋ 参加者を追加する</div>
+            </div>
           </div>
 
           <MatchModal />
