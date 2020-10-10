@@ -3,23 +3,24 @@ import Link from 'next/link'
 import { firebase } from '../lib/firebase.js'
 import DiagonalSVG from '../lib/diagonalSVG.js'
 import MatchModal from '../components/MatchModal.js'
+import TableCell from '../components/TableCell.js'
 
 export const LeagueContext = createContext(["", () => {}]);
 export const MatchContext = createContext(["", () => {}]);
 
 export default function Index({initialLeague}) {
-  const [modalMatch, setModalMatch] = useState(false);
+  const [match, setMatch] = useState(false);
   const [league, setLeague] = useState(initialLeague);
 
   const updateTeamName = (e) => {
     const teamId = e.currentTarget.dataset.teamId;
     league.teams.find(t => t.id == teamId).name = e.currentTarget.value;
-    setLeague(league);
+    setLeague(Object.assign({}, league));
   }
 
   return (
     <LeagueContext.Provider value={[league, setLeague]}>
-      <MatchContext.Provider value={[modalMatch, setModalMatch]}>
+      <MatchContext.Provider value={[match, setMatch]}>
         <div>
           <h1 className="text-lg mb-8">{league.title}</h1>
           <div>
@@ -36,14 +37,14 @@ export default function Index({initialLeague}) {
               <tbody>
                 { league.teams.map((team) => (
                   <tr key={team.id}>
-                    <th className="bg-gray-100 border p-3 text-left">
+                    <th className="bg-gray-100 border p-3">
                       <input data-team-id={team.id} className="bg-gray-100 px-1 py-2" type="text" name={`teams[${team.id}]`} defaultValue={team.name} placeholder='Player XX' onBlur={ updateTeamName } />
                     </th>
                     { league.teams.map((counter) => {
                       if(team.id == counter.id) {
                         return <td key={`${team.id}-${counter.id}`} className="border p-3" style={{ backgroundImage: `url(\'data:image/svg+xml;base64,${DiagonalSVG}\');` }}></td>;
                       }else {
-                        return <Result key={`${team.id}-${counter.id}`} league={league} team={team} counter={counter} setModalMatch={setModalMatch} />;
+                        return <TableCell key={`${team.id}-${counter.id}`} team={team} counter={counter} />;
                       }
                     }) }
                   </tr>
@@ -58,26 +59,6 @@ export default function Index({initialLeague}) {
     </LeagueContext.Provider>
   )
 }
-
-const Result = ({league, team, counter, setModalMatch}) => {
-  const match = league.matches.find(m => Object.keys(m.teams).sort().join("-") == [team.id, counter.id].sort().join("-"));
-  return (
-    <td className="border p-3 text-center cursor-pointer hover:bg-gray-200" onClick={()=>{setModalMatch(match)}}>
-      <div>
-        <div>{ resultMark(team.id, match) }</div>
-        { match.finished &&
-          `${match.teams[team.id].score} - ${match.teams[counter.id].score}`
-        }
-      </div>
-    </td>
-  );
-}
-
-const resultMark = (teamId, match) => {
-  if(!match.finished) { return '-'; }
-  if(match.winner === null) { return '▲'; }
-  return (match.winner == teamId) ? '○' : '●';
-};
 
 
 export async function getStaticProps(context) {
