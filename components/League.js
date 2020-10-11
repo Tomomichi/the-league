@@ -3,6 +3,8 @@ import { LeagueContext, MatchContext } from '../pages/index.js';
 import MatchModal from './MatchModal.js'
 import TableCell from './TableCell.js'
 
+const CellWidth = 100;
+
 export default function League({editable}){
   const [match, setMatch] = useContext(MatchContext);
   const [league, setLeague] = useContext(LeagueContext);
@@ -36,63 +38,63 @@ export default function League({editable}){
   }
 
   return (
-    <>
-          <table className="table-fixed w-full overflow-x-scroll border-collapse border mb-4">
-            <thead>
-              <tr className="bg-gray-100">
-                <th className="border"></th>
-                { league.teams.map(team => (
-                  <th key={team.name} className="border px-1 py-2 text-sm truncate">{team.name}</th>
-                )) }
-              </tr>
-            </thead>
-            <tbody>
-              { league.teams.map((team) => (
-                <tr key={team.id}>
-                  <th className="bg-gray-100 border p-3 relative">
-                    { editable ?
-                      <>
-                        <input data-team-id={team.id} className="w-full border rounded px-1 py-2 focus:bg-white" type="text" name={`teams[${team.id}]`} defaultValue={team.name} placeholder='Player XX' onBlur={ updateTeamName } />
-                        <div className="absolute cursor-pointer top-0 right-0" onClick={()=>{removeMember(team.id)}}>
-                          <svg className="fill-current inline-block pr-1" xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 18 18">
-                            <path d="M14.53 4.53l-1.06-1.06L9 7.94 4.53 3.47 3.47 4.53 7.94 9l-4.47 4.47 1.06 1.06L9 10.06l4.47 4.47 1.06-1.06L10.06 9z"></path>
-                          </svg>
-                        </div>
-                      </>
-                      :
-                      <div>{team.name}</div>
-                    }
-                  </th>
-                  { league.teams.map((counter) => {
-                    if(team.id == counter.id) {
-                      return <td key={`${team.id}-${counter.id}`} className="border p-3 diagonal"></td>;
-                    }else {
-                      return <TableCell key={`${team.id}-${counter.id}`} team={team} counter={counter} />;
-                    }
-                  }) }
-                </tr>
-              )) }
-            </tbody>
-          </table>
+    <div className="overflow-x-auto">
+      <table className="min-w-full border-collapse border mb-4 whitespace-no-wrap" style={{width: 200 + CellWidth*league.teams.length}}>
+        <thead>
+          <tr className="bg-gray-100">
+            <th className="border" style={{width: 200}}></th>
+            { league.teams.map(team => (
+              <th key={team.name} className="border px-1 py-3 text-sm truncate" style={{width: CellWidth}}>{team.name}</th>
+            )) }
+          </tr>
+        </thead>
+        <tbody>
+          { league.teams.map((team) => (
+            <tr key={team.id}>
+              <th className="bg-gray-100 border px-2 relative">
+                { editable ?
+                  <>
+                    <input data-team-id={team.id} className="w-full border rounded px-1 py-2 focus:bg-white" type="text" name={`teams[${team.id}]`} defaultValue={team.name} placeholder='Player XX' onBlur={ updateTeamName } />
+                    <div className="absolute cursor-pointer top-0 right-0" onClick={()=>{removeMember(team.id)}}>
+                      <svg className="fill-current inline-block pr-1" xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 18 18">
+                        <path d="M14.53 4.53l-1.06-1.06L9 7.94 4.53 3.47 3.47 4.53 7.94 9l-4.47 4.47 1.06 1.06L9 10.06l4.47 4.47 1.06-1.06L10.06 9z"></path>
+                      </svg>
+                    </div>
+                  </>
+                  :
+                  <div>{team.name}</div>
+                }
+              </th>
+              { league.teams.map((counter) => {
+                if(team.id == counter.id) {
+                  return <td key={`${team.id}-${counter.id}`} className="border diagonal"></td>;
+                }else {
+                  return <TableCell key={`${team.id}-${counter.id}`} team={team} counter={counter} />;
+                }
+              }) }
+            </tr>
+          )) }
+        </tbody>
+      </table>
 
-          { editable &&
-            <div>
-              <form onSubmit={addMember} className="flex items-center">
-                <input className="border px-2 py-1 rounded-l text-sm" type="text" placeholder='参加者名' name='newMember' required />
-                <input className="px-2 py-1 border border-blue-600 bg-blue-600 text-white text-sm rounded-r" type="submit" value="+ 追加" />
-              </form>
-            </div>
-          }
+      { editable &&
+        <div>
+          <form onSubmit={addMember} className="flex items-center">
+            <input className="border px-2 py-1 rounded-l text-sm" type="text" placeholder='参加者名' name='newMember' required />
+            <input className="px-2 py-1 border border-blue-600 bg-blue-600 text-white text-sm rounded-r" type="submit" value="+ 追加" />
+          </form>
+        </div>
+      }
 
-          <MatchModal editable={editable} />
+      <MatchModal editable={editable} />
 
-          <style jsx>{`
-            .diagonal {
-              background-image: url('data:image/svg+xml;base64,${
-                new Buffer(`<svg xmlns="http://www.w3.org/2000/svg" style="width:100%;height:100%;"><line x1="0%" y1="0%" x2="100%" y2="100%" style="stroke: #e2e8f0; stroke-width: 1;"/></svg>`).toString('base64')
-              }');
-            }
-          `}</style>
-    </>
+      <style jsx>{`
+        .diagonal {
+          background-image: url('data:image/svg+xml;base64,${
+            new Buffer(`<svg xmlns="http://www.w3.org/2000/svg" style="width:100%;height:100%;"><line x1="0%" y1="0%" x2="100%" y2="100%" style="stroke: #e2e8f0; stroke-width: 1;"/></svg>`).toString('base64')
+          }');
+        }
+      `}</style>
+    </div>
   )
 };
