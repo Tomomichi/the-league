@@ -23,7 +23,7 @@ export default function MatchModal(editable){
 
     const matchIndex = league.matches.findIndex(m => Object.keys(m.teams).join("-") == teams.join("-"));
     league.matches[matchIndex] = match;
-    setLeague(league);
+    setLeague(Object.assign({}, league));
     setMatch(false);
   }
 
@@ -39,7 +39,7 @@ export default function MatchModal(editable){
 
     const matchIndex = league.matches.findIndex(m => Object.keys(m.teams).join("-") == teamKeys.join("-"));
     league.matches[matchIndex] = newMatch;
-    setLeague(league);
+    setLeague(Object.assign({}, league));
     setMatch(false);
   }
 
