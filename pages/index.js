@@ -1,7 +1,6 @@
 import { useState, createContext } from 'react';
 import Link from 'next/link'
 import { firebase } from '../lib/firebase.js'
-// import DiagonalSVG from '../lib/diagonalSVG.js'
 import MatchModal from '../components/MatchModal.js'
 import TableCell from '../components/TableCell.js'
 
@@ -18,16 +17,19 @@ export default function Index({initialLeague}) {
     setLeague(Object.assign({}, league));
   }
 
-  const addMember = () => {
-    const newMember = { name: 'PlayerX', id: Math.random().toString(36).substring(2) };
+  const addMember = (e) => {
+    e.preventDefault();
+    const formData = new FormData(e.currentTarget);
+    const name = formData.get('newMember');
+    if(!name || name == '') { return; }
+
+    const newMember = { name: name, id: Math.random().toString(36).substring(2) };
     league.teams.forEach(team => {
-      const teams = {
-        [team.id]: { score: null },
-        [newMember.id]: { score: null },
-      };
+      const teams = { [team.id]: { score: null }, [newMember.id]: { score: null }, };
       league.matches.push({ teams: teams, finished: false, winner: null });
     });
     league.teams.push(newMember);
+    document.getElementsByName('newMember')[0].value = "";
     setLeague(Object.assign({}, league));
   }
 
@@ -76,7 +78,10 @@ export default function Index({initialLeague}) {
             </table>
 
             <div>
-              <div className="cursor-pointer inline-block" onClick={addMember}>＋ 参加者を追加する</div>
+              <form onSubmit={addMember} className="flex items-center">
+                <input className="border px-2 py-1 rounded-l text-sm" type="text" placeholder='参加者名' name='newMember' required />
+                <input className="px-2 py-1 border border-blue-600 bg-blue-600 text-white text-sm rounded-r" type="submit" value="+ 追加" />
+              </form>
             </div>
           </div>
 
