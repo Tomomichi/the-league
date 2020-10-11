@@ -2,12 +2,15 @@ import { useState, createContext } from 'react';
 import Link from 'next/link'
 import { firebase } from '../lib/firebase.js'
 import League from '../components/League.js'
+import Ranking from '../components/Ranking.js'
 
 export default function Index({league}) {
   return (
     <div>
       <h1 className="text-lg mb-8">{league.title}</h1>
       <div>
+        <Ranking initialLeague={league} />
+        <hr className="my-12" />
         <League initialLeague={league} editable={true} />
       </div>
     </div>
@@ -72,10 +75,10 @@ export async function getStaticProps(context) {
   ];
 
   const teams = [
-    { name: 'ぴよぴよ', id: Math.random().toString(36).substring(2) },
-    { name: 'ほげほげ', id: Math.random().toString(36).substring(2) },
-    { name: 'ふがふが', id: Math.random().toString(36).substring(2) },
-    { name: 'むにゃむにゃ', id: Math.random().toString(36).substring(2) },
+    { name: 'ぴよぴよ', id: '6zdnot6r2as' },
+    { name: 'ほげほげ', id: 'a2brymi257a' },
+    { name: 'ふがふが', id: 'a54zzd5a0d4' },
+    { name: 'むにゃむにゃ', id: 'fe50h7tqqgk' },
   ];
 
   // const docRef = firebase.firestore().collection('leagues').doc(docId);
