@@ -6,7 +6,7 @@ export const LeagueContext = createContext(["", () => {}]);
 export const MatchContext = createContext(["", () => {}]);
 
 
-export default function League({initialLeague}){
+export default function League({initialLeague, editable}){
   const [match, setMatch] = useState(false);
   const [league, setLeague] = useState(initialLeague);
 
@@ -55,12 +55,18 @@ export default function League({initialLeague}){
               { league.teams.map((team) => (
                 <tr key={team.id}>
                   <th className="bg-gray-100 border p-3 relative">
-                    <input data-team-id={team.id} className="w-full border rounded px-1 py-2 focus:bg-white" type="text" name={`teams[${team.id}]`} defaultValue={team.name} placeholder='Player XX' onBlur={ updateTeamName } />
-                    <div className="absolute cursor-pointer top-0 right-0" onClick={()=>{removeMember(team.id)}}>
-                      <svg className="fill-current inline-block pr-1" xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 18 18">
-                        <path d="M14.53 4.53l-1.06-1.06L9 7.94 4.53 3.47 3.47 4.53 7.94 9l-4.47 4.47 1.06 1.06L9 10.06l4.47 4.47 1.06-1.06L10.06 9z"></path>
-                      </svg>
-                    </div>
+                    { editable ?
+                      <>
+                        <input data-team-id={team.id} className="w-full border rounded px-1 py-2 focus:bg-white" type="text" name={`teams[${team.id}]`} defaultValue={team.name} placeholder='Player XX' onBlur={ updateTeamName } />
+                        <div className="absolute cursor-pointer top-0 right-0" onClick={()=>{removeMember(team.id)}}>
+                          <svg className="fill-current inline-block pr-1" xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 18 18">
+                            <path d="M14.53 4.53l-1.06-1.06L9 7.94 4.53 3.47 3.47 4.53 7.94 9l-4.47 4.47 1.06 1.06L9 10.06l4.47 4.47 1.06-1.06L10.06 9z"></path>
+                          </svg>
+                        </div>
+                      </>
+                      :
+                      <div>{team.name}</div>
+                    }
                   </th>
                   { league.teams.map((counter) => {
                     if(team.id == counter.id) {
@@ -74,14 +80,16 @@ export default function League({initialLeague}){
             </tbody>
           </table>
 
-          <div>
-            <form onSubmit={addMember} className="flex items-center">
-              <input className="border px-2 py-1 rounded-l text-sm" type="text" placeholder='参加者名' name='newMember' required />
-              <input className="px-2 py-1 border border-blue-600 bg-blue-600 text-white text-sm rounded-r" type="submit" value="+ 追加" />
-            </form>
-          </div>
+          { editable &&
+            <div>
+              <form onSubmit={addMember} className="flex items-center">
+                <input className="border px-2 py-1 rounded-l text-sm" type="text" placeholder='参加者名' name='newMember' required />
+                <input className="px-2 py-1 border border-blue-600 bg-blue-600 text-white text-sm rounded-r" type="submit" value="+ 追加" />
+              </form>
+            </div>
+          }
 
-          <MatchModal />
+          <MatchModal editable={editable} />
 
           <style jsx>{`
             .diagonal {

@@ -8,7 +8,7 @@ export default function Index({league}) {
     <div>
       <h1 className="text-lg mb-8">{league.title}</h1>
       <div>
-        <League initialLeague={league} />
+        <League initialLeague={league} editable={true} />
       </div>
     </div>
   )
