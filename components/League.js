@@ -1,14 +1,11 @@
 import { createContext, useContext, useState } from 'react'
+import { LeagueContext, MatchContext } from '../pages/index.js';
 import MatchModal from './MatchModal.js'
 import TableCell from './TableCell.js'
 
-export const LeagueContext = createContext(["", () => {}]);
-export const MatchContext = createContext(["", () => {}]);
-
-
-export default function League({initialLeague, editable}){
-  const [match, setMatch] = useState(false);
-  const [league, setLeague] = useState(initialLeague);
+export default function League({editable}){
+  const [match, setMatch] = useContext(MatchContext);
+  const [league, setLeague] = useContext(LeagueContext);
 
   const updateTeamName = (e) => {
     const teamId = e.currentTarget.dataset.teamId;
@@ -40,8 +37,6 @@ export default function League({initialLeague, editable}){
 
   return (
     <>
-      <LeagueContext.Provider value={[league, setLeague]}>
-        <MatchContext.Provider value={[match, setMatch]}>
           <table className="table-fixed w-full overflow-x-scroll border-collapse border mb-4">
             <thead>
               <tr className="bg-gray-100">
@@ -98,8 +93,6 @@ export default function League({initialLeague, editable}){
               }');
             }
           `}</style>
-        </MatchContext.Provider>
-      </LeagueContext.Provider>
     </>
   )
 };

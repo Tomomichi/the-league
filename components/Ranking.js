@@ -1,8 +1,9 @@
-import { useState, useEffect } from 'react'
+import { useState, useContext } from 'react'
+import { LeagueContext, MatchContext } from '../pages/index.js';
 
 
 export default function Ranking({initialLeague}){
-  const [league, setLeague] = useState(initialLeague);
+  const [league, setLeague] = useContext(LeagueContext);
   const [points, setPoints] = useState({});
 
   // 勝ち点計算
@@ -23,12 +24,11 @@ export default function Ranking({initialLeague}){
     points[t.id]['point'] = points[t.id]['win'] * 3 + points[t.id]['draw'] * 1;
   });
 
-  const sortedTeams = (p) => {
-    return Object.keys(p).sort((a,b) => {
-      return p[b]['point'] - p[a]['point'];
+  const sortedTeamIds = () => {
+    return Object.keys(points).sort((a,b) => {
+      return points[b]['point'] - points[a]['point'];
     });
   }
-
 
 
   return (
@@ -45,7 +45,7 @@ export default function Ranking({initialLeague}){
           </tr>
         </thead>
         <tbody>
-          { Object.keys(points).map((tid, index) => (
+          { sortedTeamIds().map((tid, index) => (
             <tr key={tid}>
               <td className="border px-1 py-2">{index + 1}</td>
               <td className="border px-1 py-2">{ league.teams.find(t => t.id == tid).name }</td>

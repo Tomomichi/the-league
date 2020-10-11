@@ -4,16 +4,27 @@ import { firebase } from '../lib/firebase.js'
 import League from '../components/League.js'
 import Ranking from '../components/Ranking.js'
 
-export default function Index({league}) {
+export const LeagueContext = createContext(["", () => {}]);
+export const MatchContext = createContext(["", () => {}]);
+
+
+export default function Index({initialLeague}) {
+  const [league, setLeague] = useState(initialLeague);
+  const [match, setMatch] = useState(false);
+
   return (
-    <div>
-      <h1 className="text-lg mb-8">{league.title}</h1>
-      <div>
-        <Ranking initialLeague={league} />
-        <hr className="my-12" />
-        <League initialLeague={league} editable={true} />
-      </div>
-    </div>
+    <LeagueContext.Provider value={[league, setLeague]}>
+      <MatchContext.Provider value={[match, setMatch]}>
+        <div>
+          <h1 className="text-lg mb-8">{league.title}</h1>
+          <div>
+            <Ranking initialLeague={league} />
+            <hr className="my-12" />
+            <League initialLeague={league} editable={true} />
+          </div>
+        </div>
+      </MatchContext.Provider>
+    </LeagueContext.Provider>
   )
 }
 
@@ -93,7 +104,7 @@ export async function getStaticProps(context) {
 
   return {
     props: {
-      league: league,
+      initialLeague: league,
     }
   }
 }
