@@ -1,7 +1,7 @@
 import { useState, createContext } from 'react';
 import Link from 'next/link'
 import { firebase } from '../lib/firebase.js'
-import DiagonalSVG from '../lib/diagonalSVG.js'
+// import DiagonalSVG from '../lib/diagonalSVG.js'
 import MatchModal from '../components/MatchModal.js'
 import TableCell from '../components/TableCell.js'
 
@@ -65,7 +65,7 @@ export default function Index({initialLeague}) {
                     </th>
                     { league.teams.map((counter) => {
                       if(team.id == counter.id) {
-                        return <td key={`${team.id}-${counter.id}`} className="border p-3" style={{ backgroundImage: `url(\'data:image/svg+xml;base64,${DiagonalSVG}\');` }}></td>;
+                        return <td key={`${team.id}-${counter.id}`} className="border p-3 diagonal"></td>;
                       }else {
                         return <TableCell key={`${team.id}-${counter.id}`} team={team} counter={counter} />;
                       }
@@ -82,6 +82,14 @@ export default function Index({initialLeague}) {
 
           <MatchModal />
         </div>
+
+        <style jsx>{`
+          .diagonal {
+            background-image: url('data:image/svg+xml;base64,${
+              new Buffer(`<svg xmlns="http://www.w3.org/2000/svg" style="width:100%;height:100%;"><line x1="0%" y1="0%" x2="100%" y2="100%" style="stroke: #e2e8f0; stroke-width: 1;"/></svg>`).toString('base64')
+            }');
+          }
+        `}</style>
       </MatchContext.Provider>
     </LeagueContext.Provider>
   )
