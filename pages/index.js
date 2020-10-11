@@ -1,102 +1,16 @@
 import { useState, createContext } from 'react';
 import Link from 'next/link'
 import { firebase } from '../lib/firebase.js'
-import MatchModal from '../components/MatchModal.js'
-import TableCell from '../components/TableCell.js'
+import League from '../components/League.js'
 
-export const LeagueContext = createContext(["", () => {}]);
-export const MatchContext = createContext(["", () => {}]);
-
-export default function Index({initialLeague}) {
-  const [match, setMatch] = useState(false);
-  const [league, setLeague] = useState(initialLeague);
-
-  const updateTeamName = (e) => {
-    const teamId = e.currentTarget.dataset.teamId;
-    league.teams.find(t => t.id == teamId).name = e.currentTarget.value;
-    setLeague(Object.assign({}, league));
-  }
-
-  const addMember = (e) => {
-    e.preventDefault();
-    const formData = new FormData(e.currentTarget);
-    const name = formData.get('newMember');
-    if(!name || name == '') { return; }
-
-    const newMember = { name: name, id: Math.random().toString(36).substring(2) };
-    league.teams.forEach(team => {
-      const teams = { [team.id]: { score: null }, [newMember.id]: { score: null }, };
-      league.matches.push({ teams: teams, finished: false, winner: null });
-    });
-    league.teams.push(newMember);
-    document.getElementsByName('newMember')[0].value = "";
-    setLeague(Object.assign({}, league));
-  }
-
-  const removeMember = (teamId) => {
-    league.teams = league.teams.filter(t => t.id != teamId);
-    league.matches = league.matches.filter(m => !Object.keys(m.teams).includes(teamId));
-    setLeague(Object.assign({}, league));
-  }
-
+export default function Index({league}) {
   return (
-    <LeagueContext.Provider value={[league, setLeague]}>
-      <MatchContext.Provider value={[match, setMatch]}>
-        <div>
-          <h1 className="text-lg mb-8">{league.title}</h1>
-          <div>
-            <table className="table-fixed w-full overflow-x-scroll border-collapse border mb-4">
-              <thead>
-                <tr className="bg-gray-100">
-                  <th className="border"></th>
-                  { league.teams.map(team => (
-                    <th key={team.name} className="border px-1 py-2 text-sm truncate">{team.name}</th>
-                  )) }
-                </tr>
-              </thead>
-              <tbody>
-                { league.teams.map((team) => (
-                  <tr key={team.id}>
-                    <th className="bg-gray-100 border p-3 relative">
-                      <input data-team-id={team.id} className="w-full bg-gray-100 px-1 py-2 focus:bg-white" type="text" name={`teams[${team.id}]`} defaultValue={team.name} placeholder='Player XX' onBlur={ updateTeamName } />
-                      <div className="absolute cursor-pointer top-0 right-0" onClick={()=>{removeMember(team.id)}}>
-                        <svg className="fill-current inline-block pr-1" xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 18 18">
-                          <path d="M14.53 4.53l-1.06-1.06L9 7.94 4.53 3.47 3.47 4.53 7.94 9l-4.47 4.47 1.06 1.06L9 10.06l4.47 4.47 1.06-1.06L10.06 9z"></path>
-                        </svg>
-                      </div>
-                    </th>
-                    { league.teams.map((counter) => {
-                      if(team.id == counter.id) {
-                        return <td key={`${team.id}-${counter.id}`} className="border p-3 diagonal"></td>;
-                      }else {
-                        return <TableCell key={`${team.id}-${counter.id}`} team={team} counter={counter} />;
-                      }
-                    }) }
-                  </tr>
-                )) }
-              </tbody>
-            </table>
-
-            <div>
-              <form onSubmit={addMember} className="flex items-center">
-                <input className="border px-2 py-1 rounded-l text-sm" type="text" placeholder='参加者名' name='newMember' required />
-                <input className="px-2 py-1 border border-blue-600 bg-blue-600 text-white text-sm rounded-r" type="submit" value="+ 追加" />
-              </form>
-            </div>
-          </div>
-
-          <MatchModal />
-        </div>
-
-        <style jsx>{`
-          .diagonal {
-            background-image: url('data:image/svg+xml;base64,${
-              new Buffer(`<svg xmlns="http://www.w3.org/2000/svg" style="width:100%;height:100%;"><line x1="0%" y1="0%" x2="100%" y2="100%" style="stroke: #e2e8f0; stroke-width: 1;"/></svg>`).toString('base64')
-            }');
-          }
-        `}</style>
-      </MatchContext.Provider>
-    </LeagueContext.Provider>
+    <div>
+      <h1 className="text-lg mb-8">{league.title}</h1>
+      <div>
+        <League initialLeague={league} />
+      </div>
+    </div>
   )
 }
 
@@ -176,7 +90,7 @@ export async function getStaticProps(context) {
 
   return {
     props: {
-      initialLeague: league,
+      league: league,
     }
   }
 }

@@ -1,5 +1,5 @@
 import { useContext, useState } from 'react';
-import { LeagueContext, MatchContext } from '../pages/index.js';
+import { LeagueContext, MatchContext } from './League.js';
 
 export default function MatchModal(){
   const [league, setLeague] = useContext(LeagueContext);
