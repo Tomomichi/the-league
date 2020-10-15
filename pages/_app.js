@@ -10,8 +10,8 @@ const App = ({ Component, pageProps }) => {
         <title>リーグ</title>
       </Head>
 
-      <Header />
-      <div className="max-w-screen-lg mx-auto my-24 text-gray-700">
+      <div className="text-gray-700">
+        <Header />
         <Component {...pageProps} />
       </div>
     </>

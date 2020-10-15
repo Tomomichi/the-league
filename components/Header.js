@@ -3,7 +3,7 @@ import { useContext, useState } from 'react';
 
 export default function Header(){
   return (
-    <header className="flex border-b text-sm" style={{height: 40}}>
+    <header className="flex text-sm border-b" style={{height: 40}}>
       <div className="flex items-center h-full">
         <div className="flex items-center bg-gray-900 px-6 h-full">
           <img style={{height: 20}} src="/images/logo_w.png" alt="THE TOURNAMENT" />
