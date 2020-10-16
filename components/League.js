@@ -38,44 +38,46 @@ export default function League({editable}){
   }
 
   return (
-    <div className="overflow-x-auto pl-12 -ml-12">
-      <table className="min-w-full border-collapse mb-8 whitespace-no-wrap" style={{width: 200 + CellWidth*league.teams.length}}>
-        <thead>
-          <tr className="bg-gray-200">
-            <th className="border" style={{width: 200}}></th>
-            { league.teams.map(team => (
-              <th key={team.name} className="border px-1 py-3 text-sm truncate" style={{width: CellWidth}}>{team.name}</th>
-            )) }
-          </tr>
-        </thead>
-        <tbody>
-          { league.teams.map((team) => (
-            <tr key={team.id}>
-              <th className="bg-gray-200 border px-2 relative">
-                { editable ?
-                  <>
-                    <input data-team-id={team.id} className="w-full rounded px-1 py-2 focus:bg-white" type="text" name={`teams[${team.id}]`} defaultValue={team.name} placeholder='Player XX' onBlur={ updateTeamName } />
-                    <div className="absolute text-gray-500 cursor-pointer" style={{top: 'calc(50% - 15px)', left: '-25px'}} onClick={()=>{removeMember(team.id)}}>
-                      <svg className="fill-current inline-block" xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 18 18">
-                        <path d="M14.53 4.53l-1.06-1.06L9 7.94 4.53 3.47 3.47 4.53 7.94 9l-4.47 4.47 1.06 1.06L9 10.06l4.47 4.47 1.06-1.06L10.06 9z"></path>
-                      </svg>
-                    </div>
-                  </>
-                  :
-                  <div>{team.name}</div>
-                }
-              </th>
-              { league.teams.map((counter) => {
-                if(team.id == counter.id) {
-                  return <td key={`${team.id}-${counter.id}`} className="border diagonal"></td>;
-                }else {
-                  return <TableCell key={`${team.id}-${counter.id}`} team={team} counter={counter} />;
-                }
-              }) }
+    <>
+      <div className="overflow-x-scroll pl-12 -ml-12 mb-6">
+        <table className="min-w-full border-collapse whitespace-no-wrap" style={{width: 200 + CellWidth*league.teams.length}}>
+          <thead>
+            <tr className="bg-gray-200">
+              <th className="border" style={{width: 200}}></th>
+              { league.teams.map(team => (
+                <th key={team.name} className="border px-1 py-3 text-sm truncate" style={{width: CellWidth}}>{team.name}</th>
+              )) }
             </tr>
-          )) }
-        </tbody>
-      </table>
+          </thead>
+          <tbody>
+            { league.teams.map((team) => (
+              <tr key={team.id}>
+                <th className="bg-gray-200 border px-2 relative">
+                  { editable ?
+                    <>
+                      <input data-team-id={team.id} className="w-full rounded px-1 py-2 focus:bg-white" type="text" name={`teams[${team.id}]`} defaultValue={team.name} placeholder='Player XX' onBlur={ updateTeamName } />
+                      <div className="absolute text-gray-500 cursor-pointer" style={{top: 'calc(50% - 15px)', left: '-25px'}} onClick={()=>{removeMember(team.id)}}>
+                        <svg className="fill-current inline-block" xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 18 18">
+                          <path d="M14.53 4.53l-1.06-1.06L9 7.94 4.53 3.47 3.47 4.53 7.94 9l-4.47 4.47 1.06 1.06L9 10.06l4.47 4.47 1.06-1.06L10.06 9z"></path>
+                        </svg>
+                      </div>
+                    </>
+                    :
+                    <div>{team.name}</div>
+                  }
+                </th>
+                { league.teams.map((counter) => {
+                  if(team.id == counter.id) {
+                    return <td key={`${team.id}-${counter.id}`} className="border diagonal"></td>;
+                  }else {
+                    return <TableCell key={`${team.id}-${counter.id}`} team={team} counter={counter} />;
+                  }
+                }) }
+              </tr>
+            )) }
+          </tbody>
+        </table>
+      </div>
 
       { editable &&
         <div>
@@ -100,6 +102,6 @@ export default function League({editable}){
           }');
         }
       `}</style>
-    </div>
+    </>
   )
 };

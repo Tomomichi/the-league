@@ -20,16 +20,16 @@ export default function Index({initialLeague}) {
     <LeagueContext.Provider value={[league, setLeague]}>
       <MatchContext.Provider value={[match, setMatch]}>
         <MenuContext.Provider value={[menu, setMenu]}>
-          <div className="flex flex-col sm:flex-row" style={{height: "calc(100vh - 40px)"}}>
+          <div className="flex flex-col sm:flex-row leagueContainer">
             <div className="bg-gray-800 text-white text-center text-xs -mt-px">
               <MenuColumn />
             </div>
 
-            <div className={`p-8 bg-gray-200 w-1/3 overflow-y-scroll h-full text-sm ${menu['opened'] ? '' : 'hidden'}`}>
+            <div className={`px-4 sm:px-8 pt-8 bg-gray-200 sm:w-1/3 text-sm pb-8 sm:pb-24 mb-8 sm:mb-0 ${menu['opened'] ? '' : 'hidden'}`}>
               <EditColumn />
             </div>
 
-            <div className="px-12 py-4 flex-1 h-full overflow-y-scroll">
+            <div className="px-4 sm:px-12 pt-8 flex-1 overflow-y-scroll pb-24">
               <h1 className="text-lg mb-8">{league.title}</h1>
               <div>
                 <div className="flex border-b mb-8">
@@ -55,6 +55,14 @@ export default function Index({initialLeague}) {
               </a>
             </Link>
           </div>
+
+          <style jsx>{`
+            @media (min-width: 640px) {
+              .leagueContainer {
+                height: calc(100vh - 40px);
+              }
+            }
+          `}</style>
         </MenuContext.Provider>
       </MatchContext.Provider>
     </LeagueContext.Provider>
