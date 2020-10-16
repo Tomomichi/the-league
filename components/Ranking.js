@@ -2,7 +2,7 @@ import { useState, useContext, useEffect } from 'react'
 import { LeagueContext, MatchContext } from '../pages/index.js';
 
 
-export default function Ranking({initialLeague}){
+export default function Ranking(){
   const [league, setLeague] = useContext(LeagueContext);
 
   const calcPoints = () => {
