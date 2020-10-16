@@ -13,11 +13,11 @@ export default function MenuColumn(){
   }
 
   return (
-    <div className={`p-8 bg-gray-200 w-1/3 overflow-y-scroll h-full text-sm ${menu['opened'] ? '' : 'hidden'}`}>
+    <>
       <div className={`${menu['target'] == 'settings' ? '' : 'hidden'}`}>
         <div className="mb-8">
           <label htmlFor="title" className="block mb-2 font-bold">大会名*</label>
-          <input id="title" className="rounded border px-1 py-2 w-full" type="text" required
+          <input id="title" className="rounded px-1 py-2 w-full" type="text" required
             defaultValue={league.title}
             onBlur={e => updateLeague('title', e.target.value)}
           />
@@ -25,7 +25,7 @@ export default function MenuColumn(){
 
         <div className="mb-8">
           <label htmlFor="description" className="block mb-2 font-bold">概要</label>
-          <textarea id="description" className="rounded border px-1 py-2 w-full" placeholder="大会の詳細など。URLを貼ると自動でリンクに変換されます。"
+          <textarea id="description" className="rounded px-1 py-2 w-full" placeholder="大会の詳細など。URLを貼ると自動でリンクに変換されます。"
             defaultValue={league.description}
             onBlur={e => updateLeague('description', e.target.value)}
           ></textarea>
@@ -33,15 +33,15 @@ export default function MenuColumn(){
       </div>
 
       <div className={`${menu['target'] == 'players' ? '' : 'hidden'}`}>
-        <label htmlFor="description" className="block mb-2 font-bold">参加者</label>
-        <textarea id="description" rows={league.teams.length + 1} className="rounded border px-1 py-2 w-full"
+        <label htmlFor="players" className="block mb-2 font-bold">参加者</label>
+        <textarea id="players" rows={league.teams.length + 1} className="rounded px-1 py-2 w-full"
           defaultValue={league.teams.map(t => t['name']).join('\r\n')}
         ></textarea>
       </div>
 
       <div className={`${menu['target'] == 'matches' ? '' : 'hidden'}`}>
         <h6 className="font-bold mb-2">試合結果の登録</h6>
-          <div className="w-full rounded border bg-white text-center divide-y">
+          <div className="w-full rounded bg-white text-center divide-y">
               { league['matches'].map(match => {
                 const player = league.teams.find(team => team['id'] == Object.keys(match['teams']).sort()[0]);
                 const counter = league.teams.find(team => team['id'] == Object.keys(match['teams']).sort()[1]);
@@ -99,6 +99,6 @@ export default function MenuColumn(){
           </div>
         </div>
       </div>
-    </div>
+    </>
   );
 };

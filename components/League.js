@@ -38,10 +38,10 @@ export default function League({editable}){
   }
 
   return (
-    <div className="overflow-x-auto">
-      <table className="min-w-full border-collapse border mb-8 whitespace-no-wrap" style={{width: 200 + CellWidth*league.teams.length}}>
+    <div className="overflow-x-auto pl-12 -ml-12">
+      <table className="min-w-full border-collapse mb-8 whitespace-no-wrap" style={{width: 200 + CellWidth*league.teams.length}}>
         <thead>
-          <tr className="bg-gray-100">
+          <tr className="bg-gray-200">
             <th className="border" style={{width: 200}}></th>
             { league.teams.map(team => (
               <th key={team.name} className="border px-1 py-3 text-sm truncate" style={{width: CellWidth}}>{team.name}</th>
@@ -51,12 +51,12 @@ export default function League({editable}){
         <tbody>
           { league.teams.map((team) => (
             <tr key={team.id}>
-              <th className="bg-gray-100 border px-2 relative">
+              <th className="bg-gray-200 border px-2 relative">
                 { editable ?
                   <>
-                    <input data-team-id={team.id} className="w-full border rounded px-1 py-2 focus:bg-white" type="text" name={`teams[${team.id}]`} defaultValue={team.name} placeholder='Player XX' onBlur={ updateTeamName } />
-                    <div className="absolute cursor-pointer top-0 right-0" onClick={()=>{removeMember(team.id)}}>
-                      <svg className="fill-current inline-block pr-1" xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 18 18">
+                    <input data-team-id={team.id} className="w-full rounded px-1 py-2 focus:bg-white" type="text" name={`teams[${team.id}]`} defaultValue={team.name} placeholder='Player XX' onBlur={ updateTeamName } />
+                    <div className="absolute text-gray-500 cursor-pointer" style={{top: 'calc(50% - 15px)', left: '-25px'}} onClick={()=>{removeMember(team.id)}}>
+                      <svg className="fill-current inline-block" xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 18 18">
                         <path d="M14.53 4.53l-1.06-1.06L9 7.94 4.53 3.47 3.47 4.53 7.94 9l-4.47 4.47 1.06 1.06L9 10.06l4.47 4.47 1.06-1.06L10.06 9z"></path>
                       </svg>
                     </div>

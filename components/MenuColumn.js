@@ -12,7 +12,7 @@ export default function MenuColumn(){
   }
 
   return (
-    <div className="flex flex-row sm:flex-col bg-gray-800 text-white text-center text-xs -mt-px">
+    <div className="flex flex-row sm:flex-col">
       <div className={`cursor-pointer hover:bg-gray-900 flex items-center p-4`} onClick={()=>setMenu({target: menu['target'], opened: !menu['opened']})}>
         <svg className={`w-6 h-6 fill-current mx-auto transform duration-100 ${menu['opened'] ? '' : '-rotate-90'}`} viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
           <path d="M3 18h18v-2H3v2zm0-5h18v-2H3v2zm0-7v2h18V6H3z"></path>

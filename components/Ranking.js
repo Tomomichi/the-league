@@ -41,7 +41,7 @@ export default function Ranking(){
   return (
     <div className="overflow-x-scroll">
       <table className="w-full">
-        <thead className="bg-gray-100 text-sm">
+        <thead className="bg-gray-200 text-sm">
           <tr>
             <th className="border px-1 py-2 text-left">順位</th>
             <th className="border px-1 py-2 text-left">名前</th>

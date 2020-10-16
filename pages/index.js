@@ -21,8 +21,13 @@ export default function Index({initialLeague}) {
       <MatchContext.Provider value={[match, setMatch]}>
         <MenuContext.Provider value={[menu, setMenu]}>
           <div className="flex flex-col sm:flex-row" style={{height: "calc(100vh - 40px)"}}>
-            <MenuColumn />
-            <EditColumn />
+            <div className="bg-gray-800 text-white text-center text-xs -mt-px">
+              <MenuColumn />
+            </div>
+
+            <div className={`p-8 bg-gray-200 w-1/3 overflow-y-scroll h-full text-sm ${menu['opened'] ? '' : 'hidden'}`}>
+              <EditColumn />
+            </div>
 
             <div className="px-12 py-4 flex-1 h-full overflow-y-scroll">
               <h1 className="text-lg mb-8">{league.title}</h1>
