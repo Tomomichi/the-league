@@ -40,26 +40,26 @@ export default function Ranking(){
 
   return (
     <div className="overflow-x-scroll">
-      <table className="w-full">
+      <table className="min-w-full">
         <thead className="bg-gray-200 text-sm">
           <tr>
-            <th className="border px-1 py-2 text-left">順位</th>
-            <th className="border px-1 py-2 text-left">名前</th>
-            <th className="border px-1 py-2 text-left">Win</th>
-            <th className="border px-1 py-2 text-left">Lose</th>
-            <th className="border px-1 py-2 text-left">Draw</th>
-            <th className="border px-1 py-2 text-left">勝点</th>
+            <th className="px-2 py-3 text-left">順位</th>
+            <th className="px-2 py-3 text-left">名前</th>
+            <th className="px-2 py-3 text-left">Win</th>
+            <th className="px-2 py-3 text-left">Lose</th>
+            <th className="px-2 py-3 text-left">Draw</th>
+            <th className="px-2 py-3 text-left">勝点</th>
           </tr>
         </thead>
         <tbody>
           { sortedTeamIds.map((tid, index) => (
-            <tr key={tid}>
-              <td className="border px-1 py-2">{index + 1}</td>
-              <td className="border px-1 py-2">{ league.teams.find(t => t.id == tid).name }</td>
-              <td className="border px-1 py-2">{points[tid].win}</td>
-              <td className="border px-1 py-2">{points[tid].lose}</td>
-              <td className="border px-1 py-2">{points[tid].draw}</td>
-              <td className="border px-1 py-2">{points[tid].point}</td>
+            <tr key={tid} className="border-b">
+              <td className="px-2 py-3">{index + 1}</td>
+              <td className="px-2 py-3">{ league.teams.find(t => t.id == tid).name }</td>
+              <td className="px-2 py-3">{points[tid].win}</td>
+              <td className="px-2 py-3">{points[tid].lose}</td>
+              <td className="px-2 py-3">{points[tid].draw}</td>
+              <td className="px-2 py-3">{points[tid].point}</td>
             </tr>
           ))}
         </tbody>
