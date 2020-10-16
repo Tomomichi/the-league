@@ -2,6 +2,7 @@ import { useState, createContext } from 'react';
 import Link from 'next/link'
 import { firebase } from '../lib/firebase.js'
 import MenuColumn from '../components/MenuColumn.js'
+import EditColumn from '../components/EditColumn.js'
 import League from '../components/League.js'
 import Ranking from '../components/Ranking.js'
 
@@ -20,10 +21,8 @@ export default function Index({initialLeague}) {
         <MenuContext.Provider value={[menu, setMenu]}>
           <div className="flex flex-col sm:flex-row" style={{height: "calc(100vh - 40px)"}}>
             <MenuColumn />
+            <EditColumn />
 
-            { menu['opened'] &&
-              <div className={`p-4 bg-gray-100 w-1/3 h-full`}></div>
-            }
             <div className="px-12 py-4 flex-1 h-full overflow-y-scroll">
               <h1 className="text-lg mb-8">{league.title}</h1>
               <div>
