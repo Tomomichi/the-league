@@ -33,6 +33,20 @@ export default function Index({initialLeague}) {
               </div>
             </div>
           </div>
+
+          <div className="flex items-stretch fixed w-full bottom-0 z-50 bg-white border-t px-4 py-1">
+            <Link href="">
+              <a className="rounded bg-red-600 text-white px-6 py-2 text-sm mr-8 hover:bg-red-700">保存する</a>
+            </Link>
+            <Link href="">
+              <a className="flex items-center text-sm hover:opacity-75">
+                <svg className="w-4 h-4 fill-current mr-1" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+                  <polygon points="10 8.58578644 2.92893219 1.51471863 1.51471863 2.92893219 8.58578644 10 1.51471863 17.0710678 2.92893219 18.4852814 10 11.4142136 17.0710678 18.4852814 18.4852814 17.0710678 11.4142136 10 18.4852814 2.92893219 17.0710678 1.51471863 10 8.58578644"></polygon>
+                </svg>
+                閉じる
+              </a>
+            </Link>
+          </div>
         </MenuContext.Provider>
       </MatchContext.Provider>
     </LeagueContext.Provider>
