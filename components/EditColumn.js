@@ -41,29 +41,31 @@ export default function MenuColumn(){
 
       <div className={`${menu['target'] == 'matches' ? '' : 'hidden'}`}>
         <h6 className="font-bold mb-2">試合結果の登録</h6>
-        <div className="rounded border overflow-hidden">
-          <table className="w-full bg-white text-center table-fixed">
-            <tbody className="divide-y">
+          <div className="w-full rounded border bg-white text-center divide-y">
               { league['matches'].map(match => {
                 const player = league.teams.find(team => team['id'] == Object.keys(match['teams']).sort()[0]);
                 const counter = league.teams.find(team => team['id'] == Object.keys(match['teams']).sort()[1]);
                 return(
-                  <tr key={Math.random()} className="cursor-pointer" onClick={()=>setMatch(match)}>
-                    <td className={`w-1/2 py-3 ${match['winner'] == player['id'] ? 'text-red-600 font-bold' : ''}`}>
+                  <div key={Math.random()} className="flex cursor-pointer" onClick={()=>setMatch(match)}>
+                    <div className={`flex-1 px-2 py-4 ${match['winner'] == player['id'] ? 'text-red-700 font-bold' : ''}`}>
                       <p className="truncate">{player['name']}</p>
-                      <p>{match['teams'][player['id']]['score']}</p>
-                    </td>
-                    <td className="py-3">-</td>
-                    <td className={`w-1/2 py-3 ${match['winner'] == counter['id'] ? 'text-red-600 font-bold' : ''}`}>
+                    </div>
+                    <div className="px-2 py-4 flex">
+                      <span className={`w-8 ${match['winner'] == player['id'] ? 'text-red-700 font-bold' : ''}`}>
+                        {match['teams'][player['id']]['score']}
+                      </span>
+                      <span className="mx-2">-</span>
+                      <span className={`w-8 ${match['winner'] == counter['id'] ? 'text-red-700 font-bold' : ''}`}>
+                        {match['teams'][counter['id']]['score']}
+                      </span>
+                    </div>
+                    <div className={`flex-1 px-2 py-4 ${match['winner'] == counter['id'] ? 'text-red-700 font-bold' : ''}`}>
                       <p className="truncate">{counter['name']}</p>
-                      {match['teams'][counter['id']]['score']}
-                    </td>
-                  </tr>
+                    </div>
+                  </div>
                 );
               }) }
-            </tbody>
-          </table>
-        </div>
+          </div>
       </div>
 
       <div className={`${menu['target'] == 'share' ? '' : 'hidden'}`}>

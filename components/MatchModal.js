@@ -63,13 +63,13 @@ export default function MatchModal(editable){
 
           <form id="form" onSubmit={updateMatch}>
             <div className="mb-4 px-4">
-              <div className="flex items-center">
-                <div className="flex-1 text-center border bg-gray-100 p-4 rounded">
+              <div className="flex items-stretch">
+                <div className="flex-1 text-center border bg-gray-100 py-4 rounded">
                   <div className="mb-2">{ league.teams.find(t => t.id == Object.keys(match.teams).sort()[0]).name }</div>
                   <input name={`scores[${Object.keys(match.teams)[0]}]`} className="px-1 py-2 rounded border" type="text" placeholder="スコア" defaultValue={match.teams[Object.keys(match.teams)[0]].score} />
                 </div>
-                <div className="mx-2 font-bold">-</div>
-                <div className="flex-1 text-center border bg-gray-100 p-4 rounded">
+                <div className="mx-2 font-bold flex items-center">-</div>
+                <div className="flex-1 text-center border bg-gray-100 py-4 rounded">
                   <div className="mb-2">{ league.teams.find(t => t.id == Object.keys(match.teams).sort()[1]).name }</div>
                   <input name={`scores[${Object.keys(match.teams)[1]}]`} className="px-1 py-2 rounded border" type="text" placeholder="スコア" defaultValue={match.teams[Object.keys(match.teams)[1]].score} />
                 </div>
