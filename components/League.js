@@ -39,7 +39,7 @@ export default function League({editable}){
 
   return (
     <div className="overflow-x-auto">
-      <table className="min-w-full border-collapse border mb-4 whitespace-no-wrap" style={{width: 200 + CellWidth*league.teams.length}}>
+      <table className="min-w-full border-collapse border mb-8 whitespace-no-wrap" style={{width: 200 + CellWidth*league.teams.length}}>
         <thead>
           <tr className="bg-gray-100">
             <th className="border" style={{width: 200}}></th>
@@ -80,8 +80,13 @@ export default function League({editable}){
       { editable &&
         <div>
           <form onSubmit={addMember} className="flex items-center">
-            <input className="border px-2 py-1 rounded-l text-sm" type="text" placeholder='参加者名' name='newMember' required />
-            <input className="px-2 py-1 border border-blue-600 bg-blue-600 text-white text-sm rounded-r" type="submit" value="+ 追加" />
+            <input className="border px-2 py-2 rounded-l text-sm" type="text" placeholder='参加者名' name='newMember' required />
+            <button className="flex items-center px-3 py-2 border border-blue-600 bg-blue-600 text-white text-sm rounded-r" type="submit">
+              <svg className="w-5 h-5 fill-current mr-1" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                <path d="M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6v2z"></path>
+              </svg>
+              追加
+            </button>
           </form>
         </div>
       }

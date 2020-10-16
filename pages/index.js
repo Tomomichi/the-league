@@ -14,6 +14,7 @@ export default function Index({initialLeague}) {
   const [league, setLeague] = useState(initialLeague);
   const [match, setMatch] = useState(false);
   const [menu, setMenu] = useState({target: 'settings', opened: true});
+  const [mainColumn, setMainColumn] = useState('matches');
 
   return (
     <LeagueContext.Provider value={[league, setLeague]}>
@@ -26,9 +27,12 @@ export default function Index({initialLeague}) {
             <div className="px-12 py-4 flex-1 h-full overflow-y-scroll">
               <h1 className="text-lg mb-8">{league.title}</h1>
               <div>
-                <Ranking />
-                <hr className="my-12" />
-                <League editable={true} />
+                <div className="flex border-b mb-8">
+                  <div className={`px-6 pb-1 border-gray-700 ${mainColumn == 'matches' ? 'border-b-2' : 'cursor-pointer'}`} onClick={()=>setMainColumn('matches')}>対戦表</div>
+                  <div className={`px-6 pb-1 border-gray-700 ${mainColumn == 'ranking' ? 'border-b-2' : 'cursor-pointer'}`} onClick={()=>setMainColumn('ranking')}>順位表</div>
+                </div>
+                { mainColumn == 'matches' && <League editable={true} /> }
+                { mainColumn == 'ranking' && <Ranking /> }
               </div>
             </div>
           </div>
