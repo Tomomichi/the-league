@@ -1,6 +1,6 @@
 import Link from 'next/link'
 import { useContext, useState } from 'react';
-import { LeagueContext, MatchContext, MenuContext } from '../../../pages/_app.js';
+import { LeagueContext, MatchContext, MenuContext } from '../../../lib/contexts.js';
 
 export default function MenuColumn(){
   const [match, setMatch] = useContext(MatchContext);

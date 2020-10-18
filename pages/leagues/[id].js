@@ -1,18 +1,17 @@
 import { useState, useContext, createContext } from 'react';
 import { useRouter } from 'next/router'
 import Link from 'next/link'
-import { LeagueContext, MatchContext, MenuContext } from '../_app.js';
 import { firebase } from '../../lib/firebase.js'
+import { LeagueContext, MatchContext, MenuContext } from '../../lib/contexts.js';
 import MenuColumn from '../../components/leagues/edit/MenuColumn.js'
 import EditColumn from '../../components/leagues/edit/EditColumn.js'
 import League from '../../components/leagues/League.js'
 import Ranking from '../../components/leagues/Ranking.js'
 
+
 export default function Index({initialLeague}) {
-  const [league, setLeague] = useContext(LeagueContext);
   const router = useRouter();
-  if (router.isFallback || !league) {
-    setLeague(initialLeague);
+  if (router.isFallback) {
     return(
       <div className="mt-16 text-center">
         <div>Loading...</div>
@@ -20,12 +19,15 @@ export default function Index({initialLeague}) {
     )
   }
 
-  const [match, setMatch] = useContext(MatchContext);
-  const [menu, setMenu] = useContext(MenuContext);
+  const [league, setLeague] = useState(initialLeague);
+  const [match, setMatch] = useState(false);
+  const [menu, setMenu] = useState({target: 'settings', opened: true});
   const [mainColumn, setMainColumn] = useState('matches');
 
   return (
-    <>
+    <LeagueContext.Provider value={[league, setLeague]}>
+      <MatchContext.Provider value={[match, setMatch]}>
+        <MenuContext.Provider value={[menu, setMenu]}>
           <div className="flex flex-col sm:flex-row leagueContainer">
             <div className="bg-gray-800 text-white text-center text-xs -mt-px">
               <MenuColumn />
@@ -69,7 +71,9 @@ export default function Index({initialLeague}) {
               }
             }
           `}</style>
-        </>
+        </MenuContext.Provider>
+      </MatchContext.Provider>
+    </LeagueContext.Provider>
   )
 }
 
@@ -87,6 +91,7 @@ export async function getStaticPaths() {
     fallback: true,
   }
 }
+
 
 export async function getStaticProps({params}) {
   const doc = await firebase.firestore().collection('leagues').doc(params.id).get();

@@ -1,5 +1,5 @@
 import { useState, useContext, useEffect } from 'react'
-import { LeagueContext, MatchContext } from '../../pages/_app.js';
+import { LeagueContext, MatchContext } from '../../lib/contexts.js';
 
 
 export default function Ranking(){

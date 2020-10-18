@@ -1,14 +1,11 @@
 import { useState, useContext, createContext } from 'react';
 import Link from 'next/link'
 import { firebase } from '../lib/firebase.js'
-import { LeagueContext } from '../contexts/LeagueContext.js';
-import MenuColumn from '../components/MenuColumn.js'
-import EditColumn from '../components/EditColumn.js'
-import League from '../components/League.js'
-import Ranking from '../components/Ranking.js'
-
-export const MatchContext = createContext(["", () => {}]);
-export const MenuContext = createContext(["", () => {}]);
+import { LeagueContext, MatchContext, MenuContext } from '../lib/contexts.js';
+import MenuColumn from '../components/leagues/edit/MenuColumn.js'
+import EditColumn from '../components/leagues/edit/EditColumn.js'
+import League from '../components/leagues/League.js'
+import Ranking from '../components/leagues/Ranking.js'
 
 export default function Index({initialLeague}) {
   const [league, setLeague] = useState(initialLeague);
