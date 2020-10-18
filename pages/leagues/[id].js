@@ -1,4 +1,5 @@
 import { useState, createContext } from 'react';
+import { useRouter } from 'next/router'
 import Link from 'next/link'
 import { firebase } from '../../lib/firebase.js'
 import { LeagueContext, MatchContext } from '../../lib/contexts.js';
@@ -7,7 +8,8 @@ import League from '../../components/leagues/League.js'
 import Ranking from '../../components/leagues/Ranking.js'
 
 
-export default function Index({initialLeague}) {
+export default function Show({initialLeague}) {
+  const router = useRouter();
   const [league, setLeague] = useState(initialLeague);
   const [match, setMatch] = useState(false);
   const [mainColumn, setMainColumn] = useState('matches');
@@ -16,6 +18,13 @@ export default function Index({initialLeague}) {
     { name: 'すべてのリーグ表', href: '/leagues' },
     { name: league.title },
   ];
+
+  const deleteLeague = async () => {
+    const conf = confirm('大会データを削除します。本当によろしいですか？');
+    if(!conf) { return; }
+    await firebase.firestore().collection('leagues').doc(league.id).delete();
+    router.push('/');
+  }
 
   return (
     <LeagueContext.Provider value={[league, setLeague]}>
@@ -30,11 +39,9 @@ export default function Index({initialLeague}) {
                 編集
               </a>
             </Link>
-            <Link href="/leagues/[...edit]" as={`/leagues/${league.id}/edit`}>
-              <a className="rounded px-4 py-2 text-red-700 hover:opacity-75 ml-2">
-                削除
-              </a>
-            </Link>
+            <a className="cursor-pointer rounded px-4 py-2 text-red-700 hover:opacity-75 ml-2" onClick={deleteLeague}>
+              削除
+            </a>
           </div>
 
           <div className="overflow-y-scroll">
@@ -69,7 +76,11 @@ export async function getStaticProps({params}) {
   const leagueId = params.id;
   const doc = await firebase.firestore().collection('leagues').doc(leagueId).get();
   const leagueData = doc.data() || {};
-  const league = Object.assign(leagueData, {id: leagueId});
+  const league = Object.assign(leagueData, {
+    id: leagueId,
+    createdAt: leagueData.createdAt.toDate().toISOString(),
+    updatedAt: leagueData.updatedAt.toDate().toISOString(),
+  });
 
   return {
     props: {
