@@ -1,13 +1,22 @@
 import Link from 'next/link'
+import { useRouter } from 'next/router'
 import { useContext, useState } from 'react';
+import { firebase } from '../lib/firebase.js'
 
 export default function Header(){
+  const router = useRouter()
+
+  const createLeague = () => {
+    const newRef = firebase.firestore().collection('leagues').doc();
+    router.push(`/leagues/${newRef.id}/edit`);
+  }
+
   return (
-    <header className="flex text-sm border-b" style={{height: 40}}>
+    <header className="flex justify-between text-sm border-b" style={{height: 40}}>
       <div className="flex items-center h-full">
         <div className="flex items-center bg-gray-900 px-6 h-full">
           { false && <img style={{height: 20}} src="/images/logo_w.png" alt="THE TOURNAMENT" /> }
-          <span className="text-white text-xl font-bold">THE LEAGUE</span>
+          <Link href="/"><a className="text-white text-xl font-bold hover:opacity-75">THE LEAGUE</a></Link>
         </div>
         <Link href="#">
           <a className="flex items-center px-4 hover:bg-gray-100 hover:opacity-75">
@@ -19,9 +28,16 @@ export default function Header(){
         </Link>
       </div>
 
-      <div className="flex items-center h-full flex-1 justify-end">
+      <div className="flex">
+        <div className="flex cursor-pointer items-center hover:opacity-75 mr-4" onClick={createLeague}>
+          <svg className={`mr-1 w-5 h-5 fill-current`} viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+            <path d="M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6v2z"></path>
+          </svg>
+          新規作成
+        </div>
+
         <Link href="#">
-          <a className="flex h-full items-center px-4 hover:bg-gray-100 hover:opacity-75">
+          <a className="flex items-center px-4 hover:opacity-75">
             <svg className={`w-5 h-5 fill-current`} viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
               <path d="M3 18h18v-2H3v2zm0-5h18v-2H3v2zm0-7v2h18V6H3z"></path>
             </svg>

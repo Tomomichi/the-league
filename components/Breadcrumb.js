@@ -12,7 +12,7 @@ export default function Breadcrumb({items}){
               <div key={index} className="flex items-center">
                 <li>
                   <Link href={item.href}>
-                    <a className="text-blue-600">{item.name}</a>
+                    <a className="text-blue-600 hover:opacity-75">{item.name}</a>
                   </Link>
                 </li>
                 <li><svg className={`mx-1 w-5 h-5 fill-current text-gray-500`} viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z"></path></svg></li>
