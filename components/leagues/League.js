@@ -63,7 +63,7 @@ export default function League({editable}){
                       </div>
                     </div>
                     :
-                    <div>{team.name}</div>
+                    <div className="text-left">{team.name}</div>
                   }
                 </th>
                 { league.teams.map((counter) => {

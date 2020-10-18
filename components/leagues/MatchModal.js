@@ -1,7 +1,7 @@
 import { useContext, useState } from 'react';
 import { LeagueContext, MatchContext } from '../../lib/contexts.js';
 
-export default function MatchModal(editable){
+export default function MatchModal({editable}){
   const [league, setLeague] = useContext(LeagueContext);
   const [match, setMatch] = useContext(MatchContext);
 
@@ -58,7 +58,7 @@ export default function MatchModal(editable){
           </div>
 
           <div className="border-b my-4">
-            <h5 className="px-4 pb-2 text-lg font-bold">試合結果の編集</h5>
+            <h5 className="px-4 pb-2 text-lg font-bold">試合結果</h5>
           </div>
 
           <form id="form" onSubmit={updateMatch}>
@@ -66,35 +66,47 @@ export default function MatchModal(editable){
               <div className="flex items-stretch">
                 <div className="flex-1 text-center border bg-gray-100 py-4 rounded">
                   <div className="mb-2">{ league.teams.find(t => t.id == Object.keys(match.teams).sort()[0]).name }</div>
-                  <input name={`scores[${Object.keys(match.teams)[0]}]`} className="px-1 py-2 rounded border" type="text" placeholder="スコア" defaultValue={match.teams[Object.keys(match.teams)[0]].score} />
+                  { editable ?
+                    <input name={`scores[${Object.keys(match.teams)[0]}]`} className="px-1 py-2 rounded border" type="text" placeholder="スコア" defaultValue={match.teams[Object.keys(match.teams)[0]].score} />
+                    :
+                    <div className="mt-2">{match.teams[Object.keys(match.teams)[0]].score}</div>
+                  }
                 </div>
                 <div className="mx-2 font-bold flex items-center">-</div>
                 <div className="flex-1 text-center border bg-gray-100 py-4 rounded">
                   <div className="mb-2">{ league.teams.find(t => t.id == Object.keys(match.teams).sort()[1]).name }</div>
-                  <input name={`scores[${Object.keys(match.teams)[1]}]`} className="px-1 py-2 rounded border" type="text" placeholder="スコア" defaultValue={match.teams[Object.keys(match.teams)[1]].score} />
+                  { editable ?
+                    <input name={`scores[${Object.keys(match.teams)[1]}]`} className="px-1 py-2 rounded border" type="text" placeholder="スコア" defaultValue={match.teams[Object.keys(match.teams)[1]].score} />
+                    :
+                    <div className="mt-2">{match.teams[Object.keys(match.teams)[1]].score}</div>
+                  }
                 </div>
               </div>
             </div>
 
-            <div className="mb-4 px-4">
-              <select name="winner" className="w-full px-1 py-2 border" defaultValue={ (match.finished && match.winner===null) ? 'draw' : match.winner }>
-                <option value="">-- 勝者を選択 --</option>
-                { Object.keys(match.teams).map(teamId => (
-                  <option key={teamId} value={teamId}>{ league.teams.find(team => team.id == teamId).name }</option>
-                ))}
-                <option value="draw">（引き分け）</option>
-              </select>
-            </div>
+            { editable &&
+              <>
+                <div className="mb-4 px-4">
+                  <select name="winner" className="w-full px-1 py-2 border" defaultValue={ (match.finished && match.winner===null) ? 'draw' : match.winner }>
+                    <option value="">-- 勝者を選択 --</option>
+                    { Object.keys(match.teams).map(teamId => (
+                      <option key={teamId} value={teamId}>{ league.teams.find(team => team.id == teamId).name }</option>
+                    ))}
+                    <option value="draw">（引き分け）</option>
+                  </select>
+                </div>
 
-            <div className="bg-gray-100 p-4 flex">
-              <div className="flex-1">
-                <input type="submit" className="bg-blue-600 text-white hover:opacity-75 text-sm p-2 mr-2 rounded cursor-pointer" value="更新" />
-                <div className="inline-block cursor-pointer hover:opacity-75 text-sm p-2 rounded" onClick={()=>{setMatch(false)}}>キャンセル</div>
-              </div>
-              <div>
-                <div className="inline-block cursor-pointer text-red-600 border border-red-600 hover:opacity-75 text-sm p-2 rounded" onClick={resetMatch}>削除</div>
-              </div>
-            </div>
+                <div className="bg-gray-100 p-4 flex">
+                  <div className="flex-1">
+                    <input type="submit" className="bg-blue-600 text-white hover:opacity-75 text-sm p-2 mr-2 rounded cursor-pointer" value="更新" />
+                    <div className="inline-block cursor-pointer hover:opacity-75 text-sm p-2 rounded" onClick={()=>{setMatch(false)}}>キャンセル</div>
+                  </div>
+                  <div>
+                    <div className="inline-block cursor-pointer text-red-600 border border-red-600 hover:opacity-75 text-sm p-2 rounded" onClick={resetMatch}>削除</div>
+                  </div>
+                </div>
+              </>
+            }
           </form>
         </div>
       </div>

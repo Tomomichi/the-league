@@ -2,14 +2,12 @@ import { useState, createContext } from 'react';
 import { useRouter } from 'next/router'
 import Link from 'next/link'
 import { firebase } from '../../lib/firebase.js'
-import MenuColumn from '../../components/MenuColumn.js'
-import EditColumn from '../../components/EditColumn.js'
-import League from '../../components/League.js'
-import Ranking from '../../components/Ranking.js'
+import { LeagueContext, MatchContext, MenuContext } from '../../lib/contexts.js';
+import MenuColumn from '../../components/leagues/edit/MenuColumn.js'
+import EditColumn from '../../components/leagues/edit/EditColumn.js'
+import League from '../../components/leagues/League.js'
+import Ranking from '../../components/leagues/Ranking.js'
 
-export const LeagueContext = createContext(["", () => {}]);
-export const MatchContext = createContext(["", () => {}]);
-export const MenuContext = createContext(["", () => {}]);
 
 export default function Index({initialLeague}) {
   const router = useRouter();
@@ -94,13 +92,12 @@ export async function getStaticPaths() {
   }
 }
 
+
 export async function getStaticProps({params}) {
-  const id = params.edit.pop(-2);
-  const doc = await firebase.firestore().collection('leagues').doc(id).get();
+  const leagueId = params.edit[0];
+  const doc = await firebase.firestore().collection('leagues').doc(leagueId).get();
   const leagueData = doc.data() || defaultLeague();
-  const league = Object.assign(leagueData, {id: id});
-  console.log("--")
-  console.log(league)
+  const league = Object.assign(leagueData, {id: leagueId});
 
   return {
     props: {
