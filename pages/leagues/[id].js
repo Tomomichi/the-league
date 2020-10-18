@@ -2,6 +2,7 @@ import { useState, createContext } from 'react';
 import Link from 'next/link'
 import { firebase } from '../../lib/firebase.js'
 import { LeagueContext, MatchContext } from '../../lib/contexts.js';
+import Breadcrumb from '../../components/Breadcrumb.js'
 import League from '../../components/leagues/League.js'
 import Ranking from '../../components/leagues/Ranking.js'
 
@@ -11,20 +12,38 @@ export default function Index({initialLeague}) {
   const [match, setMatch] = useState(false);
   const [mainColumn, setMainColumn] = useState('matches');
 
+  const breadcrumbs = [
+    { name: 'すべてのリーグ表', href: '/leagues' },
+    { name: league.title },
+  ];
+
   return (
     <LeagueContext.Provider value={[league, setLeague]}>
       <MatchContext.Provider value={[match, setMatch]}>
-        <div className="flex flex-col sm:flex-row">
-          <div className="px-4 sm:px-12 pt-8 overflow-y-scroll pb-24">
-            <h1 className="text-lg mb-8">{league.title}</h1>
-            <div>
-              <div className="flex border-b mb-8">
-                <div className={`px-6 pb-1 border-gray-700 ${mainColumn == 'matches' ? 'border-b-2' : 'cursor-pointer'}`} onClick={()=>setMainColumn('matches')}>対戦表</div>
-                <div className={`px-6 pb-1 border-gray-700 ${mainColumn == 'ranking' ? 'border-b-2' : 'cursor-pointer'}`} onClick={()=>setMainColumn('ranking')}>順位表</div>
-              </div>
-              { mainColumn == 'matches' && <League editable={false} /> }
-              { mainColumn == 'ranking' && <Ranking /> }
+        <Breadcrumb items={breadcrumbs} />
+
+        <div>
+          <h1 className="text-xl mb-6 py-2 border-t-4 border-b-4 border-gray-900 font-bold">{league.title}</h1>
+          <div className="mb-20 text-sm">
+            <Link href="/leagues/[...edit]" as={`/leagues/${league.id}/edit`}>
+              <a className="rounded border px-4 py-2 text-blue-600 border-blue-600 hover:opacity-75">
+                編集
+              </a>
+            </Link>
+            <Link href="/leagues/[...edit]" as={`/leagues/${league.id}/edit`}>
+              <a className="rounded px-4 py-2 text-red-700 hover:opacity-75 ml-2">
+                削除
+              </a>
+            </Link>
+          </div>
+
+          <div className="overflow-y-scroll">
+            <div className="flex border-b mb-8">
+              <div className={`px-6 pb-1 border-gray-700 ${mainColumn == 'matches' ? 'border-b-2' : 'cursor-pointer'}`} onClick={()=>setMainColumn('matches')}>対戦表</div>
+              <div className={`px-6 pb-1 border-gray-700 ${mainColumn == 'ranking' ? 'border-b-2' : 'cursor-pointer'}`} onClick={()=>setMainColumn('ranking')}>順位表</div>
             </div>
+            { mainColumn == 'matches' && <League editable={false} /> }
+            { mainColumn == 'ranking' && <Ranking /> }
           </div>
         </div>
       </MatchContext.Provider>

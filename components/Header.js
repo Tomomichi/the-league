@@ -6,7 +6,8 @@ export default function Header(){
     <header className="flex text-sm border-b" style={{height: 40}}>
       <div className="flex items-center h-full">
         <div className="flex items-center bg-gray-900 px-6 h-full">
-          <img style={{height: 20}} src="/images/logo_w.png" alt="THE TOURNAMENT" />
+          { false && <img style={{height: 20}} src="/images/logo_w.png" alt="THE TOURNAMENT" /> }
+          <span className="text-white text-xl font-bold">THE LEAGUE</span>
         </div>
         <Link href="#">
           <a className="flex items-center px-4 hover:bg-gray-100 hover:opacity-75">
