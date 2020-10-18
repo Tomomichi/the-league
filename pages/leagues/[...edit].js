@@ -9,7 +9,7 @@ import League from '../../components/leagues/League.js'
 import Ranking from '../../components/leagues/Ranking.js'
 
 
-export default function Index({initialLeague}) {
+export default function Index({initialLeague, initialPersisted}) {
   const router = useRouter();
   if (router.isFallback) {
     return(
@@ -23,6 +23,20 @@ export default function Index({initialLeague}) {
   const [match, setMatch] = useState(false);
   const [menu, setMenu] = useState({target: 'settings', opened: true});
   const [mainColumn, setMainColumn] = useState('matches');
+  const [persisted, setPersisted] = useState(initialPersisted);
+
+
+  const updateLeague = async () => {
+    const ref = firebase.firestore().collection('leagues').doc(league.id);
+    const dupLeague = Object.assign({}, league, {
+      updatedAt: new Date(),
+      createdAt: new Date(league.createdAt)
+    });
+    delete dupLeague.id;
+
+    await ref.set(dupLeague);
+    if(!persisted) { setPersisted(true); }
+  }
 
   return (
     <LeagueContext.Provider value={[league, setLeague]}>
@@ -51,9 +65,7 @@ export default function Index({initialLeague}) {
           </div>
 
           <div className="flex items-stretch fixed w-screen left-0 bottom-0 z-50 bg-white border-t px-4 py-1">
-            <Link href="">
-              <a className="rounded bg-red-600 text-white px-6 py-2 text-sm mr-8 hover:bg-red-700">保存する</a>
-            </Link>
+            <a className="rounded bg-red-600 text-white px-6 py-2 text-sm mr-8 hover:bg-red-700" onClick={updateLeague}>保存する</a>
             <Link href="/leagues/[id]" as={`/leagues/${league.id}`}>
               <a className="flex items-center text-sm hover:opacity-75">
                 <svg className="w-4 h-4 fill-current mr-1" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
@@ -79,11 +91,6 @@ export default function Index({initialLeague}) {
 
 
 export async function getStaticPaths() {
-  // const snapshot = await firebase.firestore().collection('chars').get();
-  // const hanguls = await [...new Set(snapshot.docs.map(doc => doc.data().hangul))];  //重複削除
-  // const paths = hanguls.map(h => {
-  //   return { params: {id: h} }
-  // });
   const paths = [];
 
   return {
@@ -97,11 +104,16 @@ export async function getStaticProps({params}) {
   const leagueId = params.edit[0];
   const doc = await firebase.firestore().collection('leagues').doc(leagueId).get();
   const leagueData = doc.data() || defaultLeague();
-  const league = Object.assign(leagueData, {id: leagueId});
+  const league = Object.assign(leagueData, {
+    id: leagueId,
+    createdAt: leagueData.createdAt ? leagueData.createdAt.toDate().toISOString() : new Date().toISOString(),
+    updatedAt: leagueData.updatedAt ? leagueData.updatedAt.toDate().toISOString() : new Date().toISOString(),
+  });
 
   return {
     props: {
       initialLeague: league,
+      persisted: !!doc.data(),
     }
   }
 }
