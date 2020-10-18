@@ -1,6 +1,15 @@
 import Link from 'next/link'
+import { useRouter } from 'next/router'
+import { firebase } from '../lib/firebase.js'
 
 export default function Index() {
+  const router = useRouter()
+
+  const createLeague = () => {
+    const newRef = firebase.firestore().collection('leagues').doc();
+    router.push(`/leagues/${newRef.id}/edit`);
+  }
+
   return (
     <div className="full-bleed">
       <div className="bg-gray-800 text-gray-100 -mt-px text-center py-20">
@@ -9,7 +18,7 @@ export default function Index() {
         </svg>
         <h1 className="text-3xl sm:text-6xl font-bold mb-2">THE LEAGUE</h1>
         <p className="mb-12">簡単・便利な総当たりリーグ戦作成ツールの決定版！</p>
-        <div className="inline-block text-white bg-red-700 rounded px-12 py-3 hover:bg-red-600 cursor-pointer mb-2">
+        <div className="inline-block text-white bg-red-700 rounded px-12 py-3 hover:bg-red-600 cursor-pointer mb-2" onClick={createLeague}>
           リーグ戦を作成する
         </div>
         <p className="text-gray-200 text-xs">（ログインなしでも利用できます）</p>
