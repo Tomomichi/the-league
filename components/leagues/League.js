@@ -1,6 +1,5 @@
 import { createContext, useContext, useState } from 'react'
-import { MatchContext } from '../pages/index.js';
-import { LeagueContext } from '../contexts/LeagueContext.js';
+import { LeagueContext, MatchContext } from '../../pages/_app.js';
 import MatchModal from './MatchModal.js'
 import TableCell from './TableCell.js'
 

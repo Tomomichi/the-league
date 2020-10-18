@@ -1,25 +1,31 @@
 import { useState, useContext, createContext } from 'react';
+import { useRouter } from 'next/router'
 import Link from 'next/link'
-import { firebase } from '../lib/firebase.js'
-import { LeagueContext } from '../contexts/LeagueContext.js';
-import MenuColumn from '../components/MenuColumn.js'
-import EditColumn from '../components/EditColumn.js'
-import League from '../components/League.js'
-import Ranking from '../components/Ranking.js'
-
-export const MatchContext = createContext(["", () => {}]);
-export const MenuContext = createContext(["", () => {}]);
+import { LeagueContext, MatchContext, MenuContext } from '../_app.js';
+import { firebase } from '../../lib/firebase.js'
+import MenuColumn from '../../components/leagues/edit/MenuColumn.js'
+import EditColumn from '../../components/leagues/edit/EditColumn.js'
+import League from '../../components/leagues/League.js'
+import Ranking from '../../components/leagues/Ranking.js'
 
 export default function Index({initialLeague}) {
-  const [league, setLeague] = useState(initialLeague);
-  const [match, setMatch] = useState(false);
-  const [menu, setMenu] = useState({target: 'settings', opened: true});
+  const [league, setLeague] = useContext(LeagueContext);
+  const router = useRouter();
+  if (router.isFallback || !league) {
+    setLeague(initialLeague);
+    return(
+      <div className="mt-16 text-center">
+        <div>Loading...</div>
+      </div>
+    )
+  }
+
+  const [match, setMatch] = useContext(MatchContext);
+  const [menu, setMenu] = useContext(MenuContext);
   const [mainColumn, setMainColumn] = useState('matches');
 
   return (
-    <LeagueContext.Provider value={[league, setLeague]}>
-      <MatchContext.Provider value={[match, setMatch]}>
-        <MenuContext.Provider value={[menu, setMenu]}>
+    <>
           <div className="flex flex-col sm:flex-row leagueContainer">
             <div className="bg-gray-800 text-white text-center text-xs -mt-px">
               <MenuColumn />
@@ -63,89 +69,59 @@ export default function Index({initialLeague}) {
               }
             }
           `}</style>
-        </MenuContext.Provider>
-      </MatchContext.Provider>
-    </LeagueContext.Provider>
+        </>
   )
 }
 
 
-export async function getStaticProps(context) {
-  const docId = "svVUNf8p6vwfpP9V96XW";
-  const doc = await firebase.firestore().collection('leagues').doc(docId).get();
-  const league = Object.assign(doc.data(), {id: doc.id});
+export async function getStaticPaths() {
+  // const snapshot = await firebase.firestore().collection('chars').get();
+  // const hanguls = await [...new Set(snapshot.docs.map(doc => doc.data().hangul))];  //重複削除
+  // const paths = hanguls.map(h => {
+  //   return { params: {id: h} }
+  // });
+  const paths = [];
 
-  const matches = [
-    {
-      winner: '6zdnot6r2as',
-      finished: true,
-      teams: {
-        '6zdnot6r2as' : { score: 12, },
-        'a2brymi257a': { score: 3, },
-      },
-    },
-    {
-      winner: null,
-      finished: false,
-      teams: {
-        '6zdnot6r2as' : { score: null, },
-        'a54zzd5a0d4': { score: null, },
-      },
-    },
-    {
-      winner: 'fe50h7tqqgk',
-      finished: true,
-      teams: {
-        '6zdnot6r2as' : { score: 2, },
-        'fe50h7tqqgk': { score: 5, },
-      },
-    },
-    {
-      winner: null,
-      finished: true,
-      teams: {
-        'a2brymi257a' : { score: 4, },
-        'a54zzd5a0d4': { score: 4, },
-      },
-    },
-    {
-      winner: 'a2brymi257a',
-      finished: true,
-      teams: {
-        'a2brymi257a' : { score: 2, },
-        'fe50h7tqqgk': { score: 0, },
-      },
-    },
-    {
-      winner: null,
-      finished: true,
-      teams: {
-        'a54zzd5a0d4' : { score: 30, },
-        'fe50h7tqqgk': { score: 30, },
-      },
-    },
-  ];
+  return {
+    paths,
+    fallback: true,
+  }
+}
 
-  const teams = [
-    { name: 'ぴよぴよ', id: '6zdnot6r2as' },
-    { name: 'ほげほげ', id: 'a2brymi257a' },
-    { name: 'ふがふが', id: 'a54zzd5a0d4' },
-    { name: 'むにゃむにゃ', id: 'fe50h7tqqgk' },
-  ];
-
-  // const docRef = firebase.firestore().collection('leagues').doc(docId);
-  // const res = await docRef.update(
-  //   {
-  //     matches: matches,
-  //     teams: teams,
-  //     title: 'ほげほーげ',
-  //   }
-  // );
-
+export async function getStaticProps({params}) {
+  const doc = await firebase.firestore().collection('leagues').doc(params.id).get();
+  const leagueData = doc.data() || defaultLeague();
+  const league = Object.assign(leagueData, {id: params.id});
 
   return {
     props: {
       initialLeague: league,
     }
   }
+}
+
+
+const defaultLeague = () => {
+  const teams = [
+    { name: 'PlayerA', id: Math.random().toString(36).substring(2) },
+    { name: 'PlayerB', id: Math.random().toString(36).substring(2) },
+    { name: 'PlayerC', id: Math.random().toString(36).substring(2) },
+    { name: 'PlayerD', id: Math.random().toString(36).substring(2) },
+  ];
+
+  const teamIds = teams.map(t => t["id"]);
+  let matches = [];
+  teamIds.forEach((tId, tIndex) => {
+    teamIds.forEach((cId, cIndex) => {
+      if(tIndex >= cIndex ) { return; }
+      matches.push({
+        winner: null, finished: null, teams: {[tId]: {score: null}, [cId]: {score: null}}
+      });
+    });
+  });
+
+  return {
+    teams: teams,
+    matches: matches,
+  };
 }

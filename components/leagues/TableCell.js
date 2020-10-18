@@ -1,6 +1,5 @@
 import { useContext, useState } from 'react';
-import { MatchContext } from '../pages/index.js';
-import { LeagueContext } from '../contexts/LeagueContext.js';
+import { LeagueContext, MatchContext } from '../../pages/_app.js';
 
 export default function TableCell({team, counter}){
   const [league, setLeague] = useContext(LeagueContext);
