@@ -75,23 +75,27 @@ export default function Login() {
 
   return (
     <div>
-      <div>
+      <div className="mt-12">
         <form onSubmit={magicAuth}>
-          <h3>メールアドレスでログイン</h3>
-          <div>
-            <input id="emailField" type="email" required />
-          </div>
-          <button type="submit">ログイン</button>
-          <div>
-            入力したメールアドレスに、ログインURLが届きます。
+          <div className="mb-12">
+            <h3 className="font-bold text-lg mb-4">メールアドレスでログイン</h3>
+            <div className="flex w-full mb-2">
+              <input id="emailField" className="border rounded-l px-1 py-2 flex-1" type="email" required placeholder="メールアドレス" />
+              <button type="submit" className="rounded-r bg-pink-600 text-white px-4 text-sm">送信</button>
+            </div>
+            <div className="text-sm">
+              入力したメールアドレスに、ログインURLが届きます。
+            </div>
           </div>
         </form>
       </div>
 
       <div>
-        <h3>SNSログイン</h3>
-        <button onClick={()=>{snsLogin('twitter');}}>Twitterログイン</button>
-        <button onClick={()=>{snsLogin('google');}}>Googleログイン</button>
+        <h3 className="font-bold text-lg mb-4">SNSアカウントでログイン</h3>
+        <div>
+          <button className="rounded bg-blue-500 text-white px-4 py-2 mr-4 hover:opacity-75" onClick={()=>{snsLogin('twitter');}}>Twitterログイン</button>
+          <button className="rounded bg-red-600 text-white px-4 py-2 hover:opacity-75" onClick={()=>{snsLogin('google');}}>Googleログイン</button>
+        </div>
         <div>
           もちろん勝手に投稿したりしませんのでご安心ください。
         </div>

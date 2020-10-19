@@ -1,10 +1,12 @@
 import Link from 'next/link'
 import { useRouter } from 'next/router'
 import { useContext, useState } from 'react';
+import { UserContext } from '../lib/contexts.js';
 import { firebase } from '../lib/firebase.js'
 
 export default function Header(){
   const router = useRouter()
+  const [user, setUser] = useContext(UserContext);
 
   const createLeague = () => {
     const newRef = firebase.firestore().collection('leagues').doc();
@@ -35,6 +37,10 @@ export default function Header(){
           </svg>
           新規作成
         </div>
+
+        { user &&
+          <div>{user.email}</div>
+        }
 
         <Link href="#">
           <a className="flex items-center px-4 hover:opacity-75">

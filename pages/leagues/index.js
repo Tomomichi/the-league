@@ -1,10 +1,14 @@
 import Link from 'next/link'
+import { useContext, useState } from 'react';
 import { firebase, getLeagues } from '../../lib/firebase.js'
+import { UserContext } from '../../lib/contexts.js';
 import Breadcrumb from '../../components/Breadcrumb.js'
 import LeagueList from '../../components/leagues/LeagueList.js'
 
 
 export default function Show({leagues}) {
+  const [user, setUser] = useContext(UserContext);
+
   const breadcrumbs = [
     { name: 'すべてのリーグ表' },
   ];
