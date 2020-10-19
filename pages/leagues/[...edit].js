@@ -1,8 +1,8 @@
-import { useState, createContext } from 'react';
+import { useState, useContext, createContext } from 'react';
 import { useRouter } from 'next/router'
 import Link from 'next/link'
 import { firebase } from '../../lib/firebase.js'
-import { LeagueContext, MatchContext, MenuContext } from '../../lib/contexts.js';
+import { UserContext, LeagueContext, MatchContext, MenuContext } from '../../lib/contexts.js';
 import MenuColumn from '../../components/leagues/edit/MenuColumn.js'
 import EditColumn from '../../components/leagues/edit/EditColumn.js'
 import League from '../../components/leagues/League.js'
@@ -19,6 +19,7 @@ export default function Index({initialLeague, initialPersisted}) {
     )
   }
 
+  const [user, setUser] = useContext(UserContext);
   const [league, setLeague] = useState(initialLeague);
   const [match, setMatch] = useState(false);
   const [menu, setMenu] = useState({target: 'settings', opened: true});
@@ -141,5 +142,6 @@ const defaultLeague = () => {
   return {
     teams: teams,
     matches: matches,
+    // userId: user.id,
   };
 }
