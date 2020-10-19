@@ -75,7 +75,7 @@ export default function Login() {
     <div>
       <div className="mt-12">
         <form onSubmit={magicAuth}>
-          <div className="mb-12">
+          <div className="mb-20">
             <h3 className="font-bold text-lg mb-4">メールアドレスでログイン</h3>
             <div className="flex w-full mb-4">
               <input id="emailField" className="border rounded-l px-2 py-2 flex-1" type="email" required placeholder="メールアドレス" />

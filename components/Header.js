@@ -3,14 +3,26 @@ import { useRouter } from 'next/router'
 import { useContext, useState } from 'react';
 import { UserContext } from '../lib/contexts.js';
 import { firebase } from '../lib/firebase.js'
+import { useSnackbar } from 'react-simple-snackbar'
 
 export default function Header(){
   const router = useRouter()
+  const [openSnackbar, closeSnackbar] = useSnackbar({position: 'bottom-left'});
   const [user, setUser] = useContext(UserContext);
 
   const createLeague = () => {
     const newRef = firebase.firestore().collection('leagues').doc();
     router.push(`/leagues/${newRef.id}/edit`);
+  }
+
+  const logout = () => {
+    firebase.auth().signOut().then(function() {
+      openSnackbar('ログアウトしました');
+      router.push('/');
+    }).catch(function(error) {
+      openSnackbar('ログアウトに失敗しました。。しばらくしてもログアウトできない場合は運営までお問い合わせください。');
+      console.log(error);
+    });
   }
 
   return (
@@ -30,16 +42,30 @@ export default function Header(){
         </Link>
       </div>
 
-      <div className="flex">
+      <div className="flex items-center">
         <div className="hidden sm:flex cursor-pointer items-center hover:opacity-75 mr-4" onClick={createLeague}>
           <svg className={`mr-1 w-5 h-5 fill-current`} viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
             <path d="M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6v2z"></path>
           </svg>
-          新規作成
+          リーグ表作成
         </div>
 
         { user &&
-          <div>{user.email}</div>
+          <div className="hidden sm:block">
+            <div className="mx-4">
+              {user.email}
+            </div>
+            <div className="cursor-pointer mx-4 hover:opacity-75" onClick={logout}>
+              ログアウト
+            </div>
+          </div>
+        }
+        { !user &&
+          <Link href='/login'>
+            <a className="cursor-pointer mx-4 hover:opacity-75 hidden sm:block">
+            ログイン
+            </a>
+          </Link>
         }
 
         <Link href="#">
