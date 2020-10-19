@@ -1,14 +1,22 @@
+import { useState } from 'react';
 import Head from 'next/head'
 import Link from 'next/link'
 import { useRouter } from 'next/router'
+import { UserContext } from '../lib/contexts.js';
+import { firebase } from '../lib/firebase.js';
 import Header from '../components/Header.js'
 import "../styles/tailwind.css"
 
 const App = ({ Component, pageProps }) => {
   const router = useRouter();
+  const [user, setUser] = useState();
+
+  firebase.auth().onAuthStateChanged((u) => {
+    setUser(u);
+  })
 
   return (
-    <>
+    <UserContext.Provider value={[user, setUser]}>
       <Head>
         <title>THE LEAGUE | 簡単・便利な総当りリーグ戦作成サービス</title>
       </Head>
@@ -42,7 +50,7 @@ const App = ({ Component, pageProps }) => {
           transform: translateX(-50%);
         }
       `}</style>
-    </>
+    </UserContext.Provider>
   );
 }
 

@@ -1,4 +1,3 @@
-import { useState, createContext } from 'react';
 import Link from 'next/link'
 import { firebase, getLeagues } from '../../lib/firebase.js'
 import Breadcrumb from '../../components/Breadcrumb.js'
@@ -25,7 +24,7 @@ export default function Show({leagues}) {
             </div>
           </h1>
         </div>
-        
+
         <div>
           <LeagueList result={leagues} limit={10} />
         </div>
