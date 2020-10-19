@@ -2,17 +2,15 @@ import React, { useState, useContext } from 'react';
 import { useRouter } from 'next/router'
 import { UserContext } from '../lib/contexts.js';
 import { firebase } from '../lib/firebase.js'
+import { useSnackbar } from 'react-simple-snackbar'
 
 
 export default function Login() {
   const router = useRouter();
   const [user, setUser] = useContext(UserContext);
-  const [signinUrl, setSigninUrl] = useState();
+  const [openSnackbar, closeSnackbar] = useSnackbar({position: 'bottom-left'});
 
   React.useEffect(() => {
-    const url = `${window.location.protocol}//${window.location.host}/auth`;
-    setSigninUrl(url);
-
     if(user && !user.isAnonymous) { router.push(`/mypage`); }
   }, [user]);
 
@@ -24,11 +22,11 @@ export default function Login() {
       if(confirm(alertMessage)) {
         firebase.auth().signInWithCredential(error.credential);
       }else {
-        // setSnackbar({open: true, message: 'ログインをキャンセルしました。現在ゲストで作成しているトーナメント表を引き継ぎたい場合、運営までお問い合わせください。'});
+        openSnackbar('ログインをキャンセルしました。現在ゲストで作成しているトーナメント表を引き継ぎたい場合、運営までお問い合わせください。');
       }
     // その他のエラー
     }else {
-      // setSnackbar({open: true, message: `【エラー】${error.message}`});
+      openSnackbar(`【エラー】${error.message}`);
       console.log(error)
     }
   });
@@ -59,15 +57,15 @@ export default function Login() {
     firebase.auth().createUserWithEmailAndPassword(email, newPassword).then(function(){
       //新規ユーザーの場合
       firebase.auth().sendPasswordResetEmail(email)
-      // setSnackbar({open: true, message: 'ログイン用のメールを送信しました。メール内のリンクをクリックしてログインしてください。'});
+      openSnackbar('ログイン用のメールを送信しました。メール内のリンクをクリックしてログインしてください。');
     }).catch(function(error) {
       //アドレスが既に登録済みの場合
       if(error.code == 'auth/email-already-in-use') {
         firebase.auth().sendPasswordResetEmail(email)
-        // setSnackbar({open: true, message: 'ログイン用のメールを送信しました。メール内のリンクをクリックしてログインしてください。'});
+        openSnackbar('ログイン用のメールを送信しました。メール内のリンクをクリックしてログインしてください。');
       //validationエラーなど
       }else {
-        // setSnackbar({open: true, message: error.message});
+        openSnackbar(error.message);
       }
     })
   }
@@ -79,8 +77,8 @@ export default function Login() {
         <form onSubmit={magicAuth}>
           <div className="mb-12">
             <h3 className="font-bold text-lg mb-4">メールアドレスでログイン</h3>
-            <div className="flex w-full mb-2">
-              <input id="emailField" className="border rounded-l px-1 py-2 flex-1" type="email" required placeholder="メールアドレス" />
+            <div className="flex w-full mb-4">
+              <input id="emailField" className="border rounded-l px-2 py-2 flex-1" type="email" required placeholder="メールアドレス" />
               <button type="submit" className="rounded-r bg-pink-600 text-white px-4 text-sm">送信</button>
             </div>
             <div className="text-sm">
@@ -92,11 +90,12 @@ export default function Login() {
 
       <div>
         <h3 className="font-bold text-lg mb-4">SNSアカウントでログイン</h3>
-        <div>
-          <button className="rounded bg-blue-500 text-white px-4 py-2 mr-4 hover:opacity-75" onClick={()=>{snsLogin('twitter');}}>Twitterログイン</button>
-          <button className="rounded bg-red-600 text-white px-4 py-2 hover:opacity-75" onClick={()=>{snsLogin('google');}}>Googleログイン</button>
+        <div className="mb-4">
+          <button className="rounded bg-blue-500 text-white px-4 py-2 mr-0 sm:mr-4 mb-2 sm:mb-0 hover:opacity-75 w-full sm:w-auto" onClick={()=>{snsLogin('twitter');}}>Twitterログイン</button>
+          <button className="rounded bg-blue-700 text-white px-4 py-2 mr-0 sm:mr-4 mb-2 sm:mb-0 hover:opacity-75 w-full sm:w-auto" onClick={()=>{snsLogin('facebook');}}>Facebookログイン</button>
+          <button className="rounded bg-red-600 text-white px-4 py-2 hover:opacity-75 w-full sm:w-auto" onClick={()=>{snsLogin('google');}}>Googleログイン</button>
         </div>
-        <div>
+        <div className="text-sm">
           もちろん勝手に投稿したりしませんのでご安心ください。
         </div>
       </div>

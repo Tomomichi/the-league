@@ -6,7 +6,8 @@
     "firebase": "^7.15.4",
     "next": "latest",
     "react": "latest",
-    "react-dom": "latest"
+    "react-dom": "latest",
+    "react-simple-snackbar": "^1.1.10"
   },
   "devDependencies": {
     "autoprefixer": "^9.8.0",

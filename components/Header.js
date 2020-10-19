@@ -31,7 +31,7 @@ export default function Header(){
       </div>
 
       <div className="flex">
-        <div className="flex cursor-pointer items-center hover:opacity-75 mr-4" onClick={createLeague}>
+        <div className="hidden sm:flex cursor-pointer items-center hover:opacity-75 mr-4" onClick={createLeague}>
           <svg className={`mr-1 w-5 h-5 fill-current`} viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
             <path d="M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6v2z"></path>
           </svg>
