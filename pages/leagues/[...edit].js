@@ -1,31 +1,56 @@
-import { useState, useContext, createContext } from 'react';
+import { useState, useContext, createContext, useEffect } from 'react';
 import { useRouter } from 'next/router'
 import Link from 'next/link'
 import { firebase } from '../../lib/firebase.js'
 import { UserContext, LeagueContext, MatchContext, MenuContext } from '../../lib/contexts.js';
+import { useSnackbar } from 'react-simple-snackbar'
 import MenuColumn from '../../components/leagues/edit/MenuColumn.js'
 import EditColumn from '../../components/leagues/edit/EditColumn.js'
 import League from '../../components/leagues/League.js'
 import Ranking from '../../components/leagues/Ranking.js'
 
 
-export default function Index({initialLeague, initialPersisted}) {
+export default function Index() {
   const router = useRouter();
-  if (router.isFallback) {
+  const [user, setUser] = useContext(UserContext);
+  const [league, setLeague] = useState();
+  const [match, setMatch] = useState(false);
+  const [menu, setMenu] = useState({target: 'settings', opened: true});
+  const [mainColumn, setMainColumn] = useState('matches');
+  const [persisted, setPersisted] = useState();
+  const [openSnackbar, closeSnackbar] = useSnackbar({position: 'bottom-left'});
+
+  // 最初routerが空の状態で来ちゃうのを考慮
+  React.useEffect(() => {
+    if(!user || !router.query['edit']) { return; }
+
+    const leagueId = router.query['edit'][0];
+
+    firebase.firestore().collection('leagues').doc(leagueId).get().then(doc => {
+      const leagueData = doc.data() || defaultLeague();
+      const initialLeague = Object.assign(leagueData, {
+        id: leagueId,
+        createdAt: leagueData.createdAt ? leagueData.createdAt.toDate().toISOString() : new Date().toISOString(),
+        updatedAt: leagueData.updatedAt ? leagueData.updatedAt.toDate().toISOString() : new Date().toISOString(),
+      });
+      setLeague(initialLeague);
+    });
+  }, [router, user]);
+
+
+  if(!user || !league) {
     return(
       <div className="mt-16 text-center">
         <div>Loading...</div>
       </div>
-    )
+    );
   }
 
-  const [user, setUser] = useContext(UserContext);
-  const [league, setLeague] = useState(initialLeague);
-  const [match, setMatch] = useState(false);
-  const [menu, setMenu] = useState({target: 'settings', opened: true});
-  const [mainColumn, setMainColumn] = useState('matches');
-  const [persisted, setPersisted] = useState(initialPersisted);
-
+  // FIXME:
+  // if(user.uid != league.userId) {
+  //   openSnackbar('権限がありません。。。ログイン情報を確認してください。');
+  //   router.push('/');
+  // }
 
   const updateLeague = async () => {
     const ref = firebase.firestore().collection('leagues').doc(league.id);
@@ -36,7 +61,34 @@ export default function Index({initialLeague, initialPersisted}) {
     delete dupLeague.id;
 
     await ref.set(dupLeague);
+    openSnackbar('変更を保存しました！')
     if(!persisted) { setPersisted(true); }
+  }
+
+  const defaultLeague = () => {
+    const teams = [
+      { name: 'PlayerA', id: Math.random().toString(36).substring(2) },
+      { name: 'PlayerB', id: Math.random().toString(36).substring(2) },
+      { name: 'PlayerC', id: Math.random().toString(36).substring(2) },
+      { name: 'PlayerD', id: Math.random().toString(36).substring(2) },
+    ];
+
+    const teamIds = teams.map(t => t["id"]);
+    let matches = [];
+    teamIds.forEach((tId, tIndex) => {
+      teamIds.forEach((cId, cIndex) => {
+        if(tIndex >= cIndex ) { return; }
+        matches.push({
+          winner: null, finished: null, teams: {[tId]: {score: null}, [cId]: {score: null}}
+        });
+      });
+    });
+
+    return {
+      teams: teams,
+      matches: matches,
+      userId: user.uid,
+    };
   }
 
   return (
@@ -65,8 +117,8 @@ export default function Index({initialLeague, initialPersisted}) {
             </div>
           </div>
 
-          <div className="flex items-stretch fixed w-screen left-0 bottom-0 z-50 bg-white border-t px-4 py-1">
-            <a className="rounded bg-red-600 text-white px-6 py-2 text-sm mr-8 hover:bg-red-700" onClick={updateLeague}>保存する</a>
+          <div className="flex items-stretch fixed w-screen left-0 bottom-0 z-1 bg-white border-t px-4 py-1">
+            <button className="rounded bg-red-600 text-white px-6 py-2 text-sm mr-8 hover:bg-red-700" onClick={updateLeague}>保存する</button>
             <Link href={ persisted ? '/leagues/[id]' : '/'} as={ persisted ? `/leagues/${league.id}` : '/'}>
               <a className="flex items-center text-sm hover:opacity-75">
                 <svg className="w-4 h-4 fill-current mr-1" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
@@ -88,60 +140,4 @@ export default function Index({initialLeague, initialPersisted}) {
       </MatchContext.Provider>
     </LeagueContext.Provider>
   )
-}
-
-
-export async function getStaticPaths() {
-  const paths = [];
-
-  return {
-    paths,
-    fallback: true,
-  }
-}
-
-
-export async function getStaticProps({params}) {
-  const leagueId = params.edit[0];
-  const doc = await firebase.firestore().collection('leagues').doc(leagueId).get();
-  const leagueData = doc.data() || defaultLeague();
-  const league = Object.assign(leagueData, {
-    id: leagueId,
-    createdAt: leagueData.createdAt ? leagueData.createdAt.toDate().toISOString() : new Date().toISOString(),
-    updatedAt: leagueData.updatedAt ? leagueData.updatedAt.toDate().toISOString() : new Date().toISOString(),
-  });
-
-  return {
-    props: {
-      initialLeague: league,
-      persisted: !!doc.data(),
-    }
-  }
-}
-
-
-const defaultLeague = () => {
-  const teams = [
-    { name: 'PlayerA', id: Math.random().toString(36).substring(2) },
-    { name: 'PlayerB', id: Math.random().toString(36).substring(2) },
-    { name: 'PlayerC', id: Math.random().toString(36).substring(2) },
-    { name: 'PlayerD', id: Math.random().toString(36).substring(2) },
-  ];
-
-  const teamIds = teams.map(t => t["id"]);
-  let matches = [];
-  teamIds.forEach((tId, tIndex) => {
-    teamIds.forEach((cId, cIndex) => {
-      if(tIndex >= cIndex ) { return; }
-      matches.push({
-        winner: null, finished: null, teams: {[tId]: {score: null}, [cId]: {score: null}}
-      });
-    });
-  });
-
-  return {
-    teams: teams,
-    matches: matches,
-    // userId: user.id,
-  };
 }
