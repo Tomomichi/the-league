@@ -13,6 +13,7 @@ export default function Mypage() {
   const [user, setUser] = useContext(UserContext);
   const [items, setItems] = useState([]);
 
+
   useEffect(() => {
     let ignore = false;
     if(!user) { return; }
@@ -23,6 +24,7 @@ export default function Mypage() {
     fetchData();
     return () => { ignore = true; }
   }, [user] )
+
 
   const createLeague = () => {
     const newRef = firebase.firestore().collection('leagues').doc();
@@ -50,7 +52,9 @@ export default function Mypage() {
         </div>
 
         <div>
-          <LeagueList result={items} limit={10} />
+          { user && items.length > 0 &&
+            <LeagueList result={items} limit={10} />
+          }
 
           { user && items.length == 0 &&
             <>

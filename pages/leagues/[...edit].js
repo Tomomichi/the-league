@@ -11,6 +11,7 @@ import Ranking from '../../components/leagues/Ranking.js'
 
 
 export default function Index() {
+  let ignore = false;
   const router = useRouter();
   const [user, setUser] = useContext(UserContext);
   const [league, setLeague] = useState();
@@ -20,50 +21,6 @@ export default function Index() {
   const [persisted, setPersisted] = useState();
   const [openSnackbar, closeSnackbar] = useSnackbar({position: 'bottom-left'});
 
-  // 最初routerが空の状態で来ちゃうのを考慮
-  React.useEffect(() => {
-    if(!user || !router.query['edit']) { return; }
-
-    const leagueId = router.query['edit'][0];
-
-    firebase.firestore().collection('leagues').doc(leagueId).get().then(doc => {
-      const leagueData = doc.data() || defaultLeague();
-      const initialLeague = Object.assign(leagueData, {
-        id: leagueId,
-        createdAt: leagueData.createdAt ? leagueData.createdAt.toDate().toISOString() : new Date().toISOString(),
-        updatedAt: leagueData.updatedAt ? leagueData.updatedAt.toDate().toISOString() : new Date().toISOString(),
-      });
-      setLeague(initialLeague);
-    });
-  }, [router, user]);
-
-
-  if(!user || !league) {
-    return(
-      <div className="mt-16 text-center">
-        <div>Loading...</div>
-      </div>
-    );
-  }
-
-  // FIXME:
-  // if(user.uid != league.userId) {
-  //   openSnackbar('権限がありません。。。ログイン情報を確認してください。');
-  //   router.push('/');
-  // }
-
-  const updateLeague = async () => {
-    const ref = firebase.firestore().collection('leagues').doc(league.id);
-    const dupLeague = Object.assign({}, league, {
-      updatedAt: new Date(),
-      createdAt: new Date(league.createdAt)
-    });
-    delete dupLeague.id;
-
-    await ref.set(dupLeague);
-    openSnackbar('変更を保存しました！')
-    if(!persisted) { setPersisted(true); }
-  }
 
   const defaultLeague = () => {
     const teams = [
@@ -72,7 +29,6 @@ export default function Index() {
       { name: 'PlayerC', id: Math.random().toString(36).substring(2) },
       { name: 'PlayerD', id: Math.random().toString(36).substring(2) },
     ];
-
     const teamIds = teams.map(t => t["id"]);
     let matches = [];
     teamIds.forEach((tId, tIndex) => {
@@ -89,6 +45,52 @@ export default function Index() {
       matches: matches,
       userId: user.uid,
     };
+  }
+
+  
+  React.useEffect(() => {
+    let ignore = false;
+    if(!user || !router.query['edit'] || ignore) { return; }
+
+    const leagueId = router.query['edit'][0];
+
+    firebase.firestore().collection('leagues').doc(leagueId).get().then(doc => {
+      if(doc.data() && doc.data().userId != user.uid) {
+        openSnackbar('権限がありません。。。ログイン情報を確認してください。');
+        router.push('/');
+      }
+
+      const leagueData = doc.data() || defaultLeague();
+      const initialLeague = Object.assign(leagueData, {
+        id: leagueId,
+        createdAt: leagueData.createdAt ? leagueData.createdAt.toDate().toISOString() : new Date().toISOString(),
+        updatedAt: leagueData.updatedAt ? leagueData.updatedAt.toDate().toISOString() : new Date().toISOString(),
+      });
+      if(!ignore) { setLeague(initialLeague); }
+    });
+    return () => { ignore = true; }
+  }, [router, user]);
+
+
+  if(!user || !league) {
+    return(
+      <div className="mt-16 text-center">
+        <div>Loading...</div>
+      </div>
+    );
+  }
+
+  const updateLeague = async () => {
+    const ref = firebase.firestore().collection('leagues').doc(league.id);
+    const dupLeague = Object.assign({}, league, {
+      updatedAt: new Date(),
+      createdAt: new Date(league.createdAt)
+    });
+    delete dupLeague.id;
+
+    await ref.set(dupLeague);
+    openSnackbar('変更を保存しました！')
+    if(!persisted) { setPersisted(true); }
   }
 
   return (

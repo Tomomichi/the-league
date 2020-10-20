@@ -19,7 +19,7 @@ export default function Auth() {
       firebase.auth().confirmPasswordReset(q.oobCode, newPassword).then(() => {
         firebase.auth().signInWithEmailAndPassword(email, newPassword);
         openSnackbar('ログインしました');
-        router.push('/');
+        router.push('/mypage');
       });
     }).catch((error) => {
       openSnackbar('ログインに失敗しました。。');

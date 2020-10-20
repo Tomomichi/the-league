@@ -56,7 +56,7 @@ export default function LeagueList({result, limit, userId}) {
     <>
       <ul>
         { items.map((item) => (
-          <li className="px-2 py-4">
+          <li key={item.id} className="px-2 py-4">
             <Link href='/leagues/[id]' as={`/leagues/${item.id}`}>
               <a className="text-blue-600 hover:opacity-75 mb-1">{item.title}</a>
             </Link>
