@@ -36,7 +36,7 @@ const App = ({ Component, pageProps }) => {
                 <h5>
                   <span className="text-lg">THE LEAGUE</span>
                 </h5>
-                <small className="text-xs text-gray-400">簡単・便利な総当りリーグ戦作成サービス</small>
+                <small className="text-xs text-gray-400">簡単・便利な総当りリーグ表作成サービス</small>
               </div>
               <p className="text-sm text-gray-400">
                 © 2020 THE LEAGUE by NOT SO BAD, LLC. All Rights Reserved.

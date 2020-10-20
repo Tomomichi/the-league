@@ -1,7 +1,7 @@
 import Link from 'next/link'
 import { useRouter } from 'next/router'
-import { useContext, useState } from 'react';
-import { UserContext } from '../lib/contexts.js';
+import { useContext, useState } from 'react'
+import { UserContext } from '../lib/contexts.js'
 import { firebase } from '../lib/firebase.js'
 import { useSnackbar } from 'react-simple-snackbar'
 
@@ -51,13 +51,15 @@ export default function Header(){
         </div>
 
         { user &&
-          <div className="hidden sm:block">
-            <div className="mx-4">
+          <Link href='/mypage'>
+            <a className="cursor-pointer mx-4 hover:opacity-75 hidden sm:block">
               {user.email}
-            </div>
-            <div className="cursor-pointer mx-4 hover:opacity-75" onClick={logout}>
-              ログアウト
-            </div>
+            </a>
+          </Link>
+        }
+        { user &&
+          <div className="cursor-pointer mx-4 hover:opacity-75 hidden sm:block" onClick={logout}>
+            ログアウト
           </div>
         }
         { !user &&

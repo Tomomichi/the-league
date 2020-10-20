@@ -1,13 +1,33 @@
 import Link from 'next/link'
-import { useContext, useState } from 'react';
+import { useRouter } from 'next/router'
+import { useContext, useState, useEffect } from 'react'
 import { firebase, getLeagues } from '../lib/firebase.js'
-import { UserContext } from '../lib/contexts.js';
+import { UserContext } from '../lib/contexts.js'
 import Breadcrumb from '../components/Breadcrumb.js'
 import LeagueList from '../components/leagues/LeagueList.js'
 
+const limit = 10;
 
-export default function Show({leagues}) {
+export default function Mypage() {
+  const router = useRouter();
   const [user, setUser] = useContext(UserContext);
+  const [items, setItems] = useState([]);
+
+  useEffect(() => {
+    let ignore = false;
+    if(!user) { return; }
+    const fetchData = async () => {
+      const res = await getLeagues({limit: limit, userId: user.uid});
+      if(!ignore) { setItems(res); }
+    }
+    fetchData();
+    return () => { ignore = true; }
+  }, [user] )
+
+  const createLeague = () => {
+    const newRef = firebase.firestore().collection('leagues').doc();
+    router.push(`/leagues/${newRef.id}/edit`);
+  }
 
   const breadcrumbs = [
     { name: 'マイページ' },
@@ -30,20 +50,16 @@ export default function Show({leagues}) {
         </div>
 
         <div>
-          <LeagueList result={leagues} limit={10} />
+          <LeagueList result={items} limit={10} />
+
+          { user && items.length == 0 &&
+            <>
+              <div className="mb-4 text-sm">※まだ作成済みのリーグ表がありません。</div>
+              <button className="rounded bg-red-600 text-white px-4 py-2" onClick={createLeague}>リーグ表を作る</button>
+            </>
+          }
         </div>
       </div>
     </>
   )
-}
-
-
-export async function getStaticProps() {
-  const leagues = await getLeagues({limit: 10});
-
-  return {
-    props: {
-      leagues: leagues,
-    }
-  }
 }
