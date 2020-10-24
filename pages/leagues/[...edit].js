@@ -18,7 +18,7 @@ export default function Index() {
   const [match, setMatch] = useState(false);
   const [menu, setMenu] = useState({target: 'settings', opened: true});
   const [mainColumn, setMainColumn] = useState('matches');
-  const [persisted, setPersisted] = useState();
+  const [persisted, setPersisted] = useState(false);
   const [openSnackbar, closeSnackbar] = useSnackbar({position: 'bottom-left'});
 
 
@@ -43,23 +43,17 @@ export default function Index() {
     return {
       teams: teams,
       matches: matches,
-      userId: user.uid,
     };
   }
 
-  
+
   React.useEffect(() => {
     let ignore = false;
-    if(!user || !router.query['edit'] || ignore) { return; }
+    if(!router.query['edit'] || ignore) { return; }
 
     const leagueId = router.query['edit'][0];
 
     firebase.firestore().collection('leagues').doc(leagueId).get().then(doc => {
-      if(doc.data() && doc.data().userId != user.uid) {
-        openSnackbar('権限がありません。。。ログイン情報を確認してください。');
-        router.push('/');
-      }
-
       const leagueData = doc.data() || defaultLeague();
       const initialLeague = Object.assign(leagueData, {
         id: leagueId,
@@ -67,18 +61,30 @@ export default function Index() {
         updatedAt: leagueData.updatedAt ? leagueData.updatedAt.toDate().toISOString() : new Date().toISOString(),
       });
       if(!ignore) { setLeague(initialLeague); }
+      if(doc.data()) { setPersisted(true); }
     });
     return () => { ignore = true; }
   }, [router, user]);
 
 
-  if(!user || !league) {
+  if(!league) {
     return(
       <div className="mt-16 text-center">
         <div>Loading...</div>
       </div>
     );
   }
+
+  // leagueが保存済みで、userがいない || userIdと合わない 場合は権限なし
+  if(persisted && (!user || league.userId != user.uid)) {
+    setTimeout(()=>{router.push('/')}, 3000);
+    return(
+      <div className="mt-16 text-center">
+        <div>権限がありません。。。ログイン情報を確認してください。</div>
+      </div>
+    );
+  }
+
 
   const updateLeague = async () => {
     const ref = firebase.firestore().collection('leagues').doc(league.id);
@@ -87,6 +93,16 @@ export default function Index() {
       createdAt: new Date(league.createdAt)
     });
     delete dupLeague.id;
+
+    // ログインしてなければ匿名ログイン
+    let uid;
+    if(!user) {
+      const credentials = await firebase.auth().signInAnonymously();
+      uid = credentials.user.uid;
+    }else {
+      uid = user.uid;
+    }
+    dupLeague.userId = dupLeague.userId || uid;
 
     await ref.set(dupLeague);
     openSnackbar('変更を保存しました！')
