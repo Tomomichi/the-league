@@ -1,5 +1,6 @@
-import Link from 'next/link'
 import { useContext, useState } from 'react';
+import Head from 'next/head';
+import Link from 'next/link'
 import { firebase, getLeagues } from '../../lib/firebase.js'
 import { UserContext } from '../../lib/contexts.js';
 import Breadcrumb from '../../components/Breadcrumb.js'
@@ -15,6 +16,10 @@ export default function Show({leagues}) {
 
   return (
     <>
+      <Head>
+        <title>リーグ表一覧 - THE LEAGUE</title>
+      </Head>
+
       <Breadcrumb items={breadcrumbs} />
 
       <div>

@@ -1,5 +1,6 @@
 import { useState, useContext, createContext } from 'react';
 import { useRouter } from 'next/router'
+import Head from 'next/head';
 import Link from 'next/link'
 import { firebase } from '../../lib/firebase.js'
 import { UserContext, LeagueContext, MatchContext } from '../../lib/contexts.js';
@@ -30,6 +31,10 @@ export default function Show({initialLeague}) {
   return (
     <LeagueContext.Provider value={[league, setLeague]}>
       <MatchContext.Provider value={[match, setMatch]}>
+        <Head>
+          <title>{league.title} - THE LEAGUE</title>
+        </Head>
+
         <Breadcrumb items={breadcrumbs} />
 
         <div>

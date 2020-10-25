@@ -1,6 +1,7 @@
+import { useContext, useState, useEffect } from 'react'
+import Head from 'next/head';
 import Link from 'next/link'
 import { useRouter } from 'next/router'
-import { useContext, useState, useEffect } from 'react'
 import { firebase, getLeagues } from '../lib/firebase.js'
 import { UserContext } from '../lib/contexts.js'
 import Breadcrumb from '../components/Breadcrumb.js'
@@ -37,6 +38,11 @@ export default function Mypage() {
 
   return (
     <>
+      <Head>
+        <title>マイページ - THE LEAGUE</title>
+        <meta name="robots" content="noindex" />
+      </Head>
+
       <Breadcrumb items={breadcrumbs} />
 
       <div>

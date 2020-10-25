@@ -1,5 +1,6 @@
 import { useState, useContext, createContext, useEffect } from 'react';
 import { useRouter } from 'next/router'
+import Head from 'next/head';
 import Link from 'next/link'
 import { firebase } from '../../lib/firebase.js'
 import { UserContext, LeagueContext, MatchContext, MenuContext } from '../../lib/contexts.js';
@@ -10,7 +11,7 @@ import League from '../../components/leagues/League.js'
 import Ranking from '../../components/leagues/Ranking.js'
 
 
-export default function Index() {
+export default function Edit() {
   let ignore = false;
   const router = useRouter();
   const [user, setUser] = useContext(UserContext);
@@ -119,6 +120,11 @@ export default function Index() {
     <LeagueContext.Provider value={[league, setLeague]}>
       <MatchContext.Provider value={[match, setMatch]}>
         <MenuContext.Provider value={[menu, setMenu]}>
+          <Head>
+            <title>リーグ表編集 - THE LEAGUE</title>
+            <meta name="robots" content="noindex" />
+          </Head>
+
           <div className="flex flex-col sm:flex-row leagueContainer full-bleed">
             <div className="bg-gray-800 text-white text-center text-xs -mt-px">
               <MenuColumn />

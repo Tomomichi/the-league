@@ -30,7 +30,7 @@ export default function Auth() {
   return (
     <>
       <Head>
-        <title>Auth - THE TIMELINE</title>
+        <title>Auth - THE LEAGUE</title>
         <meta name="robots" content="noindex" />
       </Head>
 

@@ -16,11 +16,28 @@ const App = ({ Component, pageProps }) => {
     setUser(u);
   })
 
+  const baseUrl = 'https://the-league.vercel.app';
+
   return (
     <UserContext.Provider value={[user, setUser]}>
       <SnackbarProvider>
         <Head>
-          <title>THE LEAGUE | 簡単・便利な総当りリーグ戦作成サービス</title>
+          <meta charSet="utf-8" />
+          <meta name="viewport" content="minimum-scale=1, initial-scale=1, width=device-width" />
+          <link rel="icon" type="image/x-icon" href="/favicon.ico" />
+          <title>THE LEAGUE (ザ・リーグ) | 簡単・便利な総当りリーグ表作成サービス</title>
+          <meta name="description" content="THE LEAGUE(ザ・リーグ)は、簡単・便利な総当りのリーグ表作成サービスです。" />
+          <meta name="keywords" content="リーグ戦,リーグ表,総当り,ラウンドロビン,THE LEAGUE" />
+          <meta property="og:title" content="THE LEAGUE (ザ・リーグ) | 簡単・便利な総当りリーグ表作成サービス" />
+          <meta property="og:type" content="website" />
+          <meta property="og:url" content={`${baseUrl}`} />
+          <meta property="og:image" content={`${baseUrl}/images/ogp.png`} />
+          <meta property="og:site_name" content="THE LEAGUE (ザ・リーグ) | 簡単・便利な総当りリーグ表作成サービス" />
+          <meta property="og:description" content="THE LEAGUE(ザ・リーグ)は、簡単・便利な総当りのリーグ表作成サービスです。" />
+          <meta property="og:locale" content="ja_JP" />
+          <meta name="twitter:card" content="summary_large_image" />
+          <meta name="twitter:description" content="THE LEAGUE(ザ・リーグ)は、簡単・便利な総当りのリーグ表作成サービスです。" />
+          <meta name="twitter:image:src" content={`${baseUrl}/images/ogp.png`} />
         </Head>
 
         <div className="text-gray-700">
