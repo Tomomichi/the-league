@@ -87,6 +87,15 @@ export default function Drawer({drawerOpened, setDrawerOpened}){
                 </Link>
               </li>
             }
+
+            <li className="mt-4 border-t">
+              <a href="https://goo.gl/forms/xqvYet0AAsQUalI52" target="_blank" className="p-4 flex items-center hover:opacity-75">
+                <svg className={`mr-1 w-5 h-5 fill-current`} viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                  <path d="M20 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 14H4V8l8 5 8-5v10zm-8-7L4 6h16l-8 5z"></path>
+                </svg>
+                お問い合わせ
+              </a>
+            </li>
           </ul>
         </nav>
       </div>

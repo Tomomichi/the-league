@@ -26,21 +26,32 @@ const App = ({ Component, pageProps }) => {
         <div className="text-gray-700">
           <Header />
 
-          <div className="max-w-screen-md mx-auto px-4 sm:px-0">
+          <div className="max-w-screen-lg mx-auto px-4 sm:px-0">
             <Component {...pageProps} />
           </div>
 
           { router.pathname != '/leagues/[...edit]' &&
             <footer className="bg-gray-900 text-gray-200 text-center py-12 mt-32">
-              <div className="mb-4">
-                <h5>
-                  <span className="text-lg">THE LEAGUE</span>
-                </h5>
-                <small className="text-xs text-gray-400">簡単・便利な総当りリーグ表作成サービス</small>
+              <div className="max-w-screen-lg mx-auto px-4 sm:px-0">
+                <div className="mb-4">
+                  <h5>
+                    <Link href="/">
+                      <a className="text-lg">THE LEAGUE</a>
+                    </Link>
+                  </h5>
+                  <small className="text-xs text-gray-500">簡単・便利な総当りリーグ表作成サービス</small>
+                </div>
+                <ul className="flex justify-center space-x-4 text-sm mb-4 text-gray-300">
+                  <li className="text-gray-500">利用規約</li>
+                  <li className="text-gray-500">プライバシーポリシー</li>
+                  <li className="text-gray-500">特定商取引法に基づく表示</li>
+                  <li><a href="" target="_blank" className="hover:text-white">運営</a></li>
+                  <li><a href="" target="_blank" className="hover:text-white">お問い合わせ</a></li>
+                </ul>
+                <p className="text-sm text-gray-500">
+                  © 2020 THE LEAGUE by NOT SO BAD, LLC. All Rights Reserved.
+                </p>
               </div>
-              <p className="text-sm text-gray-400">
-                © 2020 THE LEAGUE by NOT SO BAD, LLC. All Rights Reserved.
-              </p>
             </footer>
           }
         </div>
