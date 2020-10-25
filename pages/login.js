@@ -103,7 +103,7 @@ export default function Login() {
             <button disabled className="rounded bg-red-600 text-white px-4 py-2 opacity-50 w-full sm:w-auto cursor-auto" onClick={()=>{snsLogin('google');}}>Googleログイン</button>
           </div>
           <div className="text-sm">
-            先行お試し期間中はSNSログインが使えません。ベータ版リリースまでお待ちください。
+            ※先行お試し期間中はSNSログインが使えません。ベータ版リリースまでお待ちください。
           </div>
         </div>
       </div>

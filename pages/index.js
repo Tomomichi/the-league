@@ -144,8 +144,11 @@ export default function Index() {
             </div>
 
             <div className="mx-2 self-center">
-              <svg className={`w-6 h-6 fill-current`} viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+              <svg className={`hidden sm:block w-6 h-6 fill-current`} viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
                 <path d="M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z"></path>
+              </svg>
+              <svg className={`block sm:hidden w-6 h-6 fill-current`} viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                <path d="M7.41 8.59L12 13.17l4.59-4.58L18 10l-6 6-6-6 1.41-1.41z"></path>
               </svg>
             </div>
 
@@ -162,8 +165,11 @@ export default function Index() {
             </div>
 
             <div className="mx-2 self-center">
-              <svg className={`w-6 h-6 fill-current`} viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+              <svg className={`hidden sm:block w-6 h-6 fill-current`} viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
                 <path d="M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z"></path>
+              </svg>
+              <svg className={`block sm:hidden w-6 h-6 fill-current`} viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                <path d="M7.41 8.59L12 13.17l4.59-4.58L18 10l-6 6-6-6 1.41-1.41z"></path>
               </svg>
             </div>
 

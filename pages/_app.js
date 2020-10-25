@@ -58,7 +58,7 @@ const App = ({ Component, pageProps }) => {
                   </h5>
                   <small className="text-xs text-gray-500">簡単・便利な総当りリーグ表作成サービス</small>
                 </div>
-                <ul className="flex justify-center space-x-4 text-sm mb-4 text-gray-300">
+                <ul className="flex flex-col sm:flex-row justify-center sm:space-x-4 text-sm mb-4 text-gray-300">
                   <li className="text-gray-500">利用規約</li>
                   <li className="text-gray-500">プライバシーポリシー</li>
                   <li className="text-gray-500">特定商取引法に基づく表示</li>
