@@ -1,6 +1,7 @@
 import React, { useState, useContext } from 'react';
 import Link from 'next/link'
 import { firebase, getLeagues } from '../../lib/firebase.js'
+import { useSnackbar } from 'react-simple-snackbar'
 
 
 export default function LeagueList({result, limit, userId}) {
@@ -8,6 +9,7 @@ export default function LeagueList({result, limit, userId}) {
   const initialStartAfter = result.length == limit ? result[result.length - 1].createdAt : null;
   const [startAfter, setStartAfter] = useState(initialStartAfter);
   const [endBefore, setEndBefore] = useState(null);
+  const [openSnackbar, closeSnackbar] = useSnackbar({position: 'bottom-left'});
 
 
   const remove = (id) => {
@@ -16,10 +18,10 @@ export default function LeagueList({result, limit, userId}) {
 
     firebase.firestore().collection('leagues').doc(id).delete().then(() => {
       setItems(items.filter(i => i.id != id));
-      // setSnackbar({open: true, message: '年表が削除されました'});
+      openSnackbar('データを削除しました');
     }).catch(function(error) {
       console.error("Error removing document: ", error);
-      // setSnackbar({open: true, message: 'データ削除に失敗しました。。しばらく経っても解決しない場合、運営までお問い合わせください。'});
+      openSnackbar('データ削除に失敗しました。。しばらく経っても解決しない場合、運営までお問い合わせください。');
     });
   }
 

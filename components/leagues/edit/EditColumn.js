@@ -7,6 +7,10 @@ export default function MenuColumn(){
   const [league, setLeague] = useContext(LeagueContext);
   const [menu, setMenu] = useContext(MenuContext);
 
+  const titleBlank = () => {
+    return !league.title || league.title == '';
+  }
+
   const updateLeague = (key, value) => {
     league[key] = value;
     setLeague(Object.assign({}, league));
@@ -15,9 +19,10 @@ export default function MenuColumn(){
   return (
     <>
       <div className={`${menu['target'] == 'settings' ? '' : 'hidden'}`}>
-        <div className="mb-8">
+        <div className={`mb-8 ${titleBlank() ? 'text-red-600' : ''}`}>
           <label htmlFor="title" className="block mb-2 font-bold">大会名*</label>
-          <input id="title" className="rounded px-1 py-2 w-full" type="text" required
+          
+          <input id="title" className={`rounded px-1 py-2 w-full ${titleBlank() ? 'border border-red-600 bg-red-100' : ''}`} type="text" required
             defaultValue={league.title}
             onBlur={e => updateLeague('title', e.target.value)}
           />

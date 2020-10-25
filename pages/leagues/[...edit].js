@@ -22,7 +22,11 @@ export default function Index() {
   const [openSnackbar, closeSnackbar] = useSnackbar({position: 'bottom-left'});
 
 
-  const defaultLeague = () => {
+  const titleBlank = () => {
+    return !league.title || league.title == '';
+  }
+
+  const defaultLeague = (leagueId) => {
     const teams = [
       { name: 'PlayerA', id: Math.random().toString(36).substring(2) },
       { name: 'PlayerB', id: Math.random().toString(36).substring(2) },
@@ -41,6 +45,7 @@ export default function Index() {
     });
 
     return {
+      title: leagueId,
       teams: teams,
       matches: matches,
     };
@@ -54,7 +59,7 @@ export default function Index() {
     const leagueId = router.query['edit'][0];
 
     firebase.firestore().collection('leagues').doc(leagueId).get().then(doc => {
-      const leagueData = doc.data() || defaultLeague();
+      const leagueData = doc.data() || defaultLeague(leagueId);
       const initialLeague = Object.assign(leagueData, {
         id: leagueId,
         createdAt: leagueData.createdAt ? leagueData.createdAt.toDate().toISOString() : new Date().toISOString(),
@@ -109,6 +114,7 @@ export default function Index() {
     if(!persisted) { setPersisted(true); }
   }
 
+
   return (
     <LeagueContext.Provider value={[league, setLeague]}>
       <MatchContext.Provider value={[match, setMatch]}>
@@ -123,7 +129,6 @@ export default function Index() {
             </div>
 
             <div className="px-4 sm:px-12 pt-8 flex-1 overflow-y-scroll pb-24">
-              <h1 className="text-lg mb-8">{league.title}</h1>
               <div>
                 <div className="flex border-b mb-8">
                   <div className={`px-6 pb-1 border-gray-700 ${mainColumn == 'matches' ? 'border-b-2' : 'cursor-pointer'}`} onClick={()=>setMainColumn('matches')}>対戦表</div>
@@ -136,7 +141,7 @@ export default function Index() {
           </div>
 
           <div className="flex items-stretch fixed w-screen left-0 bottom-0 z-1 bg-white border-t px-4 py-1">
-            <button className="rounded bg-red-600 text-white px-6 py-2 text-sm mr-8 hover:bg-red-700" onClick={updateLeague}>保存する</button>
+            <button className={`rounded text-white px-6 py-2 text-sm mr-8 ${titleBlank() ? 'bg-red-300 cursor-auto' : 'bg-red-600 hover:bg-red-700'}`} disabled={titleBlank()} onClick={updateLeague}>保存する</button>
             <Link href={ persisted ? '/leagues/[id]' : '/'} as={ persisted ? `/leagues/${league.id}` : '/'}>
               <a className="flex items-center text-sm hover:opacity-75">
                 <svg className="w-4 h-4 fill-current mr-1" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
