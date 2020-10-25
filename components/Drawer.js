@@ -32,7 +32,7 @@ export default function Drawer({drawerOpened, setDrawerOpened}){
     <>
       <div className={`z-50 fixed top-0 left-0 w-full h-full bg-black opacity-25 ${drawerOpened ? 'block' : 'hidden'}`} onClick={()=>{ setDrawerOpened(false); }}></div>
 
-      <div className={`transform shadow top-0 right-0 w-2/3 fixed h-full overflow-auto ease-in-out transition-all duration-300 z-50 ${drawerOpened ? 'translate-x-screen' : 'translate-x-full'}`} style={{maxWidth: 300}}>
+      <div className={`transform shadow top-0 right-0 w-2/3 fixed h-full overflow-auto ease-in-out transition-all duration-300 z-50 ${drawerOpened ? '' : 'translate-x-full'}`} style={{maxWidth: 300}}>
         <nav className="bg-white w-full h-full absolute right-0 top-0 z-50">
           <div className="p-4 font-bold flex items-center border-b">
             <svg className={`mr-1 w-5 h-5 fill-current`} viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">

@@ -98,12 +98,12 @@ export default function Login() {
         <div>
           <h3 className="font-bold text-lg mb-4">SNSアカウントでログイン</h3>
           <div className="mb-4">
-            <button className="rounded bg-blue-500 text-white px-4 py-2 mr-0 sm:mr-4 mb-2 sm:mb-0 hover:opacity-75 w-full sm:w-auto" onClick={()=>{snsLogin('twitter');}}>Twitterログイン</button>
-            <button className="rounded bg-blue-700 text-white px-4 py-2 mr-0 sm:mr-4 mb-2 sm:mb-0 hover:opacity-75 w-full sm:w-auto" onClick={()=>{snsLogin('facebook');}}>Facebookログイン</button>
-            <button className="rounded bg-red-600 text-white px-4 py-2 hover:opacity-75 w-full sm:w-auto" onClick={()=>{snsLogin('google');}}>Googleログイン</button>
+            <button disabled className="rounded bg-blue-500 text-white px-4 py-2 mr-0 sm:mr-4 mb-2 sm:mb-0 opacity-50 w-full sm:w-auto cursor-auto" onClick={()=>{snsLogin('twitter');}}>Twitterログイン</button>
+            <button disabled className="rounded bg-blue-700 text-white px-4 py-2 mr-0 sm:mr-4 mb-2 sm:mb-0 opacity-50 w-full sm:w-auto cursor-auto" onClick={()=>{snsLogin('facebook');}}>Facebookログイン</button>
+            <button disabled className="rounded bg-red-600 text-white px-4 py-2 opacity-50 w-full sm:w-auto cursor-auto" onClick={()=>{snsLogin('google');}}>Googleログイン</button>
           </div>
           <div className="text-sm">
-            もちろん勝手に投稿したりしませんのでご安心ください。
+            先行お試し期間中はSNSログインが使えません。ベータ版リリースまでお待ちください。
           </div>
         </div>
       </div>

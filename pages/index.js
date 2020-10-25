@@ -46,11 +46,11 @@ export default function Index() {
   return (
     <LeagueContext.Provider value={[league, setLeague]}>
       <MatchContext.Provider value={[match, setMatch]}>
-        <div className="full-bleed bg-red-100 px-4 py-3 text-red-900 text-xs sm:text-sm">
+        <div className="full-bleed bg-yellow-100 px-4 py-3 text-yellow-900 text-xs sm:text-sm">
           <svg className={`inline-block mr-1 w-5 h-5 fill-current`} viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
             <path d="M1 21h22L12 2 1 21zm12-3h-2v-2h2v2zm0-4h-2v-4h2v4z"></path>
           </svg>
-          <span className="flex-1">THE LEAGUEは現在「先行お試し版」として試験運用中です。リリース時にデータがリセットされる可能性がありますので、あらかじめご了承ください。</span>
+          <span className="flex-1">THE LEAGUEは現在「先行お試し版」として試験運用中です。本リリース時にデータがリセットされる可能性がありますので、あらかじめご了承ください。</span>
         </div>
 
         <div className="full-bleed bg-gray-800 text-gray-200 mb-20 text-center px-4">
@@ -114,7 +114,7 @@ export default function Index() {
               <div className="bg-white border rounded px-2 py-3">OEM提供</div>
             </div>
             <div className="text-center">
-              <div className="text-sm mb-4">詳しい説明をご希望の方や、ここにない機能のご利用を検討されている方は、以下のフォームからお気軽にお問い合わせください。</div>
+              <div className="text-sm mb-4">ここにない機能のご利用を検討されている方は、以下のフォームからお気軽にお問い合わせください。</div>
               <a href="https://goo.gl/forms/xqvYet0AAsQUalI52" target="_blank" className="bg-blue-600 text-white rounded px-4 py-2 block sm:inline-block">お問い合わせフォーム</a>
             </div>
           </div>
