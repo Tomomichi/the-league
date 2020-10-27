@@ -39,19 +39,24 @@ export default function Show({initialLeague}) {
 
         <div>
           <h1 className="text-xl mb-6 py-2 border-t-4 border-b-4 border-gray-900 font-bold">{league.title}</h1>
-          <div className="mb-20 text-sm">
-            { user && user.uid == league.userId &&
-              <>
-                <Link href="/leagues/[...edit]" as={`/leagues/${league.id}/edit`}>
-                  <a className="rounded border px-4 py-2 text-blue-600 border-blue-600 hover:opacity-75">
-                    編集
-                  </a>
-                </Link>
-                <a className="cursor-pointer rounded px-4 py-2 text-red-700 hover:opacity-75 ml-2" onClick={deleteLeague}>
-                  削除
+          { user && user.uid == league.userId &&
+            <div className="mb-8 text-sm">
+              <Link href="/leagues/[...edit]" as={`/leagues/${league.id}/edit`}>
+                <a className="rounded border px-4 py-2 text-blue-600 border-blue-600 hover:opacity-75">
+                  編集
                 </a>
-              </>
-            }
+              </Link>
+              <a className="cursor-pointer rounded px-4 py-2 text-red-700 hover:opacity-75 ml-2" onClick={deleteLeague}>
+                削除
+              </a>
+            </div>
+          }
+          <div className="mb-20 text-sm">
+            <div>{
+              league.description.split('\n').map((str, index) => (
+                <React.Fragment key={index}>{str}<br /></React.Fragment>
+              ))
+            }</div>
           </div>
 
           <div className="overflow-y-scroll">

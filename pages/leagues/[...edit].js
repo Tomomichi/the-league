@@ -130,7 +130,7 @@ export default function Edit() {
               <MenuColumn />
             </div>
 
-            <div className={`px-4 sm:px-8 pt-8 bg-gray-200 sm:w-1/3 text-sm pb-8 sm:pb-24 mb-8 sm:mb-0 ${menu['opened'] ? '' : 'hidden'}`}>
+            <div className={`px-4 sm:px-8 pt-8 bg-gray-200 sm:w-1/3 text-sm pb-8 sm:pb-24 mb-8 sm:mb-0 overflow-y-scroll ${menu['opened'] ? '' : 'hidden'}`}>
               <EditColumn />
             </div>
 

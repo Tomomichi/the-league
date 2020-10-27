@@ -50,7 +50,7 @@ export default function Index() {
           <svg className={`inline-block mr-1 w-5 h-5 fill-current`} viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
             <path d="M1 21h22L12 2 1 21zm12-3h-2v-2h2v2zm0-4h-2v-4h2v4z"></path>
           </svg>
-          <span className="flex-1">THE LEAGUEは現在「先行お試し版」として試験運用中です。本リリース時にデータがリセットされる可能性がありますので、あらかじめご了承ください。</span>
+          <span className="flex-1">THE LEAGUEは現在「先行お試し版」として試験運用中です。本リリース時にデータが引き継がれない可能性がありますので、あらかじめご了承ください。</span>
         </div>
 
         <div className="full-bleed bg-gray-800 text-gray-200 mb-20 text-center px-4">
@@ -99,19 +99,18 @@ export default function Index() {
               </h3>
             </div>
             <div className="grid grid-cols-3 sm:grid-cols-6 gap-3 sm:gap-4 text-sm mb-8">
-              <div className="bg-white border rounded px-2 py-3">試合順の自動生成</div>
-              <div className="bg-white border rounded px-2 py-3">独自ランキングロジック</div>
-              <div className="bg-white border rounded px-2 py-3">外部サイト埋め込み</div>
-              <div className="bg-white border rounded px-2 py-3">文字でのスコア登録</div>
-              <div className="bg-white border rounded px-2 py-3">参加者シャッフル</div>
-              <div className="bg-white border rounded px-2 py-3">参加者の所属表示</div>
-              <div className="bg-white border rounded px-2 py-3">スコアなし（勝敗のみ記録）</div>
-              <div className="bg-white border rounded px-2 py-3">画像ダウンロード</div>
-              <div className="bg-white border rounded px-2 py-3">API連携</div>
-              <div className="bg-white border rounded px-2 py-3">デザインカスタマイズ</div>
-              <div className="bg-white border rounded px-2 py-3">選手の顔写真表示</div>
-              <div className="bg-white border rounded px-2 py-3">試合詳細コメント</div>
-              <div className="bg-white border rounded px-2 py-3">OEM提供</div>
+              <div className="bg-white rounded px-2 py-3">試合順の自動生成</div>
+              <div className="bg-white rounded px-2 py-3">独自ランキングロジック</div>
+              <div className="bg-white rounded px-2 py-3">外部サイト埋め込み</div>
+              <div className="bg-white rounded px-2 py-3">文字でのスコア登録</div>
+              <div className="bg-white rounded px-2 py-3">参加者シャッフル</div>
+              <div className="bg-white rounded px-2 py-3">参加者の所属表示</div>
+              <div className="bg-white rounded px-2 py-3">スコアなし（勝敗のみ記録）</div>
+              <div className="bg-white rounded px-2 py-3">画像ダウンロード</div>
+              <div className="bg-white rounded px-2 py-3">API連携</div>
+              <div className="bg-white rounded px-2 py-3">デザインカスタマイズ</div>
+              <div className="bg-white rounded px-2 py-3">選手の顔写真表示</div>
+              <div className="bg-white rounded px-2 py-3">試合詳細コメント</div>
             </div>
             <div className="text-center">
               <div className="text-sm mb-4">ここにない機能のご利用を検討されている方は、以下のフォームからお気軽にお問い合わせください。</div>
@@ -137,7 +136,7 @@ export default function Index() {
                 <span className="font-normal bg-orange-500 rounded text-white text-xs p-1 ml-2">Now!</span>
               </h5>
               <div className="text-sm text-left">
-                バグや未実装の機能があるほか、データが失われる可能性もあります。
+                バグや未実装の機能があるほか、本運用版にデータが引き継がれない可能性もあります。
                 <br />
                 基本的な機能はすでに使えますので、気軽な大会などでぜひお試しください。
               </div>
