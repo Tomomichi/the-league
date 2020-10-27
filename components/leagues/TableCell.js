@@ -7,7 +7,7 @@ export default function TableCell({team, counter}){
   const targetMatch = league.matches.find(m => Object.keys(m.teams).sort().join("-") == [team.id, counter.id].sort().join("-"));
 
   return (
-    <td className="border text-center cursor-pointer hover:bg-gray-200" style={{height: 80}} onClick={()=>{setMatch(targetMatch)}}>
+    <td className="border text-center cursor-pointer hover:bg-gray-100" style={{height: 80}} onClick={()=>{setMatch(targetMatch)}}>
       <div>
         <div>{ resultMark(team.id, targetMatch) }</div>
         { targetMatch.finished &&

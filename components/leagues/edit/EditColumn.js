@@ -22,7 +22,7 @@ export default function MenuColumn(){
         <div className={`mb-8 ${titleBlank() ? 'text-red-600' : ''}`}>
           <label htmlFor="title" className="block mb-2 font-bold">大会名*</label>
 
-          <input id="title" className={`rounded px-1 py-2 w-full ${titleBlank() ? 'border border-red-600 bg-red-100' : ''}`} type="text" required
+          <input id="title" className={`rounded p-2 w-full ${titleBlank() ? 'border border-red-600 bg-red-100' : ''}`} type="text" required
             defaultValue={league.title}
             onBlur={e => updateLeague('title', e.target.value)}
           />
@@ -30,7 +30,7 @@ export default function MenuColumn(){
 
         <div className="mb-8">
           <label htmlFor="description" className="block mb-2 font-bold">概要</label>
-          <textarea id="description" className="rounded px-1 py-2 w-full" placeholder="大会の詳細など。URLを貼ると自動でリンクに変換されます。"
+          <textarea id="description" className="rounded p-2 w-full" placeholder="大会の詳細など。URLを貼ると自動でリンクに変換されます。"
             defaultValue={league.description}
             onBlur={e => updateLeague('description', e.target.value)}
           ></textarea>
@@ -39,7 +39,7 @@ export default function MenuColumn(){
 
       <div className={`${menu['target'] == 'players' ? '' : 'hidden'}`}>
         <label htmlFor="players" className="block mb-2 font-bold">参加者</label>
-        <textarea id="players" rows={league.teams.length + 1} className="rounded px-1 py-2 w-full"
+        <textarea id="players" rows={league.teams.length + 1} className="rounded p-2 w-full"
           defaultValue={league.teams.map(t => t['name']).join('\r\n')}
         ></textarea>
       </div>
@@ -77,7 +77,7 @@ export default function MenuColumn(){
       <div className={`${menu['target'] == 'share' ? '' : 'hidden'}`}>
         <div className="mb-8">
           <h6 className="font-bold mb-2">公開URL</h6>
-          <input type="text" readOnly className="w-full bg-white rounded p-4" defaultValue={`https://league.the-tournament.jp/leagues/${league.id}`} />
+          <input type="text" readOnly className="w-full bg-white rounded p-4" defaultValue={`https://the-league.vercel.app/leagues/${league.id}`} />
         </div>
         <div className="mb-8">
           <h6 className="font-bold mb-2">埋め込みタグ</h6>

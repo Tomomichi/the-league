@@ -67,18 +67,18 @@ export default function MatchModal({editable}){
                 <div className="flex-1 text-center bg-gray-200 px-2 sm:px-4 py-4 rounded">
                   <div className="mb-2">{ league.teams.find(t => t.id == Object.keys(match.teams).sort()[0]).name }</div>
                   { editable ?
-                    <input name={`scores[${Object.keys(match.teams)[0]}]`} className="px-1 py-2 rounded w-full" type="text" placeholder="スコア" defaultValue={match.teams[Object.keys(match.teams)[0]].score} />
+                    <input name={`scores[${Object.keys(match.teams).sort()[0]}]`} className="px-1 py-2 rounded w-full" type="text" placeholder="スコア" defaultValue={match.teams[Object.keys(match.teams).sort()[0]].score} />
                     :
-                    <div className="mt-2">{match.teams[Object.keys(match.teams)[0]].score}</div>
+                    <div className="mt-2">{match.teams[Object.keys(match.teams).sort()[0]].score}</div>
                   }
                 </div>
                 <div className="mx-2 font-bold flex items-center">-</div>
                 <div className="flex-1 text-center bg-gray-200 px-2 sm:px-4 py-4 rounded">
                   <div className="mb-2">{ league.teams.find(t => t.id == Object.keys(match.teams).sort()[1]).name }</div>
                   { editable ?
-                    <input name={`scores[${Object.keys(match.teams)[1]}]`} className="px-1 py-2 rounded w-full" type="text" placeholder="スコア" defaultValue={match.teams[Object.keys(match.teams)[1]].score} />
+                    <input name={`scores[${Object.keys(match.teams).sort()[1]}]`} className="px-1 py-2 rounded w-full" type="text" placeholder="スコア" defaultValue={match.teams[Object.keys(match.teams).sort()[1]].score} />
                     :
-                    <div className="mt-2">{match.teams[Object.keys(match.teams)[1]].score}</div>
+                    <div className="mt-2">{match.teams[Object.keys(match.teams).sort()[1]].score}</div>
                   }
                 </div>
               </div>
