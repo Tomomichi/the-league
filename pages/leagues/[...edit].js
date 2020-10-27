@@ -58,6 +58,10 @@ export default function Edit() {
     if(!router.query['edit'] || ignore) { return; }
 
     const leagueId = router.query['edit'][0];
+    if(router.query['edit'][1] != 'edit') {
+      openSnackbar('お探しのページが見つかりませんでした。もう一度URLをご確認ください。');
+      router.push('/');
+    }
 
     firebase.firestore().collection('leagues').doc(leagueId).get().then(doc => {
       const leagueData = doc.data() || defaultLeague(leagueId);

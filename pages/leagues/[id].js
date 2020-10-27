@@ -75,14 +75,14 @@ export default function Show({initialLeague}) {
 
 
 export async function getStaticPaths() {
-  const snapshot = await firebase.firestore().collection('leagues').limit(3).get();
+  const snapshot = await firebase.firestore().collection('leagues').limit(30).get();
   const paths = await snapshot.docs.map(doc => {
     return {params: {id: doc.id}}
   });
 
   return {
     paths,
-    fallback: false,
+    fallback: true,
   }
 }
 
@@ -100,6 +100,7 @@ export async function getStaticProps({params}) {
   return {
     props: {
       initialLeague: league,
-    }
+    },
+    unstable_revalidate: 60,
   }
 }
