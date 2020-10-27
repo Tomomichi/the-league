@@ -1,7 +1,8 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import Head from 'next/head'
 import Link from 'next/link'
 import { useRouter } from 'next/router'
+import * as gtag from '../lib/gtag'
 import { UserContext, SnackbarContext } from '../lib/contexts.js';
 import { firebase } from '../lib/firebase.js';
 import Header from '../components/Header.js'
@@ -17,6 +18,18 @@ const App = ({ Component, pageProps }) => {
   })
 
   const baseUrl = 'https://the-league.vercel.app';
+
+  useEffect(() => {
+    // Google Analytics
+    const handleRouteChange = (url) => {
+      gtag.pageview(url)
+    }
+    router.events.on('routeChangeComplete', handleRouteChange)
+
+    return () => {
+      router.events.off('routeChangeComplete', handleRouteChange)
+    }
+  }, []);
 
   return (
     <UserContext.Provider value={[user, setUser]}>
