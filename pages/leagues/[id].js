@@ -52,11 +52,11 @@ export default function Show({initialLeague}) {
             </div>
           }
           <div className="mb-20 text-sm">
-            <div>{
-              league.description.split('\n').map((str, index) => (
-                <React.Fragment key={index}>{str}<br /></React.Fragment>
-              ))
-            }</div>
+            { league.description &&
+                league.description.split('\n').map((str, index) => (
+                  <React.Fragment key={index}>{str}<br /></React.Fragment>
+                ))
+            }
           </div>
 
           <div className="overflow-y-scroll">
