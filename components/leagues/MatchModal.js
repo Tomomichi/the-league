@@ -46,7 +46,7 @@ export default function MatchModal({editable}){
 
   if(!match) { return null; }
   return (
-    <div className='transition-opacity duration-200 fixed w-full h-full top-0 left-0 flex items-center justify-center z-50'>
+    <div className='transition-opacity duration-200 fixed w-screen h-screen top-0 left-0 flex items-center justify-center z-50'>
       <div className="absolute w-full h-full bg-black opacity-75" onClick={()=>{setMatch(false)}}></div>
       <div className="bg-white w-11/12 md:max-w-md mx-auto rounded shadow-lg z-50 overflow-y-auto">
         <div className="relative text-left">
@@ -64,7 +64,7 @@ export default function MatchModal({editable}){
           <form id="form" onSubmit={updateMatch}>
             <div className="mb-4 px-4">
               <div className="flex items-stretch">
-                <div className="flex-1 text-center bg-gray-200 px-1 sm:px-2 py-4 rounded">
+                <div className="flex-1 text-center bg-gray-200 px-2 sm:px-4 py-4 rounded">
                   <div className="mb-2">{ league.teams.find(t => t.id == Object.keys(match.teams).sort()[0]).name }</div>
                   { editable ?
                     <input name={`scores[${Object.keys(match.teams)[0]}]`} className="px-1 py-2 rounded w-full" type="text" placeholder="スコア" defaultValue={match.teams[Object.keys(match.teams)[0]].score} />
@@ -73,7 +73,7 @@ export default function MatchModal({editable}){
                   }
                 </div>
                 <div className="mx-2 font-bold flex items-center">-</div>
-                <div className="flex-1 text-center bg-gray-200 px-1 sm:px-2 py-4 rounded">
+                <div className="flex-1 text-center bg-gray-200 px-2 sm:px-4 py-4 rounded">
                   <div className="mb-2">{ league.teams.find(t => t.id == Object.keys(match.teams).sort()[1]).name }</div>
                   { editable ?
                     <input name={`scores[${Object.keys(match.teams)[1]}]`} className="px-1 py-2 rounded w-full" type="text" placeholder="スコア" defaultValue={match.teams[Object.keys(match.teams)[1]].score} />
@@ -110,6 +110,14 @@ export default function MatchModal({editable}){
           </form>
         </div>
       </div>
+
+      <style global jsx>{`
+        body {
+          width: 100%;
+          height: 100%;
+          position: fixed;
+        }
+      `}</style>
     </div>
   );
 };
