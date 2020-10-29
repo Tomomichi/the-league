@@ -1,26 +1,39 @@
 import { useState, useContext, useEffect } from 'react'
 import { LeagueContext, MatchContext } from '../../lib/contexts.js';
 
+const CellWidth = 100;
 
 export default function Ranking(){
   const [league, setLeague] = useContext(LeagueContext);
 
   const calcPoints = () => {
     let p = {};
-    // 勝ち点計算
-    league.teams.map(t => p[t.id] = { win: 0, lose: 0, draw: 0, points: 0 });
+    // 試合数計算
+    league.teams.map(t => p[t.id] = { win: 0, lose: 0, draw: 0, point: 0, gf: 0, ga: 0 });  // gf:得点、 ga: 失点, gd: 得失差
     league.matches.forEach(match => {
       if(!match.finished) { return; }
 
-      Object.keys(match.teams).map(tid => {
+      Object.keys(match.teams).map((tid, index) => {
         if(match.winner == null) {
           p[tid]['draw'] += 1
         }else {
           const res = (match.winner == tid) ? 'win' : 'lose';
           p[tid][res] += 1
         }
+        // ga: 得点
+        const gf = match.teams[tid]['score'];
+        if(!isNaN(gf)) {
+          p[tid]['gf'] += Number(gf);
+        }
+        // gf: 失点
+        const opponentId = Object.keys(match.teams)[1-index];
+        const ga = match.teams[opponentId]['score'];
+        if(!isNaN(ga)) {
+          p[tid]['ga'] += Number(ga);
+        }
       });
     });
+    // 勝ち点計算
     league.teams.forEach(t => {
       p[t.id]['point'] = p[t.id]['win'] * 3 + p[t.id]['draw'] * 1;
     });
@@ -37,33 +50,40 @@ export default function Ranking(){
   const sortedTeamIds = calcSortedTeamIds();
 
 
-
   return (
-    <div className="overflow-x-scroll">
-      <table className="min-w-full">
-        <thead className="bg-gray-200 text-sm">
-          <tr>
-            <th className="px-2 py-3 text-left">順位</th>
-            <th className="px-2 py-3 text-left">名前</th>
-            <th className="px-2 py-3 text-left">Win</th>
-            <th className="px-2 py-3 text-left">Lose</th>
-            <th className="px-2 py-3 text-left">Draw</th>
-            <th className="px-2 py-3 text-left">勝点</th>
-          </tr>
-        </thead>
-        <tbody>
-          { sortedTeamIds.map((tid, index) => (
-            <tr key={tid} className="border-b">
-              <td className="px-2 py-3">{index + 1}</td>
-              <td className="px-2 py-3">{ league.teams.find(t => t.id == tid).name }</td>
-              <td className="px-2 py-3">{points[tid].win}</td>
-              <td className="px-2 py-3">{points[tid].lose}</td>
-              <td className="px-2 py-3">{points[tid].draw}</td>
-              <td className="px-2 py-3">{points[tid].point}</td>
+    <>
+      <div className="overflow-x-scroll">
+        <table className="min-w-full rounded overflow-hidden whitespace-no-wrap table-fixed" style={{width: 760}}>
+          <thead className="bg-gray-200 text-sm">
+            <tr>
+              <th className="px-2 py-3 text-left" style={{width: 70}}>順位</th>
+              <th className="px-2 py-3 text-left" style={{width: 200}}>名前</th>
+              <th className="px-2 py-3 text-left" style={{width: 70}}>勝ち点</th>
+              <th className="px-2 py-3 text-left" style={{width: 70}}>勝ち</th>
+              <th className="px-2 py-3 text-left" style={{width: 70}}>引き分け</th>
+              <th className="px-2 py-3 text-left" style={{width: 70}}>負け</th>
+              <th className="px-2 py-3 text-left" style={{width: 70}}>得点</th>
+              <th className="px-2 py-3 text-left" style={{width: 70}}>失点</th>
+              <th className="px-2 py-3 text-left" style={{width: 70}}>得失差</th>
             </tr>
-          ))}
-        </tbody>
-      </table>
+          </thead>
+          <tbody>
+            { sortedTeamIds.map((tid, index) => (
+              <tr key={tid} className="border-b">
+                <td className="px-2 py-3">{index + 1}</td>
+                <td className="px-2 py-3">{ league.teams.find(t => t.id == tid).name }</td>
+                <td className="px-2 py-3">{points[tid].point}</td>
+                <td className="px-2 py-3">{points[tid].win}</td>
+                <td className="px-2 py-3">{points[tid].draw}</td>
+                <td className="px-2 py-3">{points[tid].lose}</td>
+                <td className="px-2 py-3">{points[tid].gf}</td>
+                <td className="px-2 py-3">{points[tid].ga}</td>
+                <td className="px-2 py-3">{points[tid].gf - points[tid].ga}</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
 
       <div className="mt-8 text-xs">
         ※ランキングは勝点順で、勝ちが「3点」,引き分けを「1点」として計算しています。
@@ -71,6 +91,6 @@ export default function Ranking(){
         <br />
         ※独自要件が必要な場合、カスタム開発での対応も可能です。お問い合わせからお気軽にご相談ください。
       </div>
-    </div>
+    </>
   )
 };
