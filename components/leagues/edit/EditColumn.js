@@ -52,7 +52,7 @@ export default function MenuColumn(){
             const player = league.teams.find(team => team['id'] == Object.keys(match['teams']).sort()[0]);
             const counter = league.teams.find(team => team['id'] == Object.keys(match['teams']).sort()[1]);
             return(
-              <div key={Math.random()} className="flex cursor-pointer" onClick={()=>setMatch(match)}>
+              <div key={Math.random()} className="flex cursor-pointer hover:bg-gray-100" onClick={()=>setMatch(match)}>
                 <div className={`flex-1 px-2 py-4 ${match['winner'] == player['id'] ? 'text-red-700 font-bold' : ''}`}>
                   <p className="truncate">{player['name']}</p>
                 </div>

@@ -56,29 +56,48 @@ export default function LeagueList({result, limit, userId}) {
 
   return (
     <>
-      <ul>
+      <ul className="divide-y mb-8">
         { items.map((item) => (
-          <li key={item.id} className="px-2 py-4">
+          <li key={item.id} className="hover:bg-gray-100">
             <Link href='/leagues/[id]' as={`/leagues/${item.id}`}>
-              <a className="text-blue-600 hover:opacity-75 mb-1">{item.title}</a>
+              <a className="flex items-center justify-between py-3">
+                <div className="flex-1 overflow-hidden">
+                  <p className="truncate">{item.title}</p>
+                  <span className="text-xs">{ item.createdAt.slice(0,10) }</span>
+                </div>
+                <svg className="w-6 h-6 fill-current text-gray-500" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                  <path d="M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z"></path>
+                </svg>
+              </a>
             </Link>
-            <div className="text-xs">{ item.createdAt.slice(0,10) }</div>
           </li>
         ))}
       </ul>
 
-      <div>
-        { endBefore &&
-          <div>
-            <div onClick={()=>{ showPrevPage(endBefore) }}>Prev</div>
-          </div>
-        }
-        { startAfter &&
-          <div flexGrow={1} textAlign="right">
-            <div onClick={()=>{ showNextPage(startAfter) }}>Next</div>
-          </div>
-        }
-      </div>
+      <nav>
+        <ul className="flex justify-between">
+          <li>
+            { endBefore &&
+              <button className="flex border rounded pl-2 pr-4 py-1 hover:bg-gray-100" onClick={()=>{ showPrevPage(endBefore) }}>
+                <svg className="w-6 h-6 fill-current text-gray-500" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                  <path d="M15.41 7.41L14 6l-6 6 6 6 1.41-1.41L10.83 12z"></path>
+                </svg>
+                Prev
+              </button>
+            }
+          </li>
+          <li>
+            { startAfter &&
+              <button className="flex border rounded pl-4 pr-2 py-1 hover:bg-gray-100" onClick={()=>{ showNextPage(startAfter) }}>
+                Next
+                <svg className="w-6 h-6 fill-current text-gray-500" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                  <path d="M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z"></path>
+                </svg>
+              </button>
+            }
+          </li>
+        </ul>
+      </nav>
     </>
   );
 }

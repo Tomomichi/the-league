@@ -69,7 +69,7 @@ export default function Ranking(){
           </thead>
           <tbody>
             { sortedTeamIds.map((tid, index) => (
-              <tr key={tid} className="border-b">
+              <tr key={tid} className="border-b hover:bg-gray-100">
                 <td className="px-2 py-3">{index + 1}</td>
                 <td className="px-2 py-3">{ league.teams.find(t => t.id == tid).name }</td>
                 <td className="px-2 py-3">{points[tid].point}</td>
