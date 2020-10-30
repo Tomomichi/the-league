@@ -9,7 +9,7 @@ export default function Ranking(){
   const calcPoints = () => {
     let p = {};
     // 試合数計算
-    league.teams.map(t => p[t.id] = { win: 0, lose: 0, draw: 0, point: 0, gf: 0, ga: 0 });  // gf:得点、 ga: 失点, gd: 得失差
+    league.teams.map(t => p[t.id] = { win: 0, lose: 0, draw: 0, point: 0, gf: 0, ga: 0, gd: 0 });  // gf:得点、 ga: 失点, gd: 得失差
     league.matches.forEach(match => {
       if(!match.finished) { return; }
 
@@ -31,6 +31,8 @@ export default function Ranking(){
         if(!isNaN(ga)) {
           p[tid]['ga'] += Number(ga);
         }
+        // gd: 得失点
+        p[tid]['gd'] += (Number(gf) - Number(ga));
       });
     });
     // 勝ち点計算
@@ -40,9 +42,22 @@ export default function Ranking(){
     return p;
   }
 
+  // TODO: 比較項目のカスタマイズ、同点の扱い
   const calcSortedTeamIds = () => {
     return Object.keys(points).sort((a,b) => {
-      return points[b]['point'] - points[a]['point'];
+      // 勝ち点
+      if(points[a]['point'] !== points[b]['point']){
+        return points[b]['point'] - points[a]['point'];
+      }
+      // 得失点差
+      if(points[a]['gd'] !== points[b]['gd']){
+        return points[b]['gd'] - points[a]['gd'];
+      }
+      // 得点
+      if(points[a]['gf'] !== points[b]['gf']){
+        return points[b]['gf'] - points[a]['gf'];
+      }
+      return 0
     });
   }
 
@@ -78,7 +93,7 @@ export default function Ranking(){
                 <td className="px-2 py-3">{points[tid].lose}</td>
                 <td className="px-2 py-3">{points[tid].gf}</td>
                 <td className="px-2 py-3">{points[tid].ga}</td>
-                <td className="px-2 py-3">{points[tid].gf - points[tid].ga}</td>
+                <td className="px-2 py-3">{points[tid].gd}</td>
               </tr>
             ))}
           </tbody>
@@ -86,7 +101,7 @@ export default function Ranking(){
       </div>
 
       <div className="mt-8 text-xs">
-        ※ランキングは勝点順で、勝ちが「3点」,引き分けを「1点」として計算しています。
+        ※ランキングは「勝点→得失点→得点」順で、勝ち点は勝ちが「3点」,引き分けを「1点」として計算しています。
         点数のカスタマイズや得失点などの表示も将来的に実装予定です。
         <br />
         ※独自要件が必要な場合、カスタム開発での対応も可能です。お問い合わせからお気軽にご相談ください。
