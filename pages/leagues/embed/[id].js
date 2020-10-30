@@ -38,16 +38,35 @@ export default function Show({initialLeague}) {
       <MatchContext.Provider value={[match, setMatch]}>
         <Head>
           <title>{league.title} - THE LEAGUE</title>
+          <link rel="canonical" href={`https://the-league.vercel.app/leagues/${league.id}`} />
         </Head>
 
-        <div>
-          <div className="overflow-y-scroll">
-            <div className="flex border-b mb-8">
-              <div className={`px-6 pb-1 border-gray-700 ${mainColumn == 'matches' ? 'border-b-2' : 'cursor-pointer'}`} onClick={()=>setMainColumn('matches')}>対戦表</div>
-              <div className={`px-6 pb-1 border-gray-700 ${mainColumn == 'ranking' ? 'border-b-2' : 'cursor-pointer'}`} onClick={()=>setMainColumn('ranking')}>順位表</div>
+        <div className="m-1">
+          <div className="p-1 border border-gray-900 bg-gray-900 text-white text-sm break-all">
+            <h1 className="inline mr-2">
+              <Link href='/leagues/[id]' as={`/leagues/${league.id}`}>
+                <a className="hover:text-gray-200">{league.title}</a>
+              </Link>
+            </h1>
+            <div className="text-xs inline">
+              <span className="text-gray-500">powered by </span>
+              <Link href='/'><a className="hover:text-gray-200">THE LEAGUE</a></Link>
             </div>
-            { mainColumn == 'matches' && <League editable={false} /> }
-            { mainColumn == 'ranking' && <Ranking /> }
+          </div>
+
+          <div className="p-4 pt-8 border-r border-l border-b">
+            <div className="overflow-y-scroll">
+              <div className="flex border-b mb-4">
+                <div className={`px-6 pb-1 border-gray-700 ${mainColumn == 'matches' ? 'border-b-2' : 'cursor-pointer'}`} onClick={()=>setMainColumn('matches')}>対戦表</div>
+                <div className={`px-6 pb-1 border-gray-700 ${mainColumn == 'ranking' ? 'border-b-2' : 'cursor-pointer'}`} onClick={()=>setMainColumn('ranking')}>順位表</div>
+              </div>
+              { mainColumn == 'matches' && <League editable={false} /> }
+              { mainColumn == 'ranking' && <Ranking /> }
+            </div>
+
+            <div className="bg-gray-800 text-white max-w-lg px-4 py-8 rounded text-center my-4">
+              広告枠
+            </div>
           </div>
         </div>
       </MatchContext.Provider>

@@ -81,7 +81,7 @@ export default function MenuColumn(){
         </div>
         <div className="mb-8">
           <h6 className="font-bold mb-2">埋め込みタグ</h6>
-          <input type="text" readOnly className="w-full bg-white rounded p-4" defaultValue={`<div style='position:relative!important;width:100%!important;max-width:100%!important;margin-bottom:20px!important;overflow:auto !important;-webkit-overflow-scrolling:touch !important;'><iframe src='https://league.the-tournament.jp/leagues/${league.id}' seamless frameborder='0' scrolling='no' width='100%' height='564' style='width:1px;min-width:100%;'></iframe></div>`} />
+          <input type="text" readOnly className="w-full bg-white rounded p-4" defaultValue={`<div style='position:relative!important;width:100%!important;max-width:100%!important;margin-bottom:20px!important;overflow:auto !important;-webkit-overflow-scrolling:touch !important;'><iframe src='https://the-league.vercel.app/leagues/embed/${league.id}' seamless frameborder='0' scrolling='no' width='100%' height='564' style='width:1px;min-width:100%;'></iframe></div>`} />
 
         </div>
         <div className="mb-8">
