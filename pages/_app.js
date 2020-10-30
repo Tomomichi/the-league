@@ -30,10 +30,19 @@ const App = ({ Component, pageProps }) => {
   }, []);
 
   return pageProps.noLayout ? (
-      <Component {...pageProps} />
+      <>
+        <Head>
+          <title>THE LEAGUE (ザ・リーグ) | 簡単・便利な総当りリーグ表作成サービス</title>
+        </Head>
+        <Component {...pageProps} />
+      </>
     ) : (
       <UserContext.Provider value={[user, setUser]}>
         <SnackbarProvider>
+          <Head>
+            <title>THE LEAGUE (ザ・リーグ) | 簡単・便利な総当りリーグ表作成サービス</title>
+          </Head>
+
           <div className="text-gray-700">
             <Header />
 

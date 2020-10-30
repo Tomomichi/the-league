@@ -11,7 +11,6 @@ export default class MyDocument extends Document {
           <meta charSet="utf-8" />
           <meta name="viewport" content="minimum-scale=1, initial-scale=1, width=device-width" />
           <link rel="icon" type="image/x-icon" href="/favicon.ico" />
-          <title>THE LEAGUE (ザ・リーグ) | 簡単・便利な総当りリーグ表作成サービス</title>
           <meta name="description" content="THE LEAGUE(ザ・リーグ)は、簡単・便利な総当りのリーグ表作成サービスです。" />
           <meta name="keywords" content="リーグ戦,リーグ表,総当り,ラウンドロビン,THE LEAGUE" />
           <meta property="og:title" content="THE LEAGUE (ザ・リーグ) | 簡単・便利な総当りリーグ表作成サービス" />
