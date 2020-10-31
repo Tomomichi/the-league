@@ -16,6 +16,34 @@ export default function MenuColumn(){
     setLeague(Object.assign({}, league));
   }
 
+  const updateTeamName = (e) => {
+    const teamId = e.currentTarget.dataset.teamId;
+    league.teams.find(t => t.id == teamId).name = e.currentTarget.value;
+    setLeague(Object.assign({}, league));
+  }
+
+  const addMember = (e) => {
+    e.preventDefault();
+    const formData = new FormData(e.currentTarget);
+    const name = formData.get('newMember');
+    if(!name || name == '') { return; }
+
+    const newMember = { name: name, id: Math.random().toString(36).substring(2) };
+    league.teams.forEach(team => {
+      const teams = { [team.id]: { score: null }, [newMember.id]: { score: null }, };
+      league.matches.push({ teams: teams, finished: false, winner: null });
+    });
+    league.teams.push(newMember);
+    document.getElementsByName('newMember')[0].value = "";
+    setLeague(Object.assign({}, league));
+  }
+
+  const removeMember = (teamId) => {
+    league.teams = league.teams.filter(t => t.id != teamId);
+    league.matches = league.matches.filter(m => !Object.keys(m.teams).includes(teamId));
+    setLeague(Object.assign({}, league));
+  }
+
   return (
     <>
       <div className={`${menu['target'] == 'settings' ? '' : 'hidden'}`}>
@@ -38,10 +66,32 @@ export default function MenuColumn(){
       </div>
 
       <div className={`${menu['target'] == 'players' ? '' : 'hidden'}`}>
-        <label htmlFor="players" className="block mb-2 font-bold">参加者</label>
-        <textarea id="players" rows={league.teams.length + 1} className="rounded p-2 w-full"
-          defaultValue={league.teams.map(t => t['name']).join('\r\n')}
-        ></textarea>
+        <h6 className="mb-2 font-bold">参加者</h6>
+        <div className="space-y-4 mb-8">
+          { league.teams.map(team => {
+            return(
+              <div key={team.id} className="flex items-center">
+                <input data-team-id={team.id} className="w-full rounded p-2 focus:bg-white" type="text" name={`teams[${team.id}]`} value={team.name} placeholder='Player XX' onChange={ updateTeamName } />
+                <div className="text-gray-500 cursor-pointer" onClick={()=>{removeMember(team.id)}}>
+                  <svg className="fill-current inline-block ml-1 w-5 h-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+                    <path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"></path>
+                  </svg>
+                </div>
+              </div>
+            )
+          }) }
+        </div>
+        <div>
+          <form onSubmit={addMember} className="flex items-center">
+            <input className="flex-1 sm:flex-grow-0 border px-2 py-2 rounded-l text-sm" type="text" placeholder='参加者名' name='newMember' required />
+            <button className="flex items-center px-3 py-2 border border-blue-600 bg-blue-600 text-white text-sm rounded-r" type="submit">
+              <svg className="w-5 h-5 fill-current mr-1" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                <path d="M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6v2z"></path>
+              </svg>
+              追加
+            </button>
+          </form>
+        </div>
       </div>
 
       <div className={`${menu['target'] == 'matches' ? '' : 'hidden'}`}>

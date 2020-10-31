@@ -55,7 +55,7 @@ export default function League({editable}){
                 <th className="bg-gray-200 border px-2 relative">
                   { editable ?
                     <div className="flex items-center">
-                      <input data-team-id={team.id} className="w-full rounded p-2 focus:bg-white" type="text" name={`teams[${team.id}]`} defaultValue={team.name} placeholder='Player XX' onBlur={ updateTeamName } />
+                      <input data-team-id={team.id} className="w-full rounded p-2 focus:bg-white" type="text" name={`teams[${team.id}]`} value={team.name} placeholder='Player XX' onChange={ updateTeamName } />
                       <div className="text-gray-500 cursor-pointer" onClick={()=>{removeMember(team.id)}}>
                         <svg className="fill-current inline-block ml-1 w-5 h-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
                           <path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"></path>
