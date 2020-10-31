@@ -59,9 +59,9 @@ export default function Index() {
                 THE LEAGUE
               </h1>
               <p className="mb-8 text-sm">簡単・便利な総当たりリーグ表作成ツールの決定版！</p>
-              <div className="sm:inline-block text-white bg-red-700 rounded px-12 py-3 hover:bg-red-600 cursor-pointer mb-2" onClick={createLeague}>
+              <button className="w-full sm:w-auto text-white bg-red-700 rounded px-12 py-3 hover:bg-red-600 mb-2" onClick={createLeague}>
                 リーグ表を作成する
-              </div>
+              </button>
               <p className="text-gray-400 text-xs">（ログインなしでも利用できます）</p>
             </div>
         </div>
@@ -81,13 +81,20 @@ export default function Index() {
             ではさらに詳細な設定も可能です。
           </div>
 
-          <div className="overflow-y-scroll">
+          <div className="overflow-y-scroll mb-12">
             <div className="flex border-b mb-6">
               <div className={`px-6 pb-1 border-gray-700 ${mainColumn == 'matches' ? 'border-b-2' : 'cursor-pointer'}`} onClick={()=>setMainColumn('matches')}>対戦表</div>
               <div className={`px-6 pb-1 border-gray-700 ${mainColumn == 'ranking' ? 'border-b-2' : 'cursor-pointer'}`} onClick={()=>setMainColumn('ranking')}>順位表</div>
             </div>
             { mainColumn == 'matches' && <League editable={true} /> }
             { mainColumn == 'ranking' && <Ranking /> }
+          </div>
+
+          <div className="text-center">
+            <button className="w-full sm:w-auto text-white bg-red-700 rounded px-12 py-3 hover:bg-red-600 mb-2" onClick={createLeague}>
+              リーグ表を作成する
+            </button>
+            <p className="text-gray-700 text-xs">（ログインなしでも利用できます）</p>
           </div>
         </div>
 
@@ -210,6 +217,13 @@ export default function Index() {
               </div>
             </div>
           </div>
+        </div>
+
+        <div className="text-center mt-16">
+          <button className="w-full sm:w-auto text-white bg-red-700 rounded px-12 py-3 hover:bg-red-600 mb-2" onClick={createLeague}>
+            リーグ表を作成する
+          </button>
+          <p className="text-gray-700 text-xs">（ログインなしでも利用できます）</p>
         </div>
       </MatchContext.Provider>
     </LeagueContext.Provider>
