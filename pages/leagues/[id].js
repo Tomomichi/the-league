@@ -15,6 +15,7 @@ export default function Show({initialLeague}) {
   const [league, setLeague] = useState(initialLeague);
   const [match, setMatch] = useState(false);
   const [mainColumn, setMainColumn] = useState('matches');
+  const [descOpened, setDescOpened] = useState(false);
 
   if (router.isFallback) {
     return(
@@ -47,6 +48,18 @@ export default function Show({initialLeague}) {
     router.push('/');
   }
 
+  const description = () => {
+    if(!league.description || league.description == '') { return ; }
+
+    let lines = league.description.split('\n');
+    return lines.map((str, index) => {
+      if(descOpened || index < 2) {
+        return <React.Fragment key={index}>{str}<br /></React.Fragment>
+      }
+    })
+  }
+
+
   return (
     <LeagueContext.Provider value={[league, setLeague]}>
       <MatchContext.Provider value={[match, setMatch]}>
@@ -71,10 +84,13 @@ export default function Show({initialLeague}) {
             </div>
           }
           <div className="mb-8 text-sm">
-            { league.description && league.description != '' &&
-                league.description.split('\n').map((str, index) => (
-                  <React.Fragment key={index}>{str}<br /></React.Fragment>
-                ))
+            { description() }
+            { !descOpened &&
+              <>
+                <button className="mt-2 border-b border-dashed border-gray-700" onClick={() => { setDescOpened(true); }}>
+                  ▼ 続きを見る
+                </button>
+              </>
             }
           </div>
 
