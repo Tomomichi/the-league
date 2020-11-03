@@ -6,6 +6,7 @@ import { firebase } from '../../../lib/firebase.js'
 import { LeagueContext, MatchContext } from '../../../lib/contexts.js';
 import League from '../../../components/leagues/League.js'
 import Ranking from '../../../components/leagues/Ranking.js'
+import MatchModal from '../../../components/leagues/MatchModal.js'
 
 
 export default function Show({initialLeague}) {
@@ -62,6 +63,7 @@ export default function Show({initialLeague}) {
               </div>
               { mainColumn == 'matches' && <League editable={false} /> }
               { mainColumn == 'ranking' && <Ranking /> }
+              <MatchModal editable={false} />
             </div>
 
             <div className="bg-gray-800 text-white max-w-lg px-4 py-8 rounded text-center my-4">

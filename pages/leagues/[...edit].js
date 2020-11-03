@@ -9,6 +9,7 @@ import MenuColumn from '../../components/leagues/edit/MenuColumn.js'
 import EditColumn from '../../components/leagues/edit/EditColumn.js'
 import League from '../../components/leagues/League.js'
 import Ranking from '../../components/leagues/Ranking.js'
+import MatchModal from '../../components/leagues/MatchModal.js'
 
 
 export default function Edit() {
@@ -146,6 +147,7 @@ export default function Edit() {
                 </div>
                 { mainColumn == 'matches' && <League editable={true} /> }
                 { mainColumn == 'ranking' && <Ranking /> }
+                <MatchModal editable={true} />
               </div>
             </div>
           </div>

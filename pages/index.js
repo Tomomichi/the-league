@@ -5,6 +5,7 @@ import { firebase } from '../lib/firebase.js'
 import { LeagueContext, MatchContext } from '../lib/contexts.js';
 import League from '../components/leagues/League.js'
 import Ranking from '../components/leagues/Ranking.js'
+import MatchModal from '../components/leagues/MatchModal.js'
 
 export default function Index() {
   const router = useRouter();
@@ -88,6 +89,7 @@ export default function Index() {
             </div>
             { mainColumn == 'matches' && <League editable={true} /> }
             { mainColumn == 'ranking' && <Ranking /> }
+            <MatchModal editable={true} />
           </div>
 
           <div className="text-center">

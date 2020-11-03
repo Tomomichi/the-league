@@ -1,6 +1,5 @@
 import { createContext, useContext, useState } from 'react'
 import { LeagueContext, MatchContext } from '../../lib/contexts.js';
-import MatchModal from './MatchModal.js'
 import TableCell from './TableCell.js'
 
 const CellWidth = 100;
@@ -92,8 +91,6 @@ export default function League({editable}){
           </form>
         </div>
       }
-
-      <MatchModal editable={editable} />
 
       <style jsx>{`
         .diagonal {
