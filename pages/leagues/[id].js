@@ -84,14 +84,20 @@ export default function Show({initialLeague}) {
               </a>
             </div>
           }
-          <div className="mb-8 text-sm">
+          <div className="mb-12 text-sm">
             { description() }
-            { !descOpened &&
+            { !descOpened && league.description && league.description.split('\n').length > 2 &&
               <>
+                <p>...</p>
                 <button className="mt-2 border-b border-dashed border-gray-700" onClick={() => { setDescOpened(true); }}>
                   ▼ 続きを見る
                 </button>
               </>
+            }
+            { descOpened &&
+              <button className="mt-2 border-b border-dashed border-gray-700" onClick={() => { setDescOpened(false); }}>
+                ▲ 閉じる
+              </button>
             }
           </div>
 
