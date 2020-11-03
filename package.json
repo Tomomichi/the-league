@@ -7,7 +7,8 @@
     "next": "latest",
     "react": "latest",
     "react-dom": "latest",
-    "react-simple-snackbar": "^1.1.10"
+    "react-simple-snackbar": "^1.1.10",
+    "react-string-replace": "^0.4.4"
   },
   "devDependencies": {
     "autoprefixer": "^9.8.0",

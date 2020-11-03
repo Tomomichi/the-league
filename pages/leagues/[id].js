@@ -2,6 +2,7 @@ import { useState, useContext, createContext } from 'react';
 import { useRouter } from 'next/router'
 import Head from 'next/head';
 import Link from 'next/link'
+import reactStringReplace from "react-string-replace";
 import { firebase } from '../../lib/firebase.js'
 import { UserContext, LeagueContext, MatchContext } from '../../lib/contexts.js';
 import Breadcrumb from '../../components/Breadcrumb.js'
@@ -49,15 +50,40 @@ export default function Show({initialLeague}) {
     router.push('/');
   }
 
+  const addLinkAndBreak = (str) => {
+    return reactStringReplace(
+      reactStringReplace(str, /(https?:\/\/\S+)/g, (match, i) => (
+        <a href={match} target="_blank" className="text-blue-600 border-b border-blue-500">{match}</a>
+      )),
+      /(\r\n|\r|\n)/g, (match, i) => <br />);
+  }
+
   const description = () => {
     if(!league.description || league.description == '') { return ; }
 
-    let lines = league.description.split('\n');
-    return lines.map((str, index) => {
-      if(descOpened || index < 2) {
-        return <React.Fragment key={index}>{str}<br /></React.Fragment>
-      }
-    })
+    const lines = league.description.split('\n');
+    const sliceEnd = descOpened ? lines.length : 3;
+    const str = lines.slice(0, sliceEnd).join('\n')
+
+    return (
+      <>
+        { addLinkAndBreak(str) }
+
+        { !descOpened && lines.length > 3 &&
+          <>
+            <p>...</p>
+            <button className="mt-2 border-b border-dashed border-gray-700" onClick={() => { setDescOpened(true); }}>
+              ▼ 続きを見る
+            </button>
+          </>
+        }
+        { descOpened &&
+          <button className="mt-6 border-b border-dashed border-gray-700" onClick={() => { setDescOpened(false); }}>
+            ▲ 閉じる
+          </button>
+        }
+      </>
+    );
   }
 
 
@@ -86,19 +112,6 @@ export default function Show({initialLeague}) {
           }
           <div className="mb-12 text-sm">
             { description() }
-            { !descOpened && league.description && league.description.split('\n').length > 2 &&
-              <>
-                <p>...</p>
-                <button className="mt-2 border-b border-dashed border-gray-700" onClick={() => { setDescOpened(true); }}>
-                  ▼ 続きを見る
-                </button>
-              </>
-            }
-            { descOpened &&
-              <button className="mt-2 border-b border-dashed border-gray-700" onClick={() => { setDescOpened(false); }}>
-                ▲ 閉じる
-              </button>
-            }
           </div>
 
           <div className="overflow-y-scroll">
