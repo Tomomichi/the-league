@@ -1,5 +1,4 @@
 import { useState, useEffect } from 'react';
-import Head from 'next/head'
 import Link from 'next/link'
 import { useRouter } from 'next/router'
 import * as gtag from '../lib/gtag'
@@ -30,19 +29,10 @@ const App = ({ Component, pageProps }) => {
   }, []);
 
   return pageProps.noLayout ? (
-      <>
-        <Head>
-          <title>THE TOURNAMENT (LEAGUE) | 簡単・便利な総当りリーグ表作成サービス</title>
-        </Head>
-        <Component {...pageProps} />
-      </>
+      <Component {...pageProps} />
     ) : (
       <UserContext.Provider value={[user, setUser]}>
         <SnackbarProvider>
-          <Head>
-            <title>THE TOURNAMENT(LEAGUE) | 簡単・便利な総当りリーグ表作成サービス</title>
-          </Head>
-
           <div className="text-gray-700">
             <Header />
 

@@ -86,12 +86,24 @@ export default function Show({initialLeague}) {
     );
   }
 
+  const scaasUrl = `https://scaas.vercel.app/api/?url=${process.env.NEXT_PUBLIC_WEB_ROOT}/leagues/${league.id}&slowMo=150&maxAge=3600`;
 
   return (
     <LeagueContext.Provider value={[league, setLeague]}>
       <MatchContext.Provider value={[match, setMatch]}>
         <Head>
-          <title>{league.title} - THE LEAGUE</title>
+          <title>{league.title} - THE TOURNAMENT(LEAGUE)</title>
+          <meta property="og:title" content={`${league.title} - THE TOURNAMENT(LEAGUE)`} />
+          <meta property="og:image" content={scaasUrl} />
+          <meta name="twitter:image:src" content={scaasUrl} />
+
+          { league.description && league.description != '' &&
+            <>
+              <meta name="description" content={league.description} />
+              <meta property="og:description" content={league.description} />
+              <meta name="twitter:description" content={league.description} />
+            </>
+          }
         </Head>
 
         <Breadcrumb items={breadcrumbs} />

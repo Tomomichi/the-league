@@ -1,4 +1,5 @@
 import { useState, createContext } from 'react';
+import Head from 'next/head';
 import Link from 'next/link'
 import { useRouter } from 'next/router'
 import { firebase } from '../lib/firebase.js'
@@ -47,6 +48,19 @@ export default function Index() {
   return (
     <LeagueContext.Provider value={[league, setLeague]}>
       <MatchContext.Provider value={[match, setMatch]}>
+        <Head>
+          <title>THE TOURNAMENT(LEAGUE) | 簡単・便利な総当りリーグ表作成サービス</title>
+          <meta property="og:title" content="THE TOURNAMENT(LEAGUE) | 簡単・便利な総当りリーグ表作成サービス" />
+          <meta property="og:image" content="hogehoge" />
+          <meta name="twitter:image:src" content={scaasUrl} />
+          <meta name="description" content="THE TOURNAMENT(LEAGUE)は、簡単・便利な総当りのリーグ表作成サービスです。" />
+          <meta property="og:description" content="THE TOURNAMENT(LEAGUE)は、簡単・便利な総当りのリーグ表作成サービスです。" />
+          <meta property="og:url" content={`${process.env.NEXT_PUBLIC_WEB_ROOT}`} />
+          <meta property="og:image" content={`${process.env.NEXT_PUBLIC_WEB_ROOT}/images/ogp.png`} />
+          <meta name="twitter:description" content="THE TOURNAMENT(LEAGUE)は、簡単・便利な総当りのリーグ表作成サービスです。" />
+          <meta name="twitter:image:src" content={`${process.env.NEXT_PUBLIC_WEB_ROOT}/images/ogp.png`} />
+        </Head>
+
         <div className="full-bleed bg-yellow-100 px-4 py-3 text-yellow-900 text-xs sm:text-sm">
           <svg className={`inline-block mr-1 w-5 h-5 fill-current`} viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
             <path d="M1 21h22L12 2 1 21zm12-3h-2v-2h2v2zm0-4h-2v-4h2v4z"></path>

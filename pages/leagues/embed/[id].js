@@ -39,7 +39,7 @@ export default function Show({initialLeague}) {
       <MatchContext.Provider value={[match, setMatch]}>
         <Head>
           <title>{league.title} - THE LEAGUE</title>
-          <link rel="canonical" href={`https://the-league.vercel.app/leagues/${league.id}`} />
+          <link rel="canonical" href={`${process.env.NEXT_PUBLIC_WEB_ROOT}/leagues/${league.id}`} />
         </Head>
 
         <div className="m-1">
