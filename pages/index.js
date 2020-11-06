@@ -51,13 +51,14 @@ export default function Index() {
           <svg className={`inline-block mr-1 w-5 h-5 fill-current`} viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
             <path d="M1 21h22L12 2 1 21zm12-3h-2v-2h2v2zm0-4h-2v-4h2v4z"></path>
           </svg>
-          <span className="flex-1">THE LEAGUEは現在「先行お試し版」として試験運用中です。本リリース時にデータが引き継がれない可能性がありますので、あらかじめご了承ください。</span>
+          <span className="flex-1">リーグ表作成機能は現在「先行お試し版」として試験運用中です。本リリース時にデータが引き継がれない可能性がありますので、あらかじめご了承ください。</span>
         </div>
 
         <div className="full-bleed bg-gray-800 text-gray-200 mb-20 text-center px-4">
             <div className="py-10">
-              <h1 className="text-3xl sm:text-4xl font-bold mb-2">
-                THE LEAGUE
+              <h1 className="text-3xl sm:text-4xl font-bold mb-2 flex items-center flex-col sm:flex-row justify-center">
+                THE TOURNAMENT
+                <span className="rounded bg-orange-600 text-white text-xs px-2 py-1 ml-2">LEAGUE</span>
               </h1>
               <p className="mb-8 text-sm">簡単・便利な総当たりリーグ表作成ツールの決定版！</p>
               <button className="w-full sm:w-auto text-white bg-red-700 rounded px-12 py-3 hover:bg-red-600 mb-2" onClick={createLeague}>
@@ -206,7 +207,7 @@ export default function Index() {
               <div className="text-sm mb-4">
                 トーナメント表の作成をご希望の場合は、日本最大のトーナメント作成サービス「THE TOURNAMENT」をご利用ください。
                 <br />
-                「THE LEAGUE」はこちらの姉妹サービスとして開発しており、将来的にトーナメント表・リーグ表どちらも作れるサービスとして統合する予定です。
+                リーグ表はこちらの姉妹サービスとして開発しており、将来的にトーナメント表・リーグ表どちらも作れるサービスとして統合する予定です。
               </div>
               <div className="text-center">
                 <a href="https://the-tournament.jp" target="_blank" className="bg-blue-600 text-white rounded px-4 py-2 block sm:inline-block">

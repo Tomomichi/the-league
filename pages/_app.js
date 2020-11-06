@@ -32,7 +32,7 @@ const App = ({ Component, pageProps }) => {
   return pageProps.noLayout ? (
       <>
         <Head>
-          <title>THE LEAGUE (ザ・リーグ) | 簡単・便利な総当りリーグ表作成サービス</title>
+          <title>THE TOURNAMENT (LEAGUE) | 簡単・便利な総当りリーグ表作成サービス</title>
         </Head>
         <Component {...pageProps} />
       </>
@@ -40,7 +40,7 @@ const App = ({ Component, pageProps }) => {
       <UserContext.Provider value={[user, setUser]}>
         <SnackbarProvider>
           <Head>
-            <title>THE LEAGUE (ザ・リーグ) | 簡単・便利な総当りリーグ表作成サービス</title>
+            <title>THE TOURNAMENT(LEAGUE) | 簡単・便利な総当りリーグ表作成サービス</title>
           </Head>
 
           <div className="text-gray-700">
@@ -56,7 +56,10 @@ const App = ({ Component, pageProps }) => {
                   <div className="mb-4">
                     <h5>
                       <Link href="/">
-                        <a className="text-lg">THE LEAGUE</a>
+                        <a className="mb-2 flex items-center flex-col sm:flex-row justify-center">
+                          <span className="text-lg font-bold">THE TOURNAMENT</span>
+                          <span className="rounded bg-orange-600 text-white text-xs px-2 py-1 ml-2">LEAGUE</span>
+                        </a>
                       </Link>
                     </h5>
                     <small className="text-xs text-gray-500">簡単・便利な総当りリーグ表作成サービス</small>
@@ -65,11 +68,11 @@ const App = ({ Component, pageProps }) => {
                     <li className="text-gray-500">利用規約</li>
                     <li className="text-gray-500">プライバシーポリシー</li>
                     <li className="text-gray-500">特定商取引法に基づく表示</li>
-                    <li><a href="" target="_blank" className="hover:text-white">運営</a></li>
-                    <li><a href="" target="_blank" className="hover:text-white">お問い合わせ</a></li>
+                    <li><a href="https://notsobad.jp" target="_blank" className="hover:text-white">運営</a></li>
+                    <li><a href="https://goo.gl/forms/xqvYet0AAsQUalI52" target="_blank" className="hover:text-white">お問い合わせ</a></li>
                   </ul>
                   <p className="text-sm text-gray-500">
-                    © 2020 THE LEAGUE by NOT SO BAD, LLC. All Rights Reserved.
+                    © 2020 THE TOURNAMENT(LEAGUE) by NOT SO BAD, LLC. All Rights Reserved.
                   </p>
                 </div>
               </footer>

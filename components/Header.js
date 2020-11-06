@@ -31,12 +31,12 @@ export default function Header(){
   return (
     <header className="flex justify-between text-sm border-b" style={{height: 40}}>
       <div className="flex items-center h-full">
-        <div className="flex items-center bg-gray-900 px-6 h-full">
+        <div className="flex items-center bg-gray-900 px-4 h-full">
           { false && <img style={{height: 20}} src="/images/logo_w.png" alt="THE TOURNAMENT" /> }
-          <Link href="/"><a className="text-white text-xl font-bold hover:opacity-75">THE LEAGUE</a></Link>
+          <Link href="/"><a className="text-white text-lg tracking-tight font-bold hover:opacity-75">THE TOURNAMENT</a></Link>
         </div>
         <div>
-          <span className="rounded bg-orange-600 text-white text-xs px-2 py-1 ml-2">SuperBETA</span>
+          <span className="rounded bg-orange-600 text-white text-xs px-2 py-1 ml-2">LEAGUE</span>
         </div>
         { false &&
           <Link href="#">
