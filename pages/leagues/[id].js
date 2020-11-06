@@ -86,7 +86,7 @@ export default function Show({initialLeague}) {
     );
   }
 
-  const scaasUrl = `https://scaas.vercel.app/api/?url=${process.env.NEXT_PUBLIC_WEB_ROOT}/leagues/${league.id}&slowMo=150&maxAge=3600`;
+  const scaasUrl = `https://scaas.vercel.app/api/?url=${process.env.NEXT_PUBLIC_WEB_ROOT}/leagues/embed/${league.id}&slowMo=150&maxAge=3600`;
 
   return (
     <LeagueContext.Provider value={[league, setLeague]}>
