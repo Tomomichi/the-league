@@ -51,8 +51,6 @@ export default function Index() {
         <Head>
           <title>THE TOURNAMENT(LEAGUE) | 簡単・便利な総当りリーグ表作成サービス</title>
           <meta property="og:title" content="THE TOURNAMENT(LEAGUE) | 簡単・便利な総当りリーグ表作成サービス" />
-          <meta property="og:image" content="hogehoge" />
-          <meta name="twitter:image:src" content={scaasUrl} />
           <meta name="description" content="THE TOURNAMENT(LEAGUE)は、簡単・便利な総当りのリーグ表作成サービスです。" />
           <meta property="og:description" content="THE TOURNAMENT(LEAGUE)は、簡単・便利な総当りのリーグ表作成サービスです。" />
           <meta property="og:url" content={`${process.env.NEXT_PUBLIC_WEB_ROOT}`} />
