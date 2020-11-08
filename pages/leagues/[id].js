@@ -78,9 +78,11 @@ export default function Show({initialLeague}) {
           </>
         }
         { descOpened &&
-          <button className="mt-6 border-b border-dashed border-gray-700" onClick={() => { setDescOpened(false); }}>
-            ▲ 閉じる
-          </button>
+          <div>
+            <button className="mt-6 border-b border-dashed border-gray-700" onClick={() => { setDescOpened(false); }}>
+              ▲ 閉じる
+            </button>
+          </div>
         }
       </>
     );
