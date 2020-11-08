@@ -10,7 +10,7 @@ export default function Drawer({drawerOpened, setDrawerOpened}){
   const router = useRouter()
   const [openSnackbar, closeSnackbar] = useSnackbar({position: 'bottom-left'});
   const [user, setUser] = useContext(UserContext);
-  const displayName = (!user || !user.email) ? 'ゲスト' : user.email;
+  const displayName = (!user) ? 'ゲスト' : user.email || user.displayName || 'ゲスト';
 
   const createLeague = () => {
     const newRef = firebase.firestore().collection('leagues').doc();

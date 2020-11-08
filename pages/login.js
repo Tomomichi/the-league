@@ -45,7 +45,6 @@ export default function Login() {
         provider = new firebase.auth.GoogleAuthProvider();
         break;
     }
-
     firebase.auth().signInWithRedirect(provider)
   }
 
@@ -86,7 +85,7 @@ export default function Login() {
               <h3 className="font-bold text-lg mb-4">メールアドレスでログイン</h3>
               <div className="flex w-full mb-4">
                 <input id="emailField" className="border rounded-l px-2 py-2 flex-1" type="email" required placeholder="メールアドレス" />
-                <button type="submit" className="rounded-r bg-pink-600 text-white px-4 text-sm">送信</button>
+                <button type="submit" className="rounded-r bg-pink-600 hover:bg-pink-700 text-white px-4 text-sm">送信</button>
               </div>
               <div className="text-sm">
                 入力したメールアドレスに、ログインURLが届きます。
@@ -98,12 +97,12 @@ export default function Login() {
         <div>
           <h3 className="font-bold text-lg mb-4">SNSアカウントでログイン</h3>
           <div className="mb-4">
-            <button disabled className="rounded bg-blue-500 text-white px-4 py-2 mr-0 sm:mr-4 mb-2 sm:mb-0 opacity-50 w-full sm:w-auto cursor-auto" onClick={()=>{snsLogin('twitter');}}>Twitterログイン</button>
-            <button disabled className="rounded bg-blue-700 text-white px-4 py-2 mr-0 sm:mr-4 mb-2 sm:mb-0 opacity-50 w-full sm:w-auto cursor-auto" onClick={()=>{snsLogin('facebook');}}>Facebookログイン</button>
-            <button disabled className="rounded bg-red-600 text-white px-4 py-2 opacity-50 w-full sm:w-auto cursor-auto" onClick={()=>{snsLogin('google');}}>Googleログイン</button>
+            <button className="rounded bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 mr-0 sm:mr-4 mb-2 sm:mb-0 w-full sm:w-auto" onClick={()=>{snsLogin('twitter');}}>Twitterログイン</button>
+            <button className="rounded bg-blue-700 hover:bg-blue-800 text-white px-4 py-2 mr-0 sm:mr-4 mb-2 sm:mb-0 w-full sm:w-auto" onClick={()=>{snsLogin('facebook');}}>Facebookログイン</button>
+            <button className="rounded bg-red-600 hover:bg-red-700 text-white px-4 py-2 w-full sm:w-auto" onClick={()=>{snsLogin('google');}}>Googleログイン</button>
           </div>
           <div className="text-sm">
-            ※先行お試し期間中はSNSログインが使えません。ベータ版リリースまでお待ちください。
+            ※許可なく投稿などはいたしませんのでご安心ください。
           </div>
         </div>
       </div>
