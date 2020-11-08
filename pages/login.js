@@ -80,6 +80,14 @@ export default function Login() {
 
       <div>
         <div className="mt-12">
+          <div className="rounded bg-blue-100 border border-blue-500 mb-12 px-4 py-3 text-blue-900 text-xs sm:text-sm">
+            <svg className={`inline-block mr-1 w-5 h-5 fill-current`} viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+              <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"></path>            </svg>
+            <span className="flex-1">
+              THE TOURNAMENTと同じアカウントでログインできます。将来的に両サイトを統合し、まとめて管理できるようにする予定です。
+            </span>
+          </div>
+
           <form onSubmit={magicAuth}>
             <div className="mb-20">
               <h3 className="font-bold text-lg mb-4">メールアドレスでログイン</h3>
@@ -87,8 +95,16 @@ export default function Login() {
                 <input id="emailField" className="border rounded-l px-2 py-2 flex-1" type="email" required placeholder="メールアドレス" />
                 <button type="submit" className="rounded-r bg-pink-600 hover:bg-pink-700 text-white px-4 text-sm">送信</button>
               </div>
-              <div className="text-sm">
-                入力したメールアドレスに、ログインURLが届きます。
+              <div className="rounded bg-yellow-100 border border-yellow-500 mt-4 px-4 py-3 text-yellow-900 text-xs sm:text-sm">
+                <svg className={`inline-block mr-1 w-5 h-5 fill-current`} viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                  <path d="M1 21h22L12 2 1 21zm12-3h-2v-2h2v2zm0-4h-2v-4h2v4z"></path>
+                </svg>
+                <span className="flex-1">
+                  メールで届くログインURLの先頭部分を「https://<span className="font-bold text-red-600">league.</span>the-tournament.jp」に変えてアクセスしてください。
+                </span>
+              </div>
+              <div className="text-sm mt-4">
+                ※こちらはベータ期間中のみの暫定措置で、本リリース後は不要になります。ご不便おかけしますがご了承ください。
               </div>
             </div>
           </form>
@@ -102,6 +118,8 @@ export default function Login() {
             <button className="rounded bg-red-600 hover:bg-red-700 text-white px-4 py-2 w-full sm:w-auto" onClick={()=>{snsLogin('google');}}>Googleログイン</button>
           </div>
           <div className="text-sm">
+            ※ログイン完了後、自動でマイページに遷移します。数秒程度かかる場合がありますがそのままお待ちください。
+            <br />
             ※許可なく投稿などはいたしませんのでご安心ください。
           </div>
         </div>
