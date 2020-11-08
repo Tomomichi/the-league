@@ -63,7 +63,7 @@ export default function Index() {
           <svg className={`inline-block mr-1 w-5 h-5 fill-current`} viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
             <path d="M1 21h22L12 2 1 21zm12-3h-2v-2h2v2zm0-4h-2v-4h2v4z"></path>
           </svg>
-          <span className="flex-1">リーグ表作成機能は現在「先行お試し版」として試験運用中です。本リリース時にデータが引き継がれない可能性がありますので、あらかじめご了承ください。</span>
+          <span className="flex-1">リーグ表作成機能は現在ベータ版として運用中です。改善要望やバグ報告などお気軽に運営までご連絡ください。</span>
         </div>
 
         <div className="full-bleed bg-gray-800 text-gray-200 mb-20 text-center px-4">
@@ -155,7 +155,6 @@ export default function Index() {
               </svg>
               <h5 className="font-bold mb-1">
                 先行お試し版
-                <span className="font-normal bg-orange-500 rounded text-white text-xs p-1 ml-2">Now!</span>
               </h5>
               <div className="text-sm text-left">
                 バグや未実装の機能があるほか、本運用版にデータが引き継がれない可能性もあります。
@@ -177,7 +176,10 @@ export default function Index() {
               <svg className={`inline-block mb-2 w-8 h-8 fill-current`} viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
                 <path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-4 8c0 1.11-.9 2-2 2h-2v2h4v2H9v-4c0-1.11.9-2 2-2h2V9H9V7h4c1.1 0 2 .89 2 2v2z"></path>
               </svg>
-              <h5 className="mb-2 font-bold">BETA版</h5>
+              <h5 className="mb-2 font-bold">
+                ベータ版
+                <span className="font-normal bg-orange-500 rounded text-white text-xs p-1 ml-2">Now!</span>
+              </h5>
               <div className="text-sm text-left">
                 一通りのバグ修正と機能実装の完了後、ベータ版としてリリースします。
                 <br />
