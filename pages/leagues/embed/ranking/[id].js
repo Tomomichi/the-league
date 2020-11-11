@@ -2,8 +2,8 @@ import { useState } from 'react';
 import { useRouter } from 'next/router'
 import Head from 'next/head';
 import Link from 'next/link'
-import { firebase } from '../../../lib/firebase.js'
-import Embed from '../../../components/leagues/Embed.js'
+import { firebase } from '../../../../lib/firebase.js'
+import Embed from '../../../../components/leagues/Embed.js'
 
 
 export default function Show({initialLeague, visibleTables}) {
@@ -32,10 +32,11 @@ export default function Show({initialLeague, visibleTables}) {
 
 
 export async function getStaticPaths() {
-  const snapshot = await firebase.firestore().collection('leagues').limit(30).get();
-  const paths = await snapshot.docs.map(doc => {
-    return {params: {id: doc.id}}
-  });
+  // const snapshot = await firebase.firestore().collection('leagues').limit(30).get();
+  // const paths = await snapshot.docs.map(doc => {
+  //   return {params: {id: doc.id}}
+  // });
+  const paths = [];
 
   return {
     paths,
@@ -57,7 +58,7 @@ export async function getStaticProps({params}) {
   return {
     props: {
       initialLeague: league,
-      visibleTables: ['matches', 'ranking'],
+      visibleTables: ['ranking'],
       noLayout: true,
     },
     unstable_revalidate: 60,

@@ -16,7 +16,7 @@ export default function Show({initialLeague}) {
   const [user, setUser] = useContext(UserContext);
   const [league, setLeague] = useState(initialLeague);
   const [match, setMatch] = useState(false);
-  const [mainColumn, setMainColumn] = useState('matches');
+  const [activeTable, setactiveTable] = useState('matches');
   const [descOpened, setDescOpened] = useState(false);
 
   if (router.isFallback) {
@@ -130,11 +130,11 @@ export default function Show({initialLeague}) {
 
           <div className="overflow-y-scroll">
             <div className="flex border-b mb-8">
-              <div className={`px-6 pb-1 border-gray-700 ${mainColumn == 'matches' ? 'border-b-2' : 'cursor-pointer'}`} onClick={()=>setMainColumn('matches')}>対戦表</div>
-              <div className={`px-6 pb-1 border-gray-700 ${mainColumn == 'ranking' ? 'border-b-2' : 'cursor-pointer'}`} onClick={()=>setMainColumn('ranking')}>順位表</div>
+              <div className={`px-6 pb-1 border-gray-700 ${activeTable == 'matches' ? 'border-b-2' : 'cursor-pointer'}`} onClick={()=>setactiveTable('matches')}>対戦表</div>
+              <div className={`px-6 pb-1 border-gray-700 ${activeTable == 'ranking' ? 'border-b-2' : 'cursor-pointer'}`} onClick={()=>setactiveTable('ranking')}>順位表</div>
             </div>
-            { mainColumn == 'matches' && <League editable={false} /> }
-            { mainColumn == 'ranking' && <Ranking /> }
+            { activeTable == 'matches' && <League editable={false} /> }
+            { activeTable == 'ranking' && <Ranking /> }
             <MatchModal editable={false} />
           </div>
         </div>
