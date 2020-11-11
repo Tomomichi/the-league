@@ -2,100 +2,29 @@ import { useState, useContext, createContext, useEffect } from 'react';
 import { useRouter } from 'next/router'
 import Head from 'next/head';
 import Link from 'next/link'
-import { firebase } from '../../lib/firebase.js'
-import { UserContext, LeagueContext, MatchContext, MenuContext } from '../../lib/contexts.js';
+import { firebase } from '../../../lib/firebase.js'
+import { UserContext, LeagueContext, MatchContext, MenuContext } from '../../../lib/contexts.js';
 import { useSnackbar } from 'react-simple-snackbar'
-import MenuColumn from '../../components/leagues/edit/MenuColumn.js'
-import EditColumn from '../../components/leagues/edit/EditColumn.js'
-import League from '../../components/leagues/League.js'
-import Ranking from '../../components/leagues/Ranking.js'
-import MatchModal from '../../components/leagues/MatchModal.js'
+import MenuColumn from '../../../components/leagues/edit/MenuColumn.js'
+import EditColumn from '../../../components/leagues/edit/EditColumn.js'
+import League from '../../../components/leagues/League.js'
+import Ranking from '../../../components/leagues/Ranking.js'
+import MatchModal from '../../../components/leagues/MatchModal.js'
 
 
-export default function Edit() {
-  let ignore = false;
+export default function Edit({initialLeague, initialPersisted}) {
   const router = useRouter();
   const [user, setUser] = useContext(UserContext);
-  const [league, setLeague] = useState();
+  const [league, setLeague] = useState(initialLeague);
   const [match, setMatch] = useState(false);
   const [menu, setMenu] = useState({target: 'settings', opened: true});
   const [mainColumn, setMainColumn] = useState('matches');
-  const [persisted, setPersisted] = useState(false);
+  const [persisted, setPersisted] = useState(initialPersisted);
   const [openSnackbar, closeSnackbar] = useSnackbar({position: 'bottom-left'});
-
 
   const titleBlank = () => {
     return !league.title || league.title == '';
   }
-
-  const defaultLeague = (leagueId) => {
-    const teams = [
-      { name: 'PlayerA', id: Math.random().toString(36).substring(2) },
-      { name: 'PlayerB', id: Math.random().toString(36).substring(2) },
-      { name: 'PlayerC', id: Math.random().toString(36).substring(2) },
-      { name: 'PlayerD', id: Math.random().toString(36).substring(2) },
-    ];
-    const teamIds = teams.map(t => t["id"]);
-    let matches = [];
-    teamIds.forEach((tId, tIndex) => {
-      teamIds.forEach((cId, cIndex) => {
-        if(tIndex >= cIndex ) { return; }
-        matches.push({
-          winner: null, finished: null, teams: {[tId]: {score: null}, [cId]: {score: null}}
-        });
-      });
-    });
-
-    return {
-      title: leagueId,
-      teams: teams,
-      matches: matches,
-    };
-  }
-
-
-  React.useEffect(() => {
-    let ignore = false;
-    if(!router.query['edit'] || ignore) { return; }
-
-    const leagueId = router.query['edit'][0];
-    if(router.query['edit'][1] != 'edit') {
-      openSnackbar('お探しのページが見つかりませんでした。もう一度URLをご確認ください。');
-      router.push('/');
-    }
-
-    firebase.firestore().collection('leagues').doc(leagueId).get().then(doc => {
-      const leagueData = doc.data() || defaultLeague(leagueId);
-      const initialLeague = Object.assign(leagueData, {
-        id: leagueId,
-        createdAt: leagueData.createdAt ? leagueData.createdAt.toDate().toISOString() : new Date().toISOString(),
-        updatedAt: leagueData.updatedAt ? leagueData.updatedAt.toDate().toISOString() : new Date().toISOString(),
-      });
-      if(!ignore) { setLeague(initialLeague); }
-      if(doc.data()) { setPersisted(true); }
-    });
-    return () => { ignore = true; }
-  }, [router, user]);
-
-
-  if(!league) {
-    return(
-      <div className="mt-16 text-center">
-        <div>Loading...</div>
-      </div>
-    );
-  }
-
-  // leagueが保存済みで、userがいない || userIdと合わない 場合は権限なし
-  if(persisted && (!user || league.userId != user.uid)) {
-    setTimeout(()=>{router.push('/')}, 3000);
-    return(
-      <div className="mt-16 text-center">
-        <div>権限がありません。。。ログイン情報を確認してください。</div>
-      </div>
-    );
-  }
-
 
   const updateLeague = async () => {
     const ref = firebase.firestore().collection('leagues').doc(league.id);
@@ -120,6 +49,24 @@ export default function Edit() {
     if(!persisted) { setPersisted(true); }
   }
 
+
+  if (router.isFallback) {
+    console.log("fallback!")
+    return <div>Loading...</div>
+  }
+  console.log("after fb")
+  console.log(initialLeague)
+  console.log(league)
+  if(!league) {
+    return <div>No League yet...</div>
+  }
+
+  // leagueが保存済みで、userがいない || userIdと合わない 場合は権限なし
+  if(persisted && (!user || league.userId != user.uid)) {
+    openSnackbar('権限がありません。。ログイン情報を確認してください。');
+    setTimeout(()=>{router.push('/')}, 3000);
+    return <div>権限がありません。。ログイン情報を確認してください。</div>
+  }
 
   return (
     <LeagueContext.Provider value={[league, setLeague]}>
@@ -175,4 +122,65 @@ export default function Edit() {
       </MatchContext.Provider>
     </LeagueContext.Provider>
   )
+}
+
+
+export async function getStaticPaths() {
+  const snapshot = await firebase.firestore().collection('leagues').limit(100).get();
+  const paths = await snapshot.docs.map(doc => {
+    return {params: {id: doc.id}}
+  });
+
+  return {
+    paths,
+    fallback: true,
+  }
+}
+
+
+export async function getStaticProps({params}) {
+  console.log("static props!!")
+  const leagueId = params.id;
+  const doc = await firebase.firestore().collection('leagues').doc(leagueId).get();
+  const leagueData = doc.data() || defaultLeague(leagueId);
+  const league = Object.assign(leagueData, {
+    id: leagueId,
+    createdAt: leagueData.createdAt ? leagueData.createdAt.toDate().toISOString() : new Date().toISOString(),
+    updatedAt: leagueData.updatedAt ? leagueData.updatedAt.toDate().toISOString() : new Date().toISOString(),
+  });
+
+  return {
+    props: {
+      initialLeague: league,
+      initialPersisted: !!doc.data(),
+    },
+    unstable_revalidate: 60,
+  }
+}
+
+
+const defaultLeague = (leagueId) => {
+  const teams = [
+    { name: 'PlayerA', id: Math.random().toString(36).substring(2) },
+    { name: 'PlayerB', id: Math.random().toString(36).substring(2) },
+    { name: 'PlayerC', id: Math.random().toString(36).substring(2) },
+    { name: 'PlayerD', id: Math.random().toString(36).substring(2) },
+  ];
+  const teamIds = teams.map(t => t["id"]);
+  let matches = [];
+  teamIds.forEach((tId, tIndex) => {
+    teamIds.forEach((cId, cIndex) => {
+      if(tIndex >= cIndex ) { return; }
+      matches.push({
+        winner: null, finished: null, teams: {[tId]: {score: null}, [cId]: {score: null}}
+      });
+    });
+  });
+
+  return {
+    id: leagueId,
+    title: leagueId,
+    teams: teams,
+    matches: matches,
+  };
 }

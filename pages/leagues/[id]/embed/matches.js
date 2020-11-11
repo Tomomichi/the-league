@@ -10,22 +10,7 @@ export default function Show({initialLeague, visibleTables}) {
   const router = useRouter();
 
   if (router.isFallback) {
-    return(
-      <>
-        <div className="bg-black px-4 py-3 text-white flex w-full z-50">
-          <h1>
-            <div className="inline-block w-4 h-4 text-teal-500 fill-current mr-3 align-middle">
-              <svg focusable="false" viewBox="0 0 24 24" aria-hidden="true"><path d="M15 15H3v2h12v-2zm0-8H3v2h12V7zM3 13h18v-2H3v2zm0 8h18v-2H3v2zM3 3v2h18V3H3z"></path></svg>
-            </div>
-            <span className="align-middle">　</span>
-          </h1>
-        </div>
-
-        <div className="mt-16 text-center">
-          <div>Loading...</div>
-        </div>
-      </>
-    )
+    return <div>Loading...</div>
   }
   return <Embed initialLeague={initialLeague} visibleTables={visibleTables} />;
 }
