@@ -38,6 +38,7 @@ export default function Edit({initialLeague, initialPersisted}) {
     let uid;
     if(!user) {
       const credentials = await firebase.auth().signInAnonymously();
+      setUser(credentials.user);
       uid = credentials.user.uid;
     }else {
       uid = user.uid;
@@ -50,21 +51,12 @@ export default function Edit({initialLeague, initialPersisted}) {
   }
 
 
-  if (router.isFallback) {
-    console.log("fallback!")
-    return <div>Loading...</div>
-  }
-  console.log("after fb")
-  console.log(initialLeague)
-  console.log(league)
-  if(!league) {
-    return <div>No League yet...</div>
-  }
-
   // leagueが保存済みで、userがいない || userIdと合わない 場合は権限なし
   if(persisted && (!user || league.userId != user.uid)) {
-    openSnackbar('権限がありません。。ログイン情報を確認してください。');
-    setTimeout(()=>{router.push('/')}, 3000);
+    setTimeout(()=>{
+      openSnackbar('権限がありません。。ログイン情報を確認してください。');
+      router.push('/');
+    }, 3000);
     return <div>権限がありません。。ログイン情報を確認してください。</div>
   }
 
@@ -125,21 +117,7 @@ export default function Edit({initialLeague, initialPersisted}) {
 }
 
 
-export async function getStaticPaths() {
-  const snapshot = await firebase.firestore().collection('leagues').limit(100).get();
-  const paths = await snapshot.docs.map(doc => {
-    return {params: {id: doc.id}}
-  });
-
-  return {
-    paths,
-    fallback: true,
-  }
-}
-
-
-export async function getStaticProps({params}) {
-  console.log("static props!!")
+export async function getServerSideProps({params}) {
   const leagueId = params.id;
   const doc = await firebase.firestore().collection('leagues').doc(leagueId).get();
   const leagueData = doc.data() || defaultLeague(leagueId);
@@ -154,7 +132,6 @@ export async function getStaticProps({params}) {
       initialLeague: league,
       initialPersisted: !!doc.data(),
     },
-    unstable_revalidate: 60,
   }
 }
 
