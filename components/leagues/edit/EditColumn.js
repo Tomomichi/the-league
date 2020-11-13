@@ -6,6 +6,8 @@ export default function MenuColumn(){
   const [match, setMatch] = useContext(MatchContext);
   const [league, setLeague] = useContext(LeagueContext);
   const [menu, setMenu] = useContext(MenuContext);
+  const [embedTables, setEmbedTables] = useState({matches: true, ranking: true});
+  const [embedPath, setEmbedPath] = useState('');
 
   const titleBlank = () => {
     return !league.title || league.title == '';
@@ -42,6 +44,13 @@ export default function MenuColumn(){
     league.teams = league.teams.filter(t => t.id != teamId);
     league.matches = league.matches.filter(m => !Object.keys(m.teams).includes(teamId));
     setLeague(Object.assign({}, league));
+  }
+
+  const handleChange = (table, e) => {
+    setEmbedTables(Object.assign(embedTables, {[table]: !embedTables[table]}));
+    const activeTableNames = Object.keys(embedTables).filter(tableName => embedTables[tableName]);
+    const path = (activeTableNames.length == 1) ? `/${activeTableNames[0]}` : '';
+    setEmbedPath(path);
   }
 
   return (
@@ -131,8 +140,19 @@ export default function MenuColumn(){
         </div>
         <div className="mb-8">
           <h6 className="font-bold mb-2">埋め込みタグ</h6>
-          <input type="text" readOnly className="w-full bg-white rounded p-4" defaultValue={`<div style='position:relative!important;width:100%!important;max-width:100%!important;margin-bottom:20px!important;overflow:auto !important;-webkit-overflow-scrolling:touch !important;'><iframe src='${process.env.NEXT_PUBLIC_WEB_ROOT}/leagues/embed/${league.id}' seamless frameborder='0' scrolling='no' width='100%' height='564' style='width:1px;min-width:100%;'></iframe></div>`} />
-
+          <div className="w-full bg-white rounded p-4 whitespace-no-wrap overflow-x-scroll">
+            {`<div style='position:relative!important;width:100%!important;max-width:100%!important;margin-bottom:20px!important;overflow:auto !important;-webkit-overflow-scrolling:touch !important;'><iframe src='${process.env.NEXT_PUBLIC_WEB_ROOT}/leagues/${league.id}/embed${embedPath}' seamless frameborder='0' scrolling='no' width='100%' height='564' style='width:1px;min-width:100%;'></iframe></div>`}
+          </div>
+          <div className="mt-2 flex">
+            <label className="flex items-center mr-2">
+              <input className="mr-1" type="checkbox" defaultChecked={embedTables.matches} onChange={(e)=>{handleChange("matches", e)}} />
+              対戦表
+            </label>
+            <label className="flex items-center">
+              <input className="mr-1" type="checkbox" defaultChecked={embedTables.ranking} onChange={(e)=>{handleChange("ranking", e)}} />
+              順位表
+            </label>
+          </div>
         </div>
         <div className="mb-8">
           <h6 className="font-bold mb-2">SNSシェア</h6>
