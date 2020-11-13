@@ -16,13 +16,12 @@ export default function Login() {
   }, [user]);
 
   // リダイレクト後の処理
-  firebase.auth().getRedirectResult()
-  // .then(res => {
-  //   setUser(res.user);
-  //   openSnackbar('ログインしました');
-  //   router.push(`/mypage`);
-  // })
-  .catch(error => {
+  firebase.auth().getRedirectResult().then(res => {
+    if(!res.user) { return; }
+    setUser(res.user);
+    openSnackbar('ログインしました');
+    router.push(`/mypage`);
+  }).catch(error => {
     // ゲストから登録済みのユーザーに紐付けようとしたとき
     if(error.code == 'auth/credential-already-in-use') {
       const alertMessage = 'すでに登録済みのアカウントに、ゲストユーザーのデータを引き継ぐことはできません。ログインすると現在ゲストで作成したデータは失われますが、よろしいですか？'
@@ -124,9 +123,7 @@ export default function Login() {
             <button className="rounded bg-red-600 hover:bg-red-700 text-white px-4 py-2 w-full sm:w-auto" onClick={()=>{snsLogin('google');}}>Googleログイン</button>
           </div>
           <div className="text-sm">
-            ※ログイン完了後、自動でマイページに遷移します。数秒程度かかる場合がありますがそのままお待ちください。
-            <br />
-            ※許可なく投稿などはいたしませんのでご安心ください。
+            ※ログイン完了後、自動でマイページに遷移します。許可なく投稿などしませんのでご安心ください。
           </div>
         </div>
       </div>
