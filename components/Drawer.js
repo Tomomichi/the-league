@@ -12,8 +12,10 @@ export default function Drawer({drawerOpened, setDrawerOpened}){
   const [user, setUser] = useContext(UserContext);
   const displayName = (!user) ? 'ゲスト' : user.email || user.displayName || 'ゲスト';
 
-  const createLeague = () => {
+  const createLeague = async () => {
     const newRef = firebase.firestore().collection('leagues').doc();
+    // ログインしてなければ匿名ログイン
+    if(!user) { await firebase.auth().signInAnonymously(); }
     router.push(`/leagues/${newRef.id}/edit`);
   }
 

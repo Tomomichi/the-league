@@ -13,8 +13,10 @@ export default function Header(){
   const [user, setUser] = useContext(UserContext);
   const [drawerOpened, setDrawerOpened] = useState(false);
 
-  const createLeague = () => {
+  const createLeague = async () => {
     const newRef = firebase.firestore().collection('leagues').doc();
+    // ログインしてなければ匿名ログイン
+    if(!user) { await firebase.auth().signInAnonymously(); }
     router.push(`/leagues/${newRef.id}/edit`);
   }
 

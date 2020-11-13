@@ -12,15 +12,37 @@ import Ranking from '../../../components/leagues/Ranking.js'
 import MatchModal from '../../../components/leagues/MatchModal.js'
 
 
-export default function Edit({initialLeague, initialPersisted}) {
+export default function Edit() {
   const router = useRouter();
   const [user, setUser] = useContext(UserContext);
-  const [league, setLeague] = useState(initialLeague);
+  const [league, setLeague] = useState();
   const [match, setMatch] = useState(false);
   const [menu, setMenu] = useState({target: 'settings', opened: true});
   const [mainColumn, setMainColumn] = useState('matches');
-  const [persisted, setPersisted] = useState(initialPersisted);
+  const [persisted, setPersisted] = useState();
   const [openSnackbar, closeSnackbar] = useSnackbar({position: 'bottom-left'});
+
+  useEffect(() => {
+    const leagueId = router.query.id;
+    let ignore = false;
+    if(!user) { return; }
+
+    const fetchData = async () => {
+      const res = await getLeague(leagueId);
+      if(!res) {
+        setLeague(defaultLeague(leagueId));
+      } else if(res.userId == user.uid) {
+        setPersisted(true);
+        setLeague(res);
+      } else {
+        openSnackbar('権限がありません。。。ログイン情報を確認してください。')
+        setTimeout(()=>{router.push('/')}, 1500);
+      }
+    }
+    fetchData();
+    return () => { ignore = true; }
+  }, [user] )
+
 
   const titleBlank = () => {
     return !league.title || league.title == '';
@@ -30,34 +52,18 @@ export default function Edit({initialLeague, initialPersisted}) {
     const ref = firebase.firestore().collection('leagues').doc(league.id);
     const dupLeague = Object.assign({}, league, {
       updatedAt: new Date(),
-      createdAt: new Date(league.createdAt)
+      createdAt: new Date(league.createdAt),
+      userId: user.uid,
     });
     delete dupLeague.id;
-
-    // ログインしてなければ匿名ログイン
-    let uid;
-    if(!user) {
-      const credentials = await firebase.auth().signInAnonymously();
-      setUser(credentials.user);
-      uid = credentials.user.uid;
-    }else {
-      uid = user.uid;
-    }
-    dupLeague.userId = dupLeague.userId || uid;
 
     await ref.set(dupLeague);
     openSnackbar('変更を保存しました！')
     if(!persisted) { setPersisted(true); }
   }
 
-
-  // leagueが保存済みで、userがいない || userIdと合わない 場合は権限なし
-  if(persisted && (!user || league.userId != user.uid)) {
-    setTimeout(()=>{
-      openSnackbar('権限がありません。。ログイン情報を確認してください。');
-      router.push('/');
-    }, 3000);
-    return <div>権限がありません。。ログイン情報を確認してください。</div>
+  if(!user || !league) {
+    return <div>Loading..</div>
   }
 
   return (
@@ -117,24 +123,17 @@ export default function Edit({initialLeague, initialPersisted}) {
 }
 
 
-export async function getServerSideProps({params}) {
-  const leagueId = params.id;
+const getLeague = async (leagueId) => {
   const doc = await firebase.firestore().collection('leagues').doc(leagueId).get();
-  const leagueData = doc.data() || defaultLeague(leagueId);
-  const league = Object.assign(leagueData, {
+  const leagueData = doc.data();
+  if(!leagueData) { return; }
+
+  return Object.assign(leagueData, {
     id: leagueId,
-    createdAt: leagueData.createdAt ? leagueData.createdAt.toDate().toISOString() : new Date().toISOString(),
-    updatedAt: leagueData.updatedAt ? leagueData.updatedAt.toDate().toISOString() : new Date().toISOString(),
+    createdAt: leagueData.createdAt.toDate().toISOString(),
+    updatedAt: leagueData.updatedAt.toDate().toISOString(),
   });
-
-  return {
-    props: {
-      initialLeague: league,
-      initialPersisted: !!doc.data(),
-    },
-  }
 }
-
 
 const defaultLeague = (leagueId) => {
   const teams = [
@@ -159,5 +158,7 @@ const defaultLeague = (leagueId) => {
     title: leagueId,
     teams: teams,
     matches: matches,
+    createdAt: new Date().toISOString(),
+    updatedAt: new Date().toISOString(),
   };
 }
