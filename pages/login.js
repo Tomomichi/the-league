@@ -15,8 +15,12 @@ export default function Login() {
     if(user && !user.isAnonymous) { router.push(`/mypage`); }
   }, [user]);
 
-  // リダイレクト後のエラー処理
-  firebase.auth().getRedirectResult().catch(error => {
+  // リダイレクト後の処理
+  firebase.auth().getRedirectResult().then(res => {
+    setUser(res.user);
+    openSnackbar('ログインしました');
+    router.push(`/mypage`);
+  }).catch(error => {
     // ゲストから登録済みのユーザーに紐付けようとしたとき
     if(error.code == 'auth/credential-already-in-use') {
       const alertMessage = 'すでに登録済みのアカウントに、ゲストユーザーのデータを引き継ぐことはできません。ログインすると現在ゲストで作成したデータは失われますが、よろしいですか？'
