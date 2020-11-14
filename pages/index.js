@@ -2,6 +2,7 @@ import { useState, useContext, createContext } from 'react';
 import Head from 'next/head';
 import Link from 'next/link'
 import { useRouter } from 'next/router'
+import { useTranslation } from 'react-i18next';
 import { firebase } from '../lib/firebase.js'
 import { UserContext, LeagueContext, MatchContext } from '../lib/contexts.js';
 import League from '../components/leagues/League.js'
@@ -10,6 +11,11 @@ import MatchModal from '../components/leagues/MatchModal.js'
 
 export default function Index() {
   const router = useRouter();
+  const [league, setLeague] = useState(defaultLeague);
+  const [match, setMatch] = useState(false);
+  const [mainColumn, setMainColumn] = useState('matches');
+  const [user, setUser] = useContext(UserContext);
+  const { t, i18n } = useTranslation();
 
   const createLeague = async () => {
     const newRef = firebase.firestore().collection('leagues').doc();
@@ -17,36 +23,6 @@ export default function Index() {
     if(!user) { await firebase.auth().signInAnonymously(); }
     router.push(`/leagues/${newRef.id}/edit`);
   }
-
-  const defaultLeague = () => {
-    const teams = [
-      { name: 'PlayerA', id: Math.random().toString(36).substring(2) },
-      { name: 'PlayerB', id: Math.random().toString(36).substring(2) },
-      { name: 'PlayerC', id: Math.random().toString(36).substring(2) },
-      { name: 'PlayerD', id: Math.random().toString(36).substring(2) },
-    ];
-    const teamIds = teams.map(t => t["id"]);
-    let matches = [];
-    teamIds.forEach((tId, tIndex) => {
-      teamIds.forEach((cId, cIndex) => {
-        if(tIndex >= cIndex ) { return; }
-        matches.push({
-          winner: null, finished: null, teams: {[tId]: {score: null}, [cId]: {score: null}}
-        });
-      });
-    });
-
-    return {
-      teams: teams,
-      matches: matches,
-    };
-  }
-
-  const [league, setLeague] = useState(defaultLeague);
-  const [match, setMatch] = useState(false);
-  const [mainColumn, setMainColumn] = useState('matches');
-  const [user, setUser] = useContext(UserContext);
-
 
   return (
     <LeagueContext.Provider value={[league, setLeague]}>
@@ -66,11 +42,9 @@ export default function Index() {
           <svg className={`inline-block mr-1 w-5 h-5 fill-current`} viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
             <path d="M1 21h22L12 2 1 21zm12-3h-2v-2h2v2zm0-4h-2v-4h2v4z"></path>
           </svg>
-          <span className="flex-1">
-            リーグ表作成機能は現在ベータ版として運用中です。改善要望やバグ報告などお気軽に
-            <a href="https://goo.gl/forms/xqvYet0AAsQUalI52" target="_blank" className="text-blue-500 border-b border-blue-600 hover:text-blue-600">運営までご連絡</a>
-            ください。
-          </span>
+          <a href="https://goo.gl/forms/xqvYet0AAsQUalI52" target="_blank" className="flex-1">
+            {t('pages.info-message')}
+          </a>
         </div>
 
         <div className="full-bleed bg-gray-800 text-gray-200 mb-20 text-center px-4">
@@ -252,4 +226,29 @@ export default function Index() {
       </MatchContext.Provider>
     </LeagueContext.Provider>
   )
+}
+
+
+const defaultLeague = () => {
+  const teams = [
+    { name: 'PlayerA', id: Math.random().toString(36).substring(2) },
+    { name: 'PlayerB', id: Math.random().toString(36).substring(2) },
+    { name: 'PlayerC', id: Math.random().toString(36).substring(2) },
+    { name: 'PlayerD', id: Math.random().toString(36).substring(2) },
+  ];
+  const teamIds = teams.map(t => t["id"]);
+  let matches = [];
+  teamIds.forEach((tId, tIndex) => {
+    teamIds.forEach((cId, cIndex) => {
+      if(tIndex >= cIndex ) { return; }
+      matches.push({
+        winner: null, finished: null, teams: {[tId]: {score: null}, [cId]: {score: null}}
+      });
+    });
+  });
+
+  return {
+    teams: teams,
+    matches: matches,
+  };
 }

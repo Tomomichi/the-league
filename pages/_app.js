@@ -8,6 +8,10 @@ import { firebase } from '../lib/firebase.js';
 import Header from '../components/Header.js'
 import SnackbarProvider from 'react-simple-snackbar'
 import "../styles/tailwind.css"
+import i18n from "i18next";
+import { initReactI18next } from "react-i18next";
+import EnTranslation from "../locales/en/common.json";
+import JaTranslation from "../locales/ja/common.json";
 
 
 // Sentry
@@ -26,6 +30,22 @@ const App = ({ Component, pageProps, err }) => {
     setUser(u);
   })
 
+  // the translations
+  const resources = {
+    en: { translation: EnTranslation },
+    ja: { translation: JaTranslation }
+  };
+  i18n
+    .use(initReactI18next) // passes i18n down to react-i18next
+    .init({
+      resources,
+      lng: router.locale,
+      keySeparator: false, // we do not use keys in form messages.welcome
+      interpolation: {
+        escapeValue: false // react already safes from xss
+      }
+    });
+
   useEffect(() => {
     // Google Analytics
     const handleRouteChange = (url) => {
@@ -38,7 +58,6 @@ const App = ({ Component, pageProps, err }) => {
     }
   }, []);
 
-  console.log(router)
 
   return pageProps.noLayout ? (
       <Component {...pageProps} err={err} />

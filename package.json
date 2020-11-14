@@ -9,9 +9,11 @@
     "@sentry/webpack-plugin": "^1.12.1",
     "@zeit/next-source-maps": "0.0.4-canary.1",
     "firebase": "^7.15.4",
+    "i18next": "^19.8.3",
     "next": "^10.0.1",
     "react": "^17.0.1",
     "react-dom": "^17.0.1",
+    "react-i18next": "^11.7.3",
     "react-simple-snackbar": "^1.1.10",
     "react-string-replace": "^0.4.4"
   },
