@@ -3,6 +3,11 @@
   "version": "4.0.0",
   "private": true,
   "dependencies": {
+    "@sentry/browser": "^5.21.3",
+    "@sentry/integrations": "^5.21.3",
+    "@sentry/node": "^5.21.3",
+    "@sentry/webpack-plugin": "^1.12.1",
+    "@zeit/next-source-maps": "0.0.4-canary.1",
     "firebase": "^7.15.4",
     "next": "latest",
     "react": "latest",

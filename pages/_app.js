@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import Link from 'next/link'
 import { useRouter } from 'next/router'
+import * as Sentry from '@sentry/node';
 import * as gtag from '../lib/gtag'
 import { UserContext, SnackbarContext } from '../lib/contexts.js';
 import { firebase } from '../lib/firebase.js';
@@ -8,7 +9,16 @@ import Header from '../components/Header.js'
 import SnackbarProvider from 'react-simple-snackbar'
 import "../styles/tailwind.css"
 
-const App = ({ Component, pageProps }) => {
+
+// Sentry
+if (process.env.NEXT_PUBLIC_SENTRY_DSN) {
+  Sentry.init({
+    enabled: process.env.NODE_ENV === 'production',
+    dsn: process.env.NEXT_PUBLIC_SENTRY_DSN
+  });
+}
+
+const App = ({ Component, pageProps, err }) => {
   const router = useRouter();
   const [user, setUser] = useState();
 
@@ -29,7 +39,7 @@ const App = ({ Component, pageProps }) => {
   }, []);
 
   return pageProps.noLayout ? (
-      <Component {...pageProps} />
+      <Component {...pageProps} err={err} />
     ) : (
       <UserContext.Provider value={[user, setUser]}>
         <SnackbarProvider>
@@ -37,7 +47,7 @@ const App = ({ Component, pageProps }) => {
             <Header />
 
             <div className="max-w-screen-lg mx-auto px-4 sm:px-0">
-              <Component {...pageProps} />
+              <Component {...pageProps} err={err} />
             </div>
 
             { router.pathname != '/leagues/[...edit]' &&
