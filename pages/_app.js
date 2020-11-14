@@ -87,14 +87,13 @@ const App = ({ Component, pageProps, err }) => {
                   </div>
 
                   <ul className="flex flex-col sm:flex-row justify-center sm:space-x-4 text-sm mb-4 text-gray-300">
-                    <li className="text-gray-500">利用規約</li>
-                    <li className="text-gray-500">プライバシーポリシー</li>
-                    <li className="text-gray-500">特定商取引法に基づく表示</li>
+                    <li><a href="https://app.the-tournament.jp/pages/terms.html" target="_blank" className="hover:text-white">利用規約</a></li>
+                    <li><a href="https://app.the-tournament.jp/pages/privacy.html" target="_blank" className="hover:text-white">プライバシーポリシー</a></li>
                     <li><a href="https://notsobad.jp" target="_blank" className="hover:text-white">運営</a></li>
                     <li><a href="https://goo.gl/forms/xqvYet0AAsQUalI52" target="_blank" className="hover:text-white">お問い合わせ</a></li>
                   </ul>
                   <p className="text-sm text-gray-500">
-                    © 2020 THE TOURNAMENT(LEAGUE) by NOT SO BAD, LLC. All Rights Reserved.
+                    © 2020 THE TOURNAMENT by NOT SO BAD, LLC. All Rights Reserved.
                   </p>
                 </div>
               </footer>

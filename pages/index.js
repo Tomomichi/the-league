@@ -66,7 +66,11 @@ export default function Index() {
           <svg className={`inline-block mr-1 w-5 h-5 fill-current`} viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
             <path d="M1 21h22L12 2 1 21zm12-3h-2v-2h2v2zm0-4h-2v-4h2v4z"></path>
           </svg>
-          <span className="flex-1">リーグ表作成機能は現在ベータ版として運用中です。改善要望やバグ報告などお気軽に運営までご連絡ください。</span>
+          <span className="flex-1">
+            リーグ表作成機能は現在ベータ版として運用中です。改善要望やバグ報告などお気軽に
+            <a href="https://goo.gl/forms/xqvYet0AAsQUalI52" target="_blank" className="text-blue-500 border-b border-blue-600 hover:text-blue-600">運営までご連絡</a>
+            ください。
+          </span>
         </div>
 
         <div className="full-bleed bg-gray-800 text-gray-200 mb-20 text-center px-4">
