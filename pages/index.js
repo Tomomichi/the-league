@@ -1,9 +1,9 @@
-import { useState, createContext } from 'react';
+import { useState, useContext, createContext } from 'react';
 import Head from 'next/head';
 import Link from 'next/link'
 import { useRouter } from 'next/router'
 import { firebase } from '../lib/firebase.js'
-import { LeagueContext, MatchContext } from '../lib/contexts.js';
+import { UserContext, LeagueContext, MatchContext } from '../lib/contexts.js';
 import League from '../components/leagues/League.js'
 import Ranking from '../components/leagues/Ranking.js'
 import MatchModal from '../components/leagues/MatchModal.js'
@@ -45,6 +45,7 @@ export default function Index() {
   const [league, setLeague] = useState(defaultLeague);
   const [match, setMatch] = useState(false);
   const [mainColumn, setMainColumn] = useState('matches');
+  const [user, setUser] = useContext(UserContext);
 
 
   return (
