@@ -76,7 +76,7 @@ export default function MenuColumn(){
 
       <div className={`${menu['target'] == 'players' ? '' : 'hidden'}`}>
         <h6 className="mb-2 font-bold">参加者</h6>
-        <div className="space-y-4 mb-8">
+        <div className="space-y-4 mb-6">
           { league.teams.map(team => {
             return(
               <div key={team.id} className="flex items-center">
@@ -90,10 +90,10 @@ export default function MenuColumn(){
             )
           }) }
         </div>
-        <div>
+        <div className="border-t border-dashed pt-6">
           <form onSubmit={addMember} className="flex items-center">
-            <input className="flex-1 sm:flex-grow-0 border px-2 py-2 rounded-l text-sm" type="text" placeholder='参加者名' name='newMember' required />
-            <button className="flex items-center px-3 py-2 border border-blue-600 bg-blue-600 text-white text-sm rounded-r" type="submit">
+            <input className="flex-1 px-2 py-2 rounded-l text-sm" type="text" placeholder='参加者名' name='newMember' required />
+            <button className="flex items-center px-3 py-2 bg-blue-600 text-white text-sm rounded-r" type="submit">
               <svg className="w-5 h-5 fill-current mr-1" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
                 <path d="M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6v2z"></path>
               </svg>
