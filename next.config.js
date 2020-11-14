@@ -18,6 +18,11 @@ process.env.SENTRY_DSN = SENTRY_DSN;
 
 
 module.exports = withSourceMaps({
+  i18n: {
+    locales: ['ja', 'en'],
+    defaultLocale: 'ja',
+    localeDetection: false,
+  },
   webpack: (config, options) => {
     const env = Object.keys(process.env).reduce((acc, curr) => {
       acc[`process.env.${curr}`] = JSON.stringify(process.env[curr]);
