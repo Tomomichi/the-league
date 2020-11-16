@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import Head from 'next/head'
 import Link from 'next/link'
 import { useRouter } from 'next/router'
 import * as Sentry from '@sentry/node';
@@ -38,13 +39,21 @@ const App = ({ Component, pageProps, err }) => {
     }
   }, []);
 
-  console.log(router)
 
   return pageProps.noLayout ? (
-      <Component {...pageProps} err={err} />
+      <>
+        <Head>
+          <meta name="viewport" content="minimum-scale=1, initial-scale=1, width=device-width" />
+        </Head>
+        <Component {...pageProps} err={err} />
+      </>
     ) : (
       <UserContext.Provider value={[user, setUser]}>
         <SnackbarProvider>
+          <Head>
+            <meta name="viewport" content="minimum-scale=1, initial-scale=1, width=device-width" />
+          </Head>
+
           <div className="text-gray-700">
             <Header />
 
@@ -65,25 +74,6 @@ const App = ({ Component, pageProps, err }) => {
                       </Link>
                     </h5>
                     <small className="text-xs text-gray-500">簡単・便利な総当りリーグ表作成サービス</small>
-                  </div>
-
-                  <div className="text-center mb-4">
-                    { router.locale == 'ja' &&
-                      <>
-                        <div className="rounded inline-block px-2 py-1 text-gray-600 bg-gray-800 mr-2">JP</div>
-                        <Link href="/" locale="en">
-                          <a className="inline-block px-2 py-1">EN</a>
-                        </Link>
-                      </>
-                    }
-                    { router.locale == 'en' &&
-                      <>
-                        <Link href="/" locale="ja">
-                          <a className="inline-block px-2 py-1 mr-2">JP</a>
-                        </Link>
-                        <div className="rounded inline-block px-2 py-1 text-gray-600 bg-gray-800">EN</div>
-                      </>
-                    }
                   </div>
 
                   <ul className="flex flex-col sm:flex-row justify-center sm:space-x-4 text-sm mb-4 text-gray-300">

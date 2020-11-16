@@ -7,7 +7,6 @@ export default class MyDocument extends Document {
       <Html lang='ja'>
         <Head>
           <meta charSet="utf-8" />
-          <meta name="viewport" content="minimum-scale=1, initial-scale=1, width=device-width" />
           <link rel="icon" type="image/x-icon" href="/favicon.ico" />
           <meta name="keywords" content="リーグ戦,リーグ表,総当り,ラウンドロビン,THE TOURNAMENT,LEAGUE" />
           <meta property="og:type" content="website" />
