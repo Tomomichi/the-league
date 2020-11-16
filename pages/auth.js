@@ -12,19 +12,23 @@ export default function Auth() {
 
   // 最初routerが空の状態で来ちゃうのを考慮
   React.useEffect(() => {
-    const q = router.query;
-    if(!q.oobCode) { return; }
-    firebase.auth().verifyPasswordResetCode(q.oobCode).then((email) => {
-      const newPassword = Math.random().toString(36).slice(-12)
-      firebase.auth().confirmPasswordReset(q.oobCode, newPassword).then(() => {
-        firebase.auth().signInWithEmailAndPassword(email, newPassword);
+    if (!firebase.auth().isSignInWithEmailLink(window.location.href)) { return; }
+
+    var email = window.localStorage.getItem('emailForSignIn');
+    if (!email) {
+      email = window.prompt('確認のため、ログインに使用するメールアドレスを再度入力してください');
+    }
+    // The client SDK will parse the code from the link for you.
+    firebase.auth().signInWithEmailLink(email, window.location.href)
+      .then(function(result) {
+        window.localStorage.removeItem('emailForSignIn');
         openSnackbar('ログインしました');
         router.push('/mypage');
+      })
+      .catch(function(error) {
+        openSnackbar('ログインに失敗しました。。');
+        router.push('/login');
       });
-    }).catch((error) => {
-      openSnackbar('ログインに失敗しました。。');
-      router.push('/login');
-    });
   }, [router]);
 
   return (
