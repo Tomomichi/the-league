@@ -46,6 +46,6 @@ export async function getStaticProps({params}) {
       visibleTables: ['matches'],
       noLayout: true,
     },
-    unstable_revalidate: 60,
+    revalidate: 60,
   }
 }

@@ -171,6 +171,6 @@ export async function getStaticProps({params}) {
     props: {
       initialLeague: league,
     },
-    unstable_revalidate: 60,
+    revalidate: 60,
   }
 }

@@ -50,6 +50,6 @@ export async function getStaticProps() {
     props: {
       leagues: leagues,
     },
-    unstable_revalidate: 60 * 60, // 1時間ごとに更新
+    revalidate: 60 * 60, // 1時間ごとに更新
   }
 }

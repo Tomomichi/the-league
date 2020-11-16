@@ -60,6 +60,6 @@ export async function getStaticProps({params}) {
       visibleTables: ['matches', 'ranking'],
       noLayout: true,
     },
-    unstable_revalidate: 60,
+    revalidate: 60,
   }
 }
