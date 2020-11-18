@@ -59,9 +59,9 @@ export default function Login() {
     const email = emailField.value;
 
     const actionCodeSettings = {
-      url: `${process.env.NEXT_PUBLIC_WEB_ROOT}/auth`,
+      // url: `${process.env.NEXT_PUBLIC_WEB_ROOT}/auth`,
+      url: `https://league.the-tournament.jp/auth`,
       handleCodeInApp: true,
-      dynamicLinkDomain: 'league.the-tournament.jp',
     };
 
     firebase.auth().sendSignInLinkToEmail(email, actionCodeSettings)
