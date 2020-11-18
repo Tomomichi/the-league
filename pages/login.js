@@ -61,6 +61,7 @@ export default function Login() {
     const actionCodeSettings = {
       url: `${process.env.NEXT_PUBLIC_WEB_ROOT}/auth`,
       handleCodeInApp: true,
+      dynamicLinkDomain: 'league.the-tournament.jp',
     };
 
     firebase.auth().sendSignInLinkToEmail(email, actionCodeSettings)
