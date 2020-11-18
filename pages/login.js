@@ -60,7 +60,7 @@ export default function Login() {
 
     const actionCodeSettings = {
       url: `${process.env.NEXT_PUBLIC_WEB_ROOT}/auth`,
-      handleCodeInApp: false,
+      handleCodeInApp: true,
     };
 
     firebase.auth().sendSignInLinkToEmail(email, actionCodeSettings)
@@ -98,8 +98,16 @@ export default function Login() {
                 <input id="emailField" className="border rounded-l px-2 py-2 flex-1" type="email" required placeholder="メールアドレス" />
                 <button type="submit" className="rounded-r bg-pink-600 hover:bg-pink-700 text-white px-4 text-sm">送信</button>
               </div>
+              <div className="rounded bg-yellow-100 border border-yellow-500 mt-4 px-4 py-3 text-yellow-900 text-xs sm:text-sm">
+                <svg className={`inline-block mr-1 w-5 h-5 fill-current`} viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                  <path d="M1 21h22L12 2 1 21zm12-3h-2v-2h2v2zm0-4h-2v-4h2v4z"></path>
+                </svg>
+                <span className="flex-1">
+                  メールで届くログインURLの先頭部分を「https://<span className="font-bold text-red-600">league.</span>the-tournament.jp」に変えてアクセスしてください。
+                </span>
+              </div>
               <div className="text-sm mt-4">
-                ※入力したメールアドレスにログイン用URLが届きます。
+                ※こちらはベータ期間中のみの暫定措置で、本リリース後は不要になります。ご不便おかけしますがご了承ください。	
               </div>
             </div>
           </form>
