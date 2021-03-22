@@ -114,7 +114,7 @@ export default function Show({initialLeague}) {
           <h1 className="text-xl mb-6 py-2 border-t-4 border-b-4 border-gray-900 font-bold">{league.title}</h1>
           { user && user.uid == league.userId &&
             <div className="mb-8 text-sm">
-              <Link href="/leagues/[...edit]" as={`/leagues/${league.id}/edit`}>
+              <Link href="/leagues/[id]/edit" as={`/leagues/${league.id}/edit`}>
                 <a className="rounded border px-4 py-2 text-blue-600 border-blue-600 hover:opacity-75">
                   編集
                 </a>
