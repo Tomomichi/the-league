@@ -50,6 +50,13 @@ export default function Ranking(){
         }
         // gd: 得失点
         p[tid]['gd'] += (Number(gf) - Number(ga));
+
+        // カスタム項目の計算
+        league.customColumns && league.customColumns.map(column => {
+          const key = Object.keys(column)[0]; // {try: トライ数} => try
+          p[tid][key] = p[tid][key] || 0;
+          p[tid][key] += Number(match.teams[tid][key] || 0);
+        })
       });
     });
     // 勝ち点計算
