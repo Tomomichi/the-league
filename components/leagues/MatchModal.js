@@ -13,6 +13,12 @@ export default function MatchModal({editable}){
     match.teams[teams[0]] = { score: formData.get(`scores[${teams[0]}]`) }
     match.teams[teams[1]] = { score: formData.get(`scores[${teams[1]}]`) }
 
+    league.customColumns && league.customColumns.map(column => {
+      const key = Object.keys(column)[0];
+      match.teams[teams[0]][key] = formData.get(`${key}[${teams[0]}]`);
+      match.teams[teams[1]][key] = formData.get(`${key}[${teams[1]}]`);
+    });
+
     // 勝者未選択 or 引き分けのときは、 winner = null
     let winner = formData.get('winner');
     if(winner == '' || winner == 'draw') { winner = null; }
@@ -71,6 +77,17 @@ export default function MatchModal({editable}){
                     :
                     <div className="mt-2">{match.teams[Object.keys(match.teams).sort()[0]].score}</div>
                   }
+
+                  {/* カスタム項目 */}
+                  { (league.customColumns || []).map(column => (
+                    editable ?
+                      <input key={Object.keys(column)[0]} name={`${Object.keys(column)[0]}[${Object.keys(match.teams).sort()[0]}]`} className="mt-2 px-1 py-2 rounded w-full" type="text" placeholder={`${Object.values(column)[0]}`} defaultValue={match.teams[Object.keys(match.teams).sort()[0]][Object.keys(column)[0]]} />
+                    :
+                      <div key={Object.keys(column)[0]} className="mt-2">
+                        <span className="text-sm text-gray-500 mr-1">{Object.values(column)[0]}:</span>
+                        <span className="">{match.teams[Object.keys(match.teams).sort()[0]][Object.keys(column)[0]]}</span>
+                      </div>
+                  ))}
                 </div>
                 <div className="mx-2 font-bold flex items-center">-</div>
                 <div className="flex-1 text-center bg-gray-200 px-2 sm:px-4 py-4 rounded">
@@ -80,6 +97,17 @@ export default function MatchModal({editable}){
                     :
                     <div className="mt-2">{match.teams[Object.keys(match.teams).sort()[1]].score}</div>
                   }
+
+                  {/* カスタム項目 */}
+                  { (league.customColumns || []).map(column => (
+                    editable ?
+                      <input key={Object.keys(column)[0]} name={`${Object.keys(column)[0]}[${Object.keys(match.teams).sort()[1]}]`} className="mt-2 px-1 py-2 rounded w-full" type="text" placeholder={`${Object.values(column)[0]}`} defaultValue={match.teams[Object.keys(match.teams).sort()[1]][Object.keys(column)[0]]} />
+                    :
+                      <div key={Object.keys(column)[0]} className="mt-2">
+                        <span className="text-sm text-gray-500 mr-1">{Object.values(column)[0]}:</span>
+                        <span className="">{match.teams[Object.keys(match.teams).sort()[1]][Object.keys(column)[0]]}</span>
+                      </div>
+                  ))}
                 </div>
               </div>
             </div>
