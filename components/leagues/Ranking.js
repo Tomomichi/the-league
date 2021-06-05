@@ -20,6 +20,9 @@ export default function Ranking(){
     { gd: '得失差' },
   ];
 
+  // 順位決定ロジック
+  const rankingOrder = league.rankingOrder || ['point', 'gd', 'gf'];
+
   const calcPoints = () => {
     let p = {};
     // 試合数計算
@@ -59,19 +62,8 @@ export default function Ranking(){
   // TODO: 比較項目のカスタマイズ、同点の扱い
   const calcSortedTeamIds = () => {
     return Object.keys(points).sort((a,b) => {
-      // 勝ち点
-      if(points[a]['point'] !== points[b]['point']){
-        return points[b]['point'] - points[a]['point'];
-      }
-      // 得失点差
-      if(points[a]['gd'] !== points[b]['gd']){
-        return points[b]['gd'] - points[a]['gd'];
-      }
-      // 得点
-      if(points[a]['gf'] !== points[b]['gf']){
-        return points[b]['gf'] - points[a]['gf'];
-      }
-      return 0
+      const col = rankingOrder.find(column => { return points[a][column] !== points[b][column] });
+      return col ? points[b][col] - points[a][col] : 0;
     });
   }
 
