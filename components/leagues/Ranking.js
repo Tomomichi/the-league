@@ -6,6 +6,8 @@ const CellWidth = 100;
 export default function Ranking(){
   const [league, setLeague] = useContext(LeagueContext);
 
+  const pointsTable = league.pointsTable || { win: 3, lose: 0, draw: 1 }
+
   const calcPoints = () => {
     let p = {};
     // 試合数計算
@@ -37,7 +39,7 @@ export default function Ranking(){
     });
     // 勝ち点計算
     league.teams.forEach(t => {
-      p[t.id]['point'] = p[t.id]['win'] * 3 + p[t.id]['draw'] * 1;
+      p[t.id]['point'] = p[t.id]['win'] * pointsTable.win + p[t.id]['draw'] * pointsTable.draw + p[t.id]['lose'] * pointsTable.lose ;
     });
     return p;
   }
