@@ -68,7 +68,7 @@ export default function Ranking(){
   return (
     <>
       <div className="overflow-x-scroll">
-        <table className="min-w-full rounded overflow-hidden whitespace-no-wrap table-fixed" style={{width: 760}}>
+        <table className="min-w-full rounded overflow-hidden whitespace-nowrap table-fixed" style={{width: 760}}>
           <thead className="bg-gray-200 text-sm">
             <tr>
               <th className="px-2 py-3 text-left" style={{width: 70}}>順位</th>
