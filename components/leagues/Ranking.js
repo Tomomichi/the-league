@@ -22,8 +22,6 @@ export default function Ranking(){
 
   // 順位決定ロジック
   const rankingOrder = league.rankingOrder || ['point', 'gd', 'gf'];
-  console.log("---")
-  console.log(rankingOrder)
 
   const calcPoints = () => {
     let p = {};
