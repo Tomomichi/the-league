@@ -39,9 +39,11 @@ export default function Embed({initialLeague, visibleTables}) {
               <MatchModal editable={false} />
             </div>
 
-            <div className="bg-gray-800 text-white max-w-lg px-4 py-8 rounded text-center my-4">
-              広告枠
-            </div>
+            { !league.noAds &&
+              <div className="bg-gray-800 text-white max-w-lg px-4 py-8 rounded text-center my-4">
+                広告枠
+              </div>
+            }
           </div>
         </div>
       </MatchContext.Provider>
