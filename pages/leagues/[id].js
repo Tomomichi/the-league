@@ -4,6 +4,7 @@ import Head from 'next/head';
 import Link from 'next/link'
 import reactStringReplace from "react-string-replace";
 import { firebase } from '../../lib/firebase.js'
+import { useSnackbar } from 'react-simple-snackbar'
 import { UserContext, LeagueContext, MatchContext } from '../../lib/contexts.js';
 import Breadcrumb from '../../components/Breadcrumb.js'
 import League from '../../components/leagues/League.js'
@@ -18,6 +19,7 @@ export default function Show({initialLeague}) {
   const [match, setMatch] = useState(false);
   const [activeTable, setactiveTable] = useState('matches');
   const [descOpened, setDescOpened] = useState(false);
+  const [openSnackbar, closeSnackbar] = useSnackbar({position: 'bottom-left'});
 
   if (router.isFallback) {
     return(
@@ -47,7 +49,24 @@ export default function Show({initialLeague}) {
     const conf = confirm('大会データを削除します。本当によろしいですか？');
     if(!conf) { return; }
     await firebase.firestore().collection('leagues').doc(league.id).delete();
+    openSnackbar('大会を削除しました！')
     router.push('/');
+  }
+
+  const duplicateLeague = async () => {
+    const conf = confirm('この大会をコピーして新しい大会を作成します。本当によろしいですか？');
+    if(!conf) { return; }
+
+    const dupLeague = Object.assign({}, league, {
+      title: league.title + 'のコピー',
+      updatedAt: new Date(),
+      createdAt: new Date(),
+    });
+    delete dupLeague.id;
+
+    const res = await firebase.firestore().collection('leagues').add(dupLeague);
+    openSnackbar('大会をコピーしました！')
+    router.push(`/leagues/${res.id}`);
   }
 
   const addLinkAndBreak = (str) => {
@@ -121,6 +140,9 @@ export default function Show({initialLeague}) {
               </Link>
               <a className="cursor-pointer rounded px-4 py-2 text-red-700 hover:opacity-75 ml-2" onClick={deleteLeague}>
                 削除
+              </a>
+              <a className="cursor-pointer rounded px-4 py-2 hover:opacity-75 ml-2" onClick={duplicateLeague}>
+                コピー
               </a>
             </div>
           }
